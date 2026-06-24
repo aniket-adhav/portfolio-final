@@ -1,3 +1,25 @@
 .home {
   overflow-x: hidden;
 }
+
+.githubRow {
+  display: flex;
+  justify-content: center;
+  padding: var(--spaceM) var(--spaceOuter) var(--space3XL);
+}
+
+.githubBtnFull {
+  display: inline;
+
+  @media (--mediaMobile) {
+    display: none;
+  }
+}
+
+.githubBtnShort {
+  display: none;
+
+  @media (--mediaMobile) {
+    display: inline;
+  }
+}
