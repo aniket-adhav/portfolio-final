@@ -1,0 +1,394 @@
+@keyframes fade-in-up {
+  from { opacity: 0; transform: translateY(16px); }
+  to { opacity: 1; transform: translateY(0); }
+}
+@keyframes stat-count {
+  from { opacity: 0; transform: scale(0.85) translateY(8px); }
+  to { opacity: 1; transform: scale(1) translateY(0); }
+}
+@keyframes cursor-blink {
+  0%, 100% { opacity: 1; }
+  50% { opacity: 0; }
+}
+
+.profile {
+  width: 100vw;
+  padding: 80px 0;
+  display: flex;
+  justify-content: center;
+
+  @media (--mediaTablet) { padding: 50px 0; }
+  @media (--mediaMobile) { padding: var(--space4XL) 0; overflow-x: hidden; }
+}
+
+.profileWrapper {
+  display: flex;
+  flex-direction: column;
+  gap: 80px;
+  max-width: var(--maxWidthL);
+  width: 100%;
+  padding: 0 var(--spaceOuter);
+
+  @media (--mediaTablet) { gap: 56px; }
+  @media (--mediaMobile) { gap: 40px; }
+}
+
+.introGrid {
+  display: grid;
+  grid-template-columns: 1fr 38%;
+  column-gap: var(--space3XL);
+  align-items: start;
+
+  @media (--mediaTablet) { grid-template-columns: 100%; gap: var(--space2XL); }
+}
+
+.introLeft {
+  display: flex;
+  flex-direction: column;
+  align-items: flex-start;
+  gap: var(--spaceL);
+}
+
+.introTag {
+  display: grid;
+  grid-template-columns: var(--space4XL) 1fr;
+  gap: 12px;
+  align-items: center;
+}
+
+.introTagText {
+  font-size: var(--fontSizeBodyS);
+  font-weight: var(--fontWeightMedium);
+  color: var(--primary);
+  opacity: 0;
+  transition: opacity var(--durationM) var(--bezierFastoutSlowin) 0.6s;
+
+  @media (--mediaUseMotion) {
+    transform: translate3d(calc(var(--spaceM) * -1), 0, 0);
+    transition: opacity var(--durationM) var(--bezierFastoutSlowin) 0.6s,
+      transform var(--durationM) var(--bezierFastoutSlowin) 0.6s;
+  }
+
+  &[data-visible='true'] { opacity: 1; transform: none; }
+}
+
+.introHeading {
+  font-size: clamp(1.4rem, 2.8vw, 2rem);
+  font-weight: var(--fontWeightMedium);
+  color: var(--textTitle);
+  line-height: 1.35;
+  margin: 0;
+  opacity: 0;
+  transition: opacity var(--durationXL) ease 0.3s;
+
+  &[data-visible='true'] { opacity: 1; }
+}
+
+.introBio {
+  font-size: var(--fontSizeBodyM);
+  color: var(--textBody);
+  line-height: 1.8;
+  margin: 0;
+  opacity: 0;
+  transition: opacity var(--durationXL) ease 0.5s;
+
+  &[data-visible='true'] { opacity: 1; }
+}
+
+.introBullets {
+  list-style: none;
+  padding: 0;
+  margin: 0;
+  display: flex;
+  flex-direction: column;
+  gap: var(--spaceS);
+  opacity: 0;
+  transition: opacity var(--durationXL) ease 0.7s;
+
+  &[data-visible='true'] { opacity: 1; }
+
+  li {
+    font-size: var(--fontSizeBodyM);
+    color: var(--textBody);
+    line-height: 1.6;
+  }
+}
+
+.typingCard {
+  display: flex;
+  align-items: center;
+  gap: 8px;
+  padding: 12px 16px;
+  border-radius: 10px;
+  background: color-mix(in lab, var(--text) 4%, var(--background));
+  border: 1px solid color-mix(in lab, var(--text) 10%, transparent);
+  font-family: 'Courier New', monospace;
+  font-size: var(--fontSizeBodyS);
+  max-width: 360px;
+}
+
+.typingPrompt { color: var(--textLight); user-select: none; }
+
+.typingText { flex: 1; color: var(--textTitle); white-space: nowrap; overflow: hidden; }
+
+.typingCursor {
+  display: inline-block;
+  width: 2px;
+  height: 1.1em;
+  background: var(--primary);
+  border-radius: 1px;
+  animation: cursor-blink 1s step-end infinite;
+  flex-shrink: 0;
+}
+
+.introRight {
+  position: sticky;
+  top: 80px;
+  opacity: 0;
+  transition: opacity var(--durationXL) ease 0.4s;
+
+  &[data-visible='true'] { opacity: 1; }
+
+  @media (--mediaTablet) { position: static; display: flex; justify-content: center; }
+}
+
+.photoWrap {
+  position: relative;
+  display: inline-block;
+}
+
+.photo {
+  width: 100%;
+  max-width: 300px;
+  aspect-ratio: 1;
+  object-fit: cover;
+  border-radius: 50%;
+  border: 3px solid color-mix(in lab, var(--primary) 40%, transparent);
+  display: block;
+
+  @media (--mediaMobile) { max-width: 220px; }
+}
+
+.photoBadge {
+  position: absolute;
+  bottom: 12px;
+  left: 50%;
+  transform: translateX(-50%);
+  background: color-mix(in lab, var(--background) 90%, transparent);
+  border: 1px solid color-mix(in lab, var(--text) 12%, transparent);
+  backdrop-filter: blur(12px);
+  border-radius: 40px;
+  padding: 8px 20px;
+  text-align: center;
+  white-space: nowrap;
+  animation: fade-in-up 0.6s ease 0.8s both;
+}
+
+.photoBadgeName {
+  display: block;
+  font-size: var(--fontSizeBodyS);
+  font-weight: var(--fontWeightMedium);
+  color: var(--textTitle);
+}
+
+.photoBadgeRole {
+  display: block;
+  font-size: var(--fontSizeBodyXS);
+  color: var(--primary);
+}
+
+.block {
+  display: flex;
+  flex-direction: column;
+  gap: var(--spaceXL);
+  opacity: 0;
+  transition: opacity var(--durationXL) ease 0.2s;
+
+  &[data-visible='true'] { opacity: 1; }
+}
+
+.blockHeading {
+  font-size: var(--fontSizeH3);
+  font-weight: var(--fontWeightMedium);
+  color: var(--textTitle);
+  margin: 0;
+  letter-spacing: -0.02em;
+}
+
+.eduGrid {
+  display: grid;
+  grid-template-columns: repeat(3, 1fr);
+  gap: var(--spaceL);
+
+  @media (--mediaTablet) { grid-template-columns: 1fr; }
+}
+
+.eduCard {
+  display: flex;
+  flex-direction: column;
+  gap: var(--spaceS);
+  padding: var(--spaceXL);
+  border-radius: 16px;
+  background: color-mix(in lab, var(--text) 3%, var(--background));
+  border: 1px solid color-mix(in lab, var(--text) 8%, transparent);
+  transition: border-color 0.25s ease, transform 0.25s ease;
+
+  &:hover {
+    border-color: color-mix(in lab, var(--primary) 40%, transparent);
+    transform: translateY(-4px);
+  }
+}
+
+.eduIcon { font-size: 1.8rem; }
+
+.eduScore { display: flex; align-items: baseline; gap: 6px; }
+
+.eduScoreValue {
+  font-size: var(--fontSizeH3);
+  font-weight: 700;
+  color: var(--primary);
+  letter-spacing: -0.02em;
+}
+
+.eduScoreLabel {
+  font-size: var(--fontSizeBodyXS);
+  color: var(--textLight);
+  text-transform: uppercase;
+  letter-spacing: 0.06em;
+}
+
+.eduDegree { font-size: var(--fontSizeBodyM); font-weight: var(--fontWeightMedium); color: var(--textTitle); margin: 0; }
+
+.eduInstitute { font-size: var(--fontSizeBodyS); color: var(--textBody); margin: 0; }
+
+.eduPeriod { font-size: var(--fontSizeBodyXS); color: var(--textLight); margin: 0; }
+
+.statsGrid {
+  display: grid;
+  grid-template-columns: repeat(4, 1fr);
+  gap: var(--spaceL);
+
+  @media (--mediaTablet) { grid-template-columns: repeat(2, 1fr); }
+}
+
+.statCard {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: var(--spaceS);
+  padding: var(--spaceXL);
+  border-radius: 16px;
+  background: color-mix(in lab, var(--text) 3%, var(--background));
+  border: 1px solid color-mix(in lab, var(--text) 8%, transparent);
+  text-align: center;
+  animation: stat-count 0.5s ease calc(var(--delay, 0ms)) both;
+  transition: border-color 0.25s ease, transform 0.25s ease;
+
+  &:hover {
+    border-color: color-mix(in lab, var(--primary) 40%, transparent);
+    transform: translateY(-3px);
+  }
+}
+
+.statIcon { font-size: 1.6rem; }
+
+.statValue {
+  font-size: var(--fontSizeH2);
+  font-weight: 700;
+  color: var(--primary);
+  letter-spacing: -0.03em;
+  line-height: 1;
+}
+
+.statLabel {
+  font-size: var(--fontSizeBodyXS);
+  color: var(--textLight);
+  text-align: center;
+  text-transform: uppercase;
+  letter-spacing: 0.06em;
+}
+
+.honoursGrid {
+  display: grid;
+  grid-template-columns: repeat(2, 1fr);
+  gap: var(--spaceL);
+
+  @media (--mediaMobile) { grid-template-columns: 1fr; }
+}
+
+.honourCard {
+  display: flex;
+  align-items: flex-start;
+  gap: var(--spaceM);
+  padding: var(--spaceXL);
+  border-radius: 14px;
+  background: color-mix(in lab, var(--primary) 5%, var(--background));
+  border: 1px solid color-mix(in lab, var(--primary) 15%, transparent);
+}
+
+.honourEmoji { font-size: 2rem; flex-shrink: 0; }
+
+.honourTitle {
+  font-size: var(--fontSizeBodyM);
+  font-weight: var(--fontWeightMedium);
+  color: var(--textTitle);
+  margin: 0 0 4px;
+}
+
+.honourDesc { font-size: var(--fontSizeBodyS); color: var(--textBody); margin: 0; }
+
+.certGrid {
+  display: grid;
+  grid-template-columns: repeat(3, 1fr);
+  gap: var(--spaceL);
+
+  @media (--mediaTablet) { grid-template-columns: 1fr; }
+}
+
+.certCard {
+  display: flex;
+  flex-direction: column;
+  gap: var(--spaceM);
+  border-radius: 16px;
+  background: color-mix(in lab, var(--text) 3%, var(--background));
+  border: 1px solid color-mix(in lab, var(--text) 8%, transparent);
+  overflow: hidden;
+  transition: border-color 0.25s ease, transform 0.25s ease, box-shadow 0.25s ease;
+
+  &:hover {
+    border-color: color-mix(in lab, var(--accent, var(--primary)) 40%, transparent);
+    transform: translateY(-4px);
+    box-shadow: 0 12px 40px color-mix(in lab, var(--accent, var(--primary)) 12%, transparent);
+  }
+}
+
+.certImage { width: 100%; aspect-ratio: 16/9; object-fit: cover; }
+
+.certMeta {
+  display: flex;
+  align-items: center;
+  gap: 8px;
+  padding: 0 var(--spaceL);
+}
+
+.certBadge { font-size: 1.2rem; }
+
+.certIssuer {
+  font-size: var(--fontSizeBodyS);
+  font-weight: var(--fontWeightMedium);
+  color: var(--accent, var(--primary));
+  flex: 1;
+}
+
+.certDate { font-size: var(--fontSizeBodyXS); color: var(--textLight); }
+
+.certTitle {
+  font-size: var(--fontSizeBodyM);
+  font-weight: var(--fontWeightMedium);
+  color: var(--textTitle);
+  margin: 0;
+  padding: 0 var(--spaceL);
+  line-height: 1.4;
+}
+
+.certDuration { font-size: var(--fontSizeBodyXS); color: var(--textLight); margin: 0; padding: 0 var(--spaceL) var(--spaceL); }
