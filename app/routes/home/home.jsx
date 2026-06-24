@@ -10,15 +10,11 @@ import moviesHouseTexture2 from '~/assets/movieshouse-screenshot2.png';
 import moviesHouseTextureLarge from '~/assets/movieshouse-screenshot-large.png';
 import moviesHouseTexturePlaceholder from '~/assets/movieshouse-screenshot-placeholder.jpg';
 import moviesHouseTexture from '~/assets/movieshouse-screenshot.png';
-import macbookProModel from '~/assets/macbook-pro.glb';
-import iphoneModel from '~/assets/iphone-11.glb';
-import { Button } from '~/components/button';
 import { Footer } from '~/components/footer';
 import { baseMeta } from '~/utils/meta';
 import { Intro } from './intro';
 import { Profile } from './profile';
 import { ProjectSummary } from './project-summary';
-import { SplashScreen } from './splash-screen';
 import { TechStack } from './tech-stack';
 import { ContactSection } from './contact-section';
 import { useEffect, useRef, useState } from 'react';
@@ -41,20 +37,6 @@ export const links = () => {
       type: 'application/wasm',
       importance: 'low',
     },
-    {
-      rel: 'prefetch',
-      href: macbookProModel,
-      as: 'fetch',
-      type: 'model/gltf-binary',
-      importance: 'low',
-    },
-    {
-      rel: 'prefetch',
-      href: iphoneModel,
-      as: 'fetch',
-      type: 'model/gltf-binary',
-      importance: 'low',
-    },
   ];
 };
 
@@ -68,7 +50,6 @@ export const meta = () => {
 export const Home = () => {
   const [visibleSections, setVisibleSections] = useState([]);
   const [scrollIndicatorHidden, setScrollIndicatorHidden] = useState(false);
-  const [splashDone, setSplashDone] = useState(false);
   const intro = useRef();
   const projectOne = useRef();
   const projectTwo = useRef();
@@ -115,26 +96,23 @@ export const Home = () => {
 
   return (
     <div className={styles.home}>
-      <SplashScreen onDone={() => setSplashDone(true)} />
       <Intro
         id="intro"
         sectionRef={intro}
         scrollIndicatorHidden={scrollIndicatorHidden}
-        splashDone={splashDone}
       />
       <ProjectSummary
         id="project-1"
         sectionRef={projectOne}
         visible={visibleSections.includes(projectOne.current)}
         index={1}
-        title="Civic Issue Reporting Platform"
-        description="A full-stack platform for citizens to report local civic issues with geolocation, image uploads, and community upvoting — built with React, Node.js, and MongoDB."
+        title="Civic Assist Platform"
+        description="A full-stack civic issue reporting platform empowering citizens to report local problems with geolocation, image upload, and community upvoting."
         buttonText="View project"
         buttonLink="/projects/civic-assist"
         model={{
           type: 'laptop',
-          alt: 'Civic Assist platform community feed',
-          svgText: ['CIVIC ASSIST'],
+          alt: 'Civic Assist civic issue reporting platform',
           textures: [
             {
               srcSet: `${civicAssistTexture} 1280w, ${civicAssistTextureLarge} 2560w`,
@@ -149,14 +127,13 @@ export const Home = () => {
         sectionRef={projectTwo}
         visible={visibleSections.includes(projectTwo.current)}
         index={2}
-        title="Movies House — Android App"
-        description="A movie discovery Android app built with Jetpack Compose and MVVM, integrating the TMDB API with Retrofit & Paging 3 and offline-first caching using Room DB."
+        title="Movies House — Android Movie Discovery"
+        description="A feature-rich Android app built with Jetpack Compose and MVVM, integrating TMDB API for real-time movie data with offline-first caching."
         buttonText="View project"
         buttonLink="/projects/movies-house"
         model={{
           type: 'phone',
           alt: 'Movies House app home screen',
-          svgText: ['MOVIES HOUSE'],
           textures: [
             {
               srcSet: `${moviesHouseTexture} 375w, ${moviesHouseTextureLarge} 750w`,
@@ -175,13 +152,12 @@ export const Home = () => {
         visible={visibleSections.includes(projectThree.current)}
         index={3}
         title="Parakram — Sports Event Platform"
-        description="A full-stack sports event management platform serving 1500+ users with Google OAuth, QR-based payments, jersey validation, and real-time admin workflows."
+        description="Full-stack sports event management serving 1500+ users with Google OAuth, QR-based payments, jersey validation, and real-time admin workflows."
         buttonText="View project"
         buttonLink="/projects/parakram"
         model={{
           type: 'laptop',
-          alt: 'Parakram sports event platform homepage',
-          svgText: ['PARAKRAM'],
+          alt: 'Parakram sports event platform',
           textures: [
             {
               srcSet: `${parakramTexture} 1280w, ${parakramTextureLarge} 2560w`,
@@ -190,18 +166,6 @@ export const Home = () => {
           ],
         }}
       />
-      <div className={styles.githubRow}>
-        <Button
-          href="https://github.com/aniket-adhav"
-          target="_blank"
-          rel="noopener noreferrer"
-          iconEnd="arrow-right"
-          secondary
-        >
-          <span className={styles.githubBtnFull}>See all projects on GitHub</span>
-          <span className={styles.githubBtnShort}>GitHub Projects</span>
-        </Button>
-      </div>
       <TechStack
         id="skills"
         sectionRef={skills}

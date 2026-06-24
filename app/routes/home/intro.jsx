@@ -17,7 +17,7 @@ const DisplacementSphere = lazy(() =>
   import('./displacement-sphere').then(module => ({ default: module.DisplacementSphere }))
 );
 
-export function Intro({ id, sectionRef, scrollIndicatorHidden, splashDone, ...rest }) {
+export function Intro({ id, sectionRef, scrollIndicatorHidden, ...rest }) {
   const { theme } = useTheme();
   const { disciplines } = config;
   const [disciplineIndex, setDisciplineIndex] = useState(0);
@@ -60,7 +60,7 @@ export function Intro({ id, sectionRef, scrollIndicatorHidden, splashDone, ...re
       tabIndex={-1}
       {...rest}
     >
-      <Transition in={splashDone} key={splashDone ? theme : 'splash'} timeout={3000}>
+      <Transition in key={theme} timeout={3000}>
         {({ visible, status }) => (
           <>
             {isHydrated && (

@@ -11,6 +11,7 @@ import { useWindowSize } from '~/hooks';
 import { Suspense, lazy, useState } from 'react';
 import { cssProps, media } from '~/utils/style';
 import { useHydrated } from '~/hooks/useHydrated';
+import katakana from './katakana.svg';
 import styles from './project-summary.module.css';
 
 const Model = lazy(() =>
@@ -37,12 +38,29 @@ export function ProjectSummary({
   const isHydrated = useHydrated();
   const titleId = `${id}-title`;
   const isMobile = width <= media.tablet;
+  const svgOpacity = theme === 'light' ? 0.7 : 1;
   const indexText = index < 10 ? `0${index}` : index;
-  const phoneSizes = `(max-width: ${media.tablet}px) 80vw, 20vw`;
+  const phoneSizes = `(max-width: ${media.tablet}px) 30vw, 20vw`;
   const laptopSizes = `(max-width: ${media.tablet}px) 80vw, 40vw`;
 
   function handleModelLoad() {
     setModelLoaded(true);
+  }
+
+  function renderKatakana(device, visible) {
+    return (
+      <svg
+        type="project"
+        data-visible={visible && modelLoaded}
+        data-light={theme === 'light'}
+        style={cssProps({ opacity: svgOpacity })}
+        className={styles.svg}
+        data-device={device}
+        viewBox="0 0 751 136"
+      >
+        <use href={`${katakana}#katakana-project`} />
+      </svg>
+    );
   }
 
   function renderDetails(visible) {
@@ -80,103 +98,77 @@ export function ProjectSummary({
     );
   }
 
-  function renderSvgText(visible, device) {
-    const lines = model.svgText;
-    if (!lines) return null;
-
-    return (
-      <svg
-        aria-hidden
-        className={styles.svg}
-        data-device={device}
-        data-visible={visible}
-        style={cssProps({ opacity: 0.065 })}
-        viewBox="0 0 500 48"
-        xmlns="http://www.w3.org/2000/svg"
-      >
-        <text
-          x="50%"
-          y="50%"
-          dominantBaseline="middle"
-          textAnchor="middle"
-          fontSize="28"
-          fontWeight="700"
-          fontFamily="Gotham, 'Helvetica Neue', Arial, sans-serif"
-          letterSpacing="14"
-        >
-          {lines[0]}
-        </text>
-      </svg>
-    );
-  }
-
   function renderPreview(visible) {
     return (
       <div className={styles.preview}>
         {model.type === 'laptop' && (
-          <div className={styles.model} data-device="laptop">
-            {!modelLoaded && (
-              <Loader center className={styles.loader} data-visible={visible} />
-            )}
-            <Suspense>
-              {isHydrated && visible && (
-                <Model
-                  alt={model.alt}
-                  cameraPosition={{ x: 0, y: 0, z: 8 }}
-                  showDelay={200}
-                  onLoad={handleModelLoad}
-                  show={visible}
-                  models={[
-                    {
-                      ...deviceModels.laptop,
-                      texture: {
-                        ...model.textures[0],
-                        sizes: laptopSizes,
-                      },
-                    },
-                  ]}
-                />
+          <>
+            {renderKatakana('laptop', visible)}
+            <div className={styles.model} data-device="laptop">
+              {!modelLoaded && (
+                <Loader center className={styles.loader} data-visible={visible} />
               )}
-            </Suspense>
-            {renderSvgText(visible, 'laptop')}
-          </div>
+              {isHydrated && visible && (
+                <Suspense>
+                  <Model
+                    alt={model.alt}
+                    cameraPosition={{ x: 0, y: 0, z: 8 }}
+                    showDelay={700}
+                    onLoad={handleModelLoad}
+                    show={visible}
+                    models={[
+                      {
+                        ...deviceModels.laptop,
+                        texture: {
+                          ...model.textures[0],
+                          sizes: laptopSizes,
+                        },
+                      },
+                    ]}
+                  />
+                </Suspense>
+              )}
+            </div>
+          </>
         )}
         {model.type === 'phone' && (
-          <div className={styles.model} data-device="phone">
-            {!modelLoaded && (
-              <Loader center className={styles.loader} data-visible={visible} />
-            )}
-            <Suspense>
-              {isHydrated && visible && (
-                <Model
-                  alt={model.alt}
-                  cameraPosition={{ x: 0, y: 0, z: 11.5 }}
-                  showDelay={100}
-                  onLoad={handleModelLoad}
-                  show={visible}
-                  models={[
-                    {
-                      ...deviceModels.phone,
-                      position: { x: -0.6, y: 1.1, z: 0 },
-                      texture: {
-                        ...model.textures[0],
-                        sizes: phoneSizes,
-                      },
-                    },
-                    {
-                      ...deviceModels.phone,
-                      position: { x: 0.6, y: -0.5, z: 0.3 },
-                      texture: {
-                        ...model.textures[1],
-                        sizes: phoneSizes,
-                      },
-                    },
-                  ]}
-                />
+          <>
+            {renderKatakana('phone', visible)}
+            <div className={styles.model} data-device="phone">
+              {!modelLoaded && (
+                <Loader center className={styles.loader} data-visible={visible} />
               )}
-            </Suspense>
-            {renderSvgText(visible, 'phone')}
-          </div>
+              {isHydrated && visible && (
+                <Suspense>
+                  <Model
+                    alt={model.alt}
+                    cameraPosition={{ x: 0, y: 0, z: 11.5 }}
+                    showDelay={300}
+                    onLoad={handleModelLoad}
+                    show={visible}
+                    models={[
+                      {
+                        ...deviceModels.phone,
+                        position: { x: -0.6, y: 1.1, z: 0 },
+                        texture: {
+                          ...model.textures[0],
+                          sizes: phoneSizes,
+                        },
+                      },
+                      {
+                        ...deviceModels.phone,
+                        position: { x: 0.6, y: -0.5, z: 0.3 },
+                        texture: {
+                          ...model.textures[1],
+                          sizes: phoneSizes,
+                        },
+                      },
+                    ]}
+                  />
+                </Suspense>
+              )}
+            </div>
+          </>
         )}
       </div>
     );
@@ -206,13 +198,7 @@ export function ProjectSummary({
                   {renderPreview(visible)}
                 </>
               )}
-              {alternate && !isMobile && (
-                <>
-                  {renderPreview(visible)}
-                  {renderDetails(visible)}
-                </>
-              )}
-              {isMobile && (
+              {(alternate || isMobile) && (
                 <>
                   {renderPreview(visible)}
                   {renderDetails(visible)}
