@@ -2,19 +2,115 @@
   --primary: oklch(0.65 0.22 30);
 }
 
-.hero {
-  position: relative;
-  overflow: hidden;
+.backRow {
+  padding: var(--spaceXL) var(--spaceOuter) 0;
 }
 
-.heroBack {
-  position: absolute;
-  top: var(--spaceXL);
-  left: var(--spaceOuter);
-  z-index: 4;
+.backLink {
+  display: inline-flex;
+  align-items: center;
+  gap: 8px;
+  font-size: var(--fontSizeBodyS);
+  color: var(--textLight);
+  text-decoration: none;
+  transition: color 0.2s ease;
 }
 
-.phoneRow {
+.backLink:hover {
+  color: var(--textTitle);
+}
+
+/* ── Header ── */
+.header {
+  padding: var(--spaceXL) var(--spaceOuter) var(--space2XL);
+}
+
+.headerContent {
+  max-width: var(--maxWidthL);
+  margin: 0 auto;
+  display: grid;
+  grid-template-columns: 1fr auto;
+  gap: var(--space2XL);
+  align-items: start;
+
+  @media (--mediaTablet) {
+    grid-template-columns: 1fr;
+  }
+}
+
+.headerText {
+  display: flex;
+  flex-direction: column;
+  gap: var(--spaceL);
+}
+
+.tag {
+  font-size: var(--fontSizeBodyXS);
+  font-weight: var(--fontWeightMedium);
+  text-transform: uppercase;
+  letter-spacing: 0.1em;
+  color: var(--primary);
+}
+
+.title {
+  font-size: clamp(2rem, 5vw, 3.5rem);
+  font-weight: var(--fontWeightBold);
+  color: var(--textTitle);
+  line-height: 1.1;
+  margin: 0;
+}
+
+.description {
+  font-size: var(--fontSizeBodyM);
+  color: var(--textBody);
+  line-height: 1.7;
+  max-width: 60ch;
+  margin: 0;
+}
+
+.headerButtons {
+  display: flex;
+  gap: var(--spaceM);
+  flex-wrap: wrap;
+}
+
+.techList {
+  list-style: none;
+  margin: 0;
+  padding: 0;
+  display: flex;
+  flex-direction: column;
+  gap: 8px;
+  min-width: 180px;
+
+  @media (--mediaTablet) {
+    flex-direction: row;
+    flex-wrap: wrap;
+  }
+}
+
+.techLabel {
+  font-size: var(--fontSizeBodyXS);
+  font-weight: var(--fontWeightMedium);
+  text-transform: uppercase;
+  letter-spacing: 0.1em;
+  color: var(--textLight);
+  margin-bottom: 4px;
+}
+
+.techItem {
+  font-size: var(--fontSizeBodyS);
+  color: var(--textBody);
+  padding: 4px 10px;
+  border: 1px solid color-mix(in lab, var(--text) 15%, transparent);
+  border-radius: 4px;
+  background: color-mix(in lab, var(--primary) 8%, transparent);
+}
+
+/* ── Hero phone showcase ── */
+.heroSection {}
+
+.phoneShowcase {
   display: flex;
   justify-content: center;
   gap: var(--space2XL);
@@ -27,66 +123,73 @@
   }
 }
 
+.phoneWrap {
+  display: flex;
+  justify-content: center;
+}
+
 .phoneImg {
   width: 280px;
   border-radius: 28px;
   box-shadow: 0 24px 80px rgba(0, 0, 0, 0.35);
   overflow: hidden;
 
-  @media (--mediaMobile) { width: 220px; }
+  @media (--mediaMobile) {
+    width: 220px;
+  }
 }
 
-.featureList {
+/* ── Feature grid ── */
+.featureGrid {
+  display: grid;
+  grid-template-columns: repeat(3, 1fr);
+  gap: var(--spaceL);
+  margin-top: var(--spaceXL);
+
+  @media (--mediaTablet) {
+    grid-template-columns: repeat(2, 1fr);
+  }
+
+  @media (--mediaMobile) {
+    grid-template-columns: 1fr;
+  }
+}
+
+.featureCard {
+  padding: var(--spaceL);
+  border: 1px solid color-mix(in lab, var(--text) 10%, transparent);
+  border-radius: 12px;
+  background: color-mix(in lab, var(--background) 60%, transparent);
   display: flex;
   flex-direction: column;
-  gap: var(--spaceL);
+  gap: var(--spaceS);
 }
 
-.featureItem {
-  display: flex;
-  align-items: flex-start;
-  gap: var(--spaceM);
+.featureIcon {
+  font-size: 1.8rem;
 }
 
-.featureIcon { font-size: 1.5rem; flex-shrink: 0; margin-top: 2px; }
-
-.featureItem strong {
-  display: block;
+.featureTitle {
   font-size: var(--fontSizeBodyM);
   font-weight: var(--fontWeightMedium);
   color: var(--textTitle);
-  margin-bottom: 4px;
+  margin: 0;
 }
 
-.featureItem p {
+.featureDesc {
   font-size: var(--fontSizeBodyS);
   color: var(--textBody);
-  margin: 0;
   line-height: 1.6;
+  margin: 0;
 }
 
-.techStack {
-  display: flex;
-  flex-direction: column;
-  gap: var(--spaceL);
-}
+/* ── CTA ── */
+.ctaSection {}
 
-.techRow {
+.ctaButtons {
   display: flex;
-  align-items: baseline;
   gap: var(--spaceM);
-  padding: var(--spaceS) 0;
-  border-bottom: 1px solid color-mix(in lab, var(--text) 8%, transparent);
+  flex-wrap: wrap;
+  justify-content: center;
+  margin-top: var(--spaceL);
 }
-
-.techLabel {
-  font-size: var(--fontSizeBodyXS);
-  font-weight: var(--fontWeightMedium);
-  text-transform: uppercase;
-  letter-spacing: 0.08em;
-  color: var(--textLight);
-  min-width: 90px;
-  flex-shrink: 0;
-}
-
-.techValue { font-size: var(--fontSizeBodyS); color: var(--textBody); }

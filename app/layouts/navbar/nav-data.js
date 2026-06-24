@@ -25,4 +25,9 @@ export const socialLinks = [
     url: `https://github.com/${config.github}`,
     icon: 'github',
   },
+  {
+    label: 'LinkedIn',
+    url: 'https://www.linkedin.com/in/aniket-adhav-a70182312/',
+    icon: 'linkedin',
+  },
 ];
