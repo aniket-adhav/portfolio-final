@@ -1,7 +1,7 @@
 modules = ["web", "nodejs-20"]
 [agent]
 expertMode = true
-stack = "BEST_EFFORT_FALLBACK"
+stack = "GAMESTACK_JS"
 
 [nix]
 channel = "stable-25_05"
@@ -22,13 +22,13 @@ args = "Start application"
 name = "Start application"
 author = "agent"
 
-[[workflows.workflow.tasks]]
-task = "shell.exec"
-args = "npm run dev"
-waitForPort = 5000
-
 [workflows.workflow.metadata]
 outputType = "webview"
+
+[[workflows.workflow.tasks]]
+task = "shell.exec"
+args = "node ./scripts/dev.cjs && npx --no remix vite:dev"
+waitForPort = 5000
 
 [[ports]]
 localPort = 5000
@@ -36,5 +36,5 @@ externalPort = 80
 
 [deployment]
 deploymentTarget = "autoscale"
-run = ["npx", "wrangler", "pages", "dev", "./build/client", "--port=5000"]
+run = ["node", "./dist/index.cjs"]
 build = ["npm", "run", "build"]
