@@ -34,34 +34,6 @@ function IconInstagram() {
   );
 }
 
-function IconEmail() {
-  return (
-    <svg width="22" height="22" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round">
-      <rect x="2" y="4" width="20" height="16" rx="2" />
-      <path d="m22 7-8.97 5.7a1.94 1.94 0 0 1-2.06 0L2 7" />
-    </svg>
-  );
-}
-
-function IconCopy() {
-  return (
-    <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round">
-      <rect width="14" height="14" x="8" y="8" rx="2" ry="2" />
-      <path d="M4 16c-1.1 0-2-.9-2-2V4c0-1.1.9-2 2-2h10c1.1 0 2 .9 2 2" />
-    </svg>
-  );
-}
-
-function IconCheck() {
-  return (
-    <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2.5" strokeLinecap="round" strokeLinejoin="round">
-      <polyline points="20 6 9 17 4 12" />
-    </svg>
-  );
-}
-
-import { useState } from 'react';
-
 const SOCIAL_LINKS = [
   { label: 'GitHub', handle: '@aniket-adhav', href: 'https://github.com/aniket-adhav', color: '#6e40c9', Icon: IconGitHub },
   { label: 'LinkedIn', handle: 'Aniket Adhav', href: 'https://www.linkedin.com/in/aniket-adhav-a70182312/', color: '#0a66c2', Icon: IconLinkedIn },
@@ -69,19 +41,7 @@ const SOCIAL_LINKS = [
   { label: 'Instagram', handle: '@aniket_adhav_07', href: 'https://www.instagram.com/aniket_adhav_07', color: '#e1306c', Icon: IconInstagram },
 ];
 
-const DIRECT_CONTACTS = [
-  { label: 'Email', value: 'aniketadhav2006@gmail.com', href: 'mailto:aniketadhav2006@gmail.com', color: '#ea4335', Icon: IconEmail },
-];
-
 export const ContactSection = ({ id, visible, sectionRef }) => {
-  const [copiedIdx, setCopiedIdx] = useState(null);
-
-  const handleCopy = (text, idx) => {
-    navigator.clipboard.writeText(text.replace(/\s/g, ''));
-    setCopiedIdx(idx);
-    setTimeout(() => setCopiedIdx(null), 1800);
-  };
-
   return (
     <section
       className={styles.contactSection}
@@ -95,32 +55,11 @@ export const ContactSection = ({ id, visible, sectionRef }) => {
             <Divider notchWidth="64px" notchHeight="8px" />
             <span className={styles.tagText} data-visible={visible}>Get in touch</span>
           </div>
-          <h2 className={styles.heading}>Contact</h2>
+          <h2 className={styles.heading}>Let's connect</h2>
           <p className={styles.subText} data-visible={visible}>
             Whether you want to collaborate, have a question, or just want to say hi —
             I&#39;m always happy to hear from you.
           </p>
-        </div>
-
-        <div className={styles.directGroup} data-visible={visible}>
-          {DIRECT_CONTACTS.map((c, i) => (
-            <div key={c.label} className={styles.directCard} style={{ '--cc': c.color }}>
-              <a href={c.href} className={styles.directLink} aria-label={c.label}>
-                <span className={styles.directIcon} style={{ color: c.color }}><c.Icon /></span>
-                <span className={styles.directInfo}>
-                  <span className={styles.directLabel}>{c.label}</span>
-                  <span className={styles.directValue}>{c.value}</span>
-                </span>
-              </a>
-              <button
-                className={styles.copyBtn}
-                onClick={e => { e.preventDefault(); handleCopy(c.value, i); }}
-                aria-label={`Copy ${c.label}`}
-              >
-                {copiedIdx === i ? <IconCheck /> : <IconCopy />}
-              </button>
-            </div>
-          ))}
         </div>
 
         <p className={styles.socialLabel} data-visible={visible}>Find me on</p>
@@ -150,7 +89,7 @@ export const ContactSection = ({ id, visible, sectionRef }) => {
             href="/aniket-adhav-resume.pdf"
             target="_blank"
             rel="noopener noreferrer"
-            icon="chevron-right"
+            iconEnd="arrow-right"
             iconHoverShift
           >
             View Resume

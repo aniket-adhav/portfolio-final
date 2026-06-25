@@ -40,6 +40,119 @@
   }
 }
 
+.header {
+  width: 100%;
+  padding: var(--space3XL) 0 var(--space4XL);
+
+  @media (--mediaTablet) {
+    padding: var(--space2XL) 0 var(--space3XL);
+  }
+}
+
+.headerContent {
+  max-width: var(--maxWidthL);
+  margin: 0 auto;
+  padding: 0 var(--spaceXL);
+  display: grid;
+  grid-template-columns: 1fr 260px;
+  gap: var(--space4XL);
+  align-items: start;
+
+  @media (max-width: 1100px) {
+    grid-template-columns: 1fr 200px;
+    gap: var(--space2XL);
+  }
+
+  @media (--mediaTablet) {
+    grid-template-columns: 1fr;
+    gap: var(--space2XL);
+    padding: 0 var(--spaceL);
+  }
+}
+
+.headerText {
+  display: flex;
+  flex-direction: column;
+  gap: var(--spaceL);
+}
+
+.tag {
+  font-size: var(--fontSizeBodyXS);
+  font-weight: var(--fontWeightMedium);
+  letter-spacing: 0.12em;
+  text-transform: uppercase;
+  color: var(--accent);
+}
+
+.title {
+  font-size: clamp(2.4rem, 5vw, 4.2rem);
+  font-weight: var(--fontWeightMedium);
+  line-height: 1.1;
+  letter-spacing: -0.02em;
+  color: var(--text);
+  margin: 0;
+}
+
+.description {
+  font-size: var(--fontSizeBodyL);
+  line-height: 1.6;
+  color: var(--textLight);
+  margin: 0;
+  max-width: 600px;
+}
+
+.headerButtons {
+  display: flex;
+  gap: var(--spaceM);
+  flex-wrap: wrap;
+  padding-top: var(--spaceS);
+}
+
+.techList {
+  list-style: none;
+  margin: var(--spaceL) 0 0;
+  padding: 0;
+
+  @media (--mediaTablet) {
+    display: flex;
+    flex-wrap: wrap;
+    gap: var(--spaceS);
+  }
+}
+
+.techLabel {
+  font-size: var(--fontSizeBodyXS);
+  font-weight: var(--fontWeightMedium);
+  letter-spacing: 0.1em;
+  text-transform: uppercase;
+  color: var(--textLight);
+  padding-bottom: var(--spaceM);
+  border-bottom: 1px solid color-mix(in lab, var(--text) 12%, transparent);
+  margin-bottom: var(--spaceM);
+
+  @media (--mediaTablet) {
+    width: 100%;
+    margin-bottom: 0;
+    padding-bottom: 0;
+    border-bottom: none;
+  }
+}
+
+.techItem {
+  padding: var(--spaceM) 0;
+  font-size: var(--fontSizeBodyS);
+  color: var(--text);
+  border-bottom: 1px solid color-mix(in lab, var(--text) 10%, transparent);
+
+  @media (--mediaTablet) {
+    padding: var(--spaceXS) var(--spaceM);
+    border-bottom: none;
+    border: 1px solid color-mix(in lab, var(--text) 15%, transparent);
+    border-radius: 4px;
+    font-size: var(--fontSizeBodyXS);
+  }
+}
+
 .heroSection {
   padding-bottom: 0;
 }
@@ -98,84 +211,6 @@
   border-radius: 24px;
   box-shadow: 0 24px 64px color-mix(in lab, var(--text) 20%, transparent);
   border: 1px solid color-mix(in lab, var(--text) 8%, transparent);
-}
-
-.heroMeta {
-  max-width: 720px;
-  margin: 0 auto;
-  padding-top: var(--spaceXL);
-  border-top: 1px solid color-mix(in lab, var(--text) 10%, transparent);
-  text-align: center;
-  display: flex;
-  flex-direction: column;
-  align-items: center;
-  gap: var(--spaceL);
-  position: relative;
-  z-index: 1;
-}
-
-.tag {
-  font-size: var(--fontSizeBodyXS);
-  font-weight: var(--fontWeightMedium);
-  letter-spacing: 0.12em;
-  text-transform: uppercase;
-  color: var(--accent);
-}
-
-.title {
-  font-size: clamp(2.4rem, 5vw, 4.2rem);
-  font-weight: var(--fontWeightMedium);
-  line-height: 1.1;
-  letter-spacing: -0.02em;
-  color: var(--text);
-  margin: 0;
-}
-
-.description {
-  font-size: var(--fontSizeBodyL);
-  line-height: 1.6;
-  color: var(--textLight);
-  margin: 0;
-  max-width: 600px;
-}
-
-.headerButtons {
-  display: flex;
-  gap: var(--spaceM);
-  flex-wrap: wrap;
-  justify-content: center;
-  padding-top: var(--spaceS);
-}
-
-.techSection {
-  padding-top: 0;
-}
-
-.techList {
-  list-style: none;
-  margin: var(--spaceXL) 0 0;
-  padding: 0;
-  display: flex;
-  flex-wrap: wrap;
-  align-items: center;
-  gap: var(--spaceS);
-}
-
-.techLabel {
-  font-size: var(--fontSizeBodyXS);
-  font-weight: var(--fontWeightMedium);
-  letter-spacing: 0.1em;
-  text-transform: uppercase;
-  color: var(--textLight);
-  margin-right: var(--spaceS);
-}
-
-.techItem {
-  padding: var(--spaceXS) var(--spaceM);
-  font-size: var(--fontSizeBodyXS);
-  color: var(--text);
-  border: 1px solid color-mix(in lab, var(--text) 15%, transparent);
-  border-radius: 4px;
 }
 
 .featureGrid {

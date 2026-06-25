@@ -18,7 +18,6 @@ export const Navbar = () => {
   const [current, setCurrent] = useState();
   const [menuOpen, setMenuOpen] = useState(false);
   const [target, setTarget] = useState();
-  const [resumeOpen, setResumeOpen] = useState(false);
   const { theme } = useTheme();
   const location = useLocation();
   const windowSize = useWindowSize();
@@ -192,51 +191,6 @@ export const Navbar = () => {
         </Transition>
         {!isMobile && <ThemeToggle data-navbar-item />}
       </header>
-
-      {!menuOpen && (
-        <div className={styles.resumeButtonWrap}>
-          <Button
-            onClick={() => setResumeOpen(true)}
-            icon="resume"
-            secondary
-          >
-            Resume
-          </Button>
-        </div>
-      )}
-
-      {resumeOpen && (
-        <div className={styles.resumeOverlay} onClick={() => setResumeOpen(false)}>
-          <div className={styles.resumeModal} onClick={e => e.stopPropagation()}>
-            <div className={styles.resumeModalHeader}>
-              <span className={styles.resumeModalTitle}>Aniket Adhav — Resume</span>
-              <div className={styles.resumeModalActions}>
-                <a
-                  href="/aniket-adhav-resume.pdf"
-                  download="Aniket_Adhav_Resume.pdf"
-                  className={styles.resumeDownloadBtn}
-                  aria-label="Download Resume"
-                >
-                  <Icon icon="download" size={18} />
-                  <span>Download</span>
-                </a>
-                <button
-                  className={styles.resumeCloseBtn}
-                  onClick={() => setResumeOpen(false)}
-                  aria-label="Close"
-                >
-                  <Icon icon="close" size={20} />
-                </button>
-              </div>
-            </div>
-            <iframe
-              src="/aniket-adhav-resume.pdf"
-              className={styles.resumeFrame}
-              title="Aniket Adhav Resume"
-            />
-          </div>
-        </div>
-      )}
     </>
   );
 };

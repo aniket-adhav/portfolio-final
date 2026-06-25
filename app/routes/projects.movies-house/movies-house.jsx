@@ -39,6 +39,44 @@ export function MoviesHouse() {
           </Link>
         </div>
 
+        <header className={styles.header}>
+          <div className={styles.headerContent}>
+            <div className={styles.headerText}>
+              <div className={styles.tag}>Android · Jetpack Compose · MVVM</div>
+              <h1 className={styles.title}>Movies House</h1>
+              <p className={styles.description}>{description}</p>
+              <div className={styles.headerButtons}>
+                <Button
+                  iconHoverShift
+                  iconEnd="arrow-right"
+                  href="https://github.com/aniket-adhav/MoviesHouse"
+                  target="_blank"
+                  rel="noopener noreferrer"
+                >
+                  GitHub Repo
+                </Button>
+              </div>
+            </div>
+            <ul className={styles.techList}>
+              <li className={styles.techLabel}>Tech Stack</li>
+              {[
+                'Kotlin',
+                'Jetpack Compose',
+                'MVVM + Repository',
+                'Hilt DI',
+                'Retrofit + OkHttp',
+                'Room DB + Paging 3',
+                'Coroutines + Flow',
+                'Coil',
+                'TMDB API v3',
+                'Gradle (Kotlin DSL)',
+              ].map(tech => (
+                <li key={tech} className={styles.techItem}>{tech}</li>
+              ))}
+            </ul>
+          </div>
+        </header>
+
         <ProjectSection padding="top" className={styles.heroSection}>
           <ProjectSectionContent data-width="xl">
             <div className={styles.phoneShowcase}>
@@ -61,27 +99,10 @@ export function MoviesHouse() {
                 />
               </div>
             </div>
-
-            <div className={styles.heroMeta}>
-              <div className={styles.tag}>Android · Jetpack Compose · MVVM</div>
-              <h1 className={styles.title}>Movies House</h1>
-              <p className={styles.description}>{description}</p>
-              <div className={styles.headerButtons}>
-                <Button
-                  iconHoverShift
-                  iconEnd="arrow-right"
-                  href="https://github.com/aniket-adhav/MoviesHouse"
-                  target="_blank"
-                  rel="noopener noreferrer"
-                >
-                  GitHub Repo
-                </Button>
-              </div>
-            </div>
           </ProjectSectionContent>
         </ProjectSection>
 
-        <ProjectSection className={styles.techSection}>
+        <ProjectSection>
           <ProjectSectionContent>
             <ProjectTextRow>
               <ProjectSectionHeading>Overview</ProjectSectionHeading>
@@ -96,23 +117,6 @@ export function MoviesHouse() {
                 API for live movie metadata.
               </ProjectSectionText>
             </ProjectTextRow>
-            <ul className={styles.techList}>
-              <span className={styles.techLabel}>Tech Stack</span>
-              {[
-                'Kotlin',
-                'Jetpack Compose',
-                'MVVM + Repository',
-                'Hilt DI',
-                'Retrofit + OkHttp',
-                'Room DB + Paging 3',
-                'Coroutines + Flow',
-                'Coil',
-                'TMDB API v3',
-                'Gradle (Kotlin DSL)',
-              ].map(tech => (
-                <li key={tech} className={styles.techItem}>{tech}</li>
-              ))}
-            </ul>
           </ProjectSectionContent>
         </ProjectSection>
 
