@@ -20,14 +20,9 @@ import { Profile } from './profile';
 import { ProjectSummary } from './project-summary';
 import { TechStack } from './tech-stack';
 import { ContactSection } from './contact-section';
-import { useEffect, useRef, useState, Suspense, lazy } from 'react';
-import { useHydrated } from '~/hooks/useHydrated';
+import { useEffect, useRef, useState } from 'react';
 import config from '~/config.json';
 import styles from './home.module.css';
-
-const SplashScreen = lazy(() =>
-  import('./splash-screen').then(m => ({ default: m.SplashScreen }))
-);
 
 export const links = () => {
   return [
@@ -72,8 +67,6 @@ export const meta = () => {
 export const Home = () => {
   const [visibleSections, setVisibleSections] = useState([]);
   const [scrollIndicatorHidden, setScrollIndicatorHidden] = useState(false);
-  const [splashDone, setSplashDone] = useState(false);
-  const isHydrated = useHydrated();
   const intro = useRef();
   const projectOne = useRef();
   const projectTwo = useRef();
@@ -120,11 +113,6 @@ export const Home = () => {
 
   return (
     <div className={styles.home}>
-      {isHydrated && (
-        <Suspense>
-          <SplashScreen onDone={() => setSplashDone(true)} />
-        </Suspense>
-      )}
       <Intro
         id="intro"
         sectionRef={intro}
