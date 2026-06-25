@@ -51,7 +51,7 @@ export function Parakram() {
                 <Button
                   iconHoverShift
                   iconEnd="arrow-right"
-                  href="https://parakram-sportsmanagement.vercel.app/"
+                  href="https://www.parakram.site/"
                   target="_blank"
                   rel="noopener noreferrer"
                 >
@@ -253,7 +253,7 @@ export function Parakram() {
                 <Button
                   iconHoverShift
                   iconEnd="arrow-right"
-                  href="https://parakram-sportsmanagement.vercel.app/"
+                  href="https://www.parakram.site/"
                   target="_blank"
                   rel="noopener noreferrer"
                 >

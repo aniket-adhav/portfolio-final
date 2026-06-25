@@ -49,14 +49,14 @@ const techRows = [
     { name: 'Hilt', icon: 'https://cdn.simpleicons.org/android/3DDC84', url: 'https://dagger.dev/hilt/' },
     { name: 'Paging 3', icon: 'https://cdn.simpleicons.org/android/3DDC84', url: 'https://developer.android.com/topic/libraries/architecture/paging/v3-overview' },
     { name: 'Coil', icon: 'https://avatars.githubusercontent.com/u/52722434?s=200&v=4', url: 'https://coil-kt.github.io/coil/' },
-    { name: 'Leaflet', icon: 'https://cdn.jsdelivr.net/gh/devicons/devicon/icons/leaflet/leaflet-original.svg', url: 'https://leafletjs.com' },
+    { name: 'Leaflet', icon: 'https://cdn.simpleicons.org/leaflet/199900', url: 'https://leafletjs.com' },
   ],
   [
     { name: 'REST APIs', icon: 'https://cdn.simpleicons.org/fastapi/009688', url: 'https://restfulapi.net' },
     { name: 'JWT', icon: 'https://cdn.simpleicons.org/jsonwebtokens/000000', url: 'https://jwt.io' },
   ],
   [
-    { name: 'DSA', icon: 'https://cdn.simpleicons.org/leetcode/FFA116', url: 'https://leetcode.com/u/aniket_adhav/' },
+    { name: 'LeetCode', icon: 'https://cdn.simpleicons.org/leetcode/FFA116', url: 'https://leetcode.com/u/aniket_adhav/' },
   ],
 ];
 

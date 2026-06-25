@@ -81,7 +81,7 @@ const education = [
 ];
 
 const achievements = [
-  { value: '1800+', label: 'LeetCode Rating', icon: '⚡' },
+  { value: '1866', label: 'Max LeetCode Rating', icon: '⚡' },
   { value: '700+',  label: 'DSA Problems',    icon: '🧠' },
   { value: '290',   label: 'Day Streak',       icon: '🔥' },
   { value: '10/10', label: 'SGPA — Rank 1',    icon: '🏅' },
@@ -157,7 +157,7 @@ export const Profile = ({ id, visible, sectionRef }) => {
                   <span className={styles.tagText} data-visible={vis}>About me</span>
                 </div>
                 <h2 className={styles.title} id={titleId} data-visible={vis}>
-                  A passionate Full Stack Web &amp; Android Developer from Maharashtra, India.
+                  A passionate Full Stack Web &amp; Android Developer.
                 </h2>
                 <p className={styles.bio} data-visible={vis}>
                   I build fast, scalable web apps and polished Android experiences — and I love
@@ -166,7 +166,7 @@ export const Profile = ({ id, visible, sectionRef }) => {
                 <ul className={styles.summaryList} data-visible={vis}>
                   <li>🚀 Currently pursuing B.E. Computer Engineering with <strong>9.74 CGPA</strong></li>
                   <li>💡 Technical Head · led cross-functional teams on full-stack products</li>
-                  <li>🏆 Hackathon winner &amp; top DSA performer with <strong>1800+ LeetCode rating</strong></li>
+                  <li>🏆 Hackathon winner &amp; Knight on LeetCode with <strong>1866 max rating</strong></li>
                 </ul>
               </div>
 

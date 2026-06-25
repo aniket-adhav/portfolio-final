@@ -1,10 +1,5 @@
 import { Divider } from '~/components/divider';
 import { Button } from '~/components/button';
-import { Input } from '~/components/input';
-import { tokens } from '~/components/theme-provider/theme';
-import { useFormInput } from '~/hooks';
-import { cssProps, msToNum, numToMs } from '~/utils/style';
-import { useState, useRef } from 'react';
 import styles from './contact-section.module.css';
 
 function IconGitHub() {
@@ -65,9 +60,7 @@ function IconCheck() {
   );
 }
 
-const MAX_EMAIL_LENGTH = 512;
-const MAX_MESSAGE_LENGTH = 4096;
-const EMAIL_PATTERN = /(.+)@(.+){2,}\.(.+){2,}/;
+import { useState } from 'react';
 
 const SOCIAL_LINKS = [
   { label: 'GitHub', handle: '@aniket-adhav', href: 'https://github.com/aniket-adhav', color: '#6e40c9', Icon: IconGitHub },
@@ -80,19 +73,8 @@ const DIRECT_CONTACTS = [
   { label: 'Email', value: 'aniketadhav2006@gmail.com', href: 'mailto:aniketadhav2006@gmail.com', color: '#ea4335', Icon: IconEmail },
 ];
 
-function getDelay(delayMs, offset = numToMs(0), multiplier = 1) {
-  const numDelay = msToNum(delayMs) * multiplier;
-  return cssProps({ delay: numToMs((msToNum(offset) + numDelay).toFixed(0)) });
-}
-
 export const ContactSection = ({ id, visible, sectionRef }) => {
   const [copiedIdx, setCopiedIdx] = useState(null);
-  const [sending, setSending] = useState(false);
-  const [success, setSuccess] = useState(false);
-  const [errors, setErrors] = useState({});
-  const email = useFormInput('');
-  const message = useFormInput('');
-  const initDelay = tokens.base.durationS;
 
   const handleCopy = (text, idx) => {
     navigator.clipboard.writeText(text.replace(/\s/g, ''));
@@ -108,152 +90,71 @@ export const ContactSection = ({ id, visible, sectionRef }) => {
       tabIndex={-1}
     >
       <div className={styles.wrapper} data-visible={visible}>
-        {/* Left column */}
-        <div className={styles.leftCol}>
-          <div className={styles.header} data-visible={visible}>
-            <div className={styles.tag}>
-              <Divider notchWidth="64px" notchHeight="8px" />
-              <span className={styles.tagText} data-visible={visible}>Get in touch</span>
-            </div>
-            <h2 className={styles.heading}>Contact</h2>
-            <p className={styles.subText} data-visible={visible}>
-              Whether you want to collaborate, have a question, or just want to say hi —
-              I&#39;m always happy to hear from you.
-            </p>
+        <div className={styles.header} data-visible={visible}>
+          <div className={styles.tag}>
+            <Divider notchWidth="64px" notchHeight="8px" />
+            <span className={styles.tagText} data-visible={visible}>Get in touch</span>
           </div>
-
-          {/* Direct contacts */}
-          <div className={styles.directGroup} data-visible={visible}>
-            {DIRECT_CONTACTS.map((c, i) => (
-              <div key={c.label} className={styles.directCard} style={{ '--cc': c.color }}>
-                <a href={c.href} className={styles.directLink} aria-label={c.label}>
-                  <span className={styles.directIcon} style={{ color: c.color }}><c.Icon /></span>
-                  <span className={styles.directInfo}>
-                    <span className={styles.directLabel}>{c.label}</span>
-                    <span className={styles.directValue}>{c.value}</span>
-                  </span>
-                </a>
-                <button
-                  className={styles.copyBtn}
-                  onClick={e => { e.preventDefault(); handleCopy(c.value, i); }}
-                  aria-label={`Copy ${c.label}`}
-                >
-                  {copiedIdx === i ? <IconCheck /> : <IconCopy />}
-                </button>
-              </div>
-            ))}
-          </div>
-
-          <p className={styles.socialLabel} data-visible={visible}>Find me on</p>
-
-          {/* Social links */}
-          <div className={styles.socialGrid} data-visible={visible}>
-            {SOCIAL_LINKS.map((s) => (
-              <a
-                key={s.label}
-                href={s.href}
-                target="_blank"
-                rel="noopener noreferrer"
-                className={styles.socialCard}
-                style={{ '--sc': s.color }}
-              >
-                <span className={styles.socialIcon} style={{ color: s.color }}><s.Icon /></span>
-                <span className={styles.socialInfo}>
-                  <span className={styles.socialName}>{s.label}</span>
-                  <span className={styles.socialHandle}>{s.handle}</span>
-                </span>
-              </a>
-            ))}
-          </div>
-
-          {/* Resume */}
-          <div className={styles.resumeRow} data-visible={visible}>
-            <Button
-              as="a"
-              href="/aniket-adhav-resume.pdf"
-              target="_blank"
-              rel="noopener noreferrer"
-              icon="chevron-right"
-              iconHoverShift
-            >
-              View Resume
-            </Button>
-          </div>
+          <h2 className={styles.heading}>Contact</h2>
+          <p className={styles.subText} data-visible={visible}>
+            Whether you want to collaborate, have a question, or just want to say hi —
+            I&#39;m always happy to hear from you.
+          </p>
         </div>
 
-        {/* Right column: message form */}
-        <div className={styles.rightCol} data-visible={visible}>
-          {!success ? (
-            <form
-              className={styles.form}
-              onSubmit={async e => {
-                e.preventDefault();
-                const emailVal = email.value;
-                const messageVal = message.value;
-                const errs = {};
-                if (!emailVal || !EMAIL_PATTERN.test(emailVal))
-                  errs.email = 'Please enter a valid email address.';
-                if (!messageVal)
-                  errs.message = 'Please enter a message.';
-                if (emailVal.length > MAX_EMAIL_LENGTH)
-                  errs.email = `Email must be shorter than ${MAX_EMAIL_LENGTH} characters.`;
-                if (messageVal.length > MAX_MESSAGE_LENGTH)
-                  errs.message = `Message must be shorter than ${MAX_MESSAGE_LENGTH} characters.`;
-                if (Object.keys(errs).length > 0) { setErrors(errs); return; }
-                setErrors({});
-                setSending(true);
-                try {
-                  const fd = new FormData();
-                  fd.append('email', emailVal);
-                  fd.append('message', messageVal);
-                  await fetch('/contact', { method: 'POST', body: fd });
-                  setSuccess(true);
-                } finally {
-                  setSending(false);
-                }
-              }}
-            >
-              <Input
-                required
-                className={styles.input}
-                label="Your email"
-                type="email"
-                name="email"
-                maxLength={MAX_EMAIL_LENGTH}
-                {...email}
-              />
-              <Input
-                required
-                multiline
-                className={styles.input}
-                label="Message"
-                name="message"
-                maxLength={MAX_MESSAGE_LENGTH}
-                {...message}
-              />
-              {(errors.email || errors.message) && (
-                <div className={styles.formError}>
-                  <p className={styles.formErrorMessage}>{errors.email || errors.message}</p>
-                </div>
-              )}
-              <Button
-                className={styles.submitBtn}
-                type="submit"
-                loading={sending}
-                loadingText="Sending..."
-                icon="send"
-                style={getDelay(tokens.base.durationM, initDelay)}
+        <div className={styles.directGroup} data-visible={visible}>
+          {DIRECT_CONTACTS.map((c, i) => (
+            <div key={c.label} className={styles.directCard} style={{ '--cc': c.color }}>
+              <a href={c.href} className={styles.directLink} aria-label={c.label}>
+                <span className={styles.directIcon} style={{ color: c.color }}><c.Icon /></span>
+                <span className={styles.directInfo}>
+                  <span className={styles.directLabel}>{c.label}</span>
+                  <span className={styles.directValue}>{c.value}</span>
+                </span>
+              </a>
+              <button
+                className={styles.copyBtn}
+                onClick={e => { e.preventDefault(); handleCopy(c.value, i); }}
+                aria-label={`Copy ${c.label}`}
               >
-                Send message
-              </Button>
-            </form>
-          ) : (
-            <div className={styles.successBox}>
-              <span className={styles.successEmoji}>✉️</span>
-              <h3 className={styles.successTitle}>Message Sent!</h3>
-              <p className={styles.successText}>I&#39;ll get back to you within a couple days, sit tight.</p>
+                {copiedIdx === i ? <IconCheck /> : <IconCopy />}
+              </button>
             </div>
-          )}
+          ))}
+        </div>
+
+        <p className={styles.socialLabel} data-visible={visible}>Find me on</p>
+
+        <div className={styles.socialGrid} data-visible={visible}>
+          {SOCIAL_LINKS.map((s) => (
+            <a
+              key={s.label}
+              href={s.href}
+              target="_blank"
+              rel="noopener noreferrer"
+              className={styles.socialCard}
+              style={{ '--sc': s.color }}
+            >
+              <span className={styles.socialIcon} style={{ color: s.color }}><s.Icon /></span>
+              <span className={styles.socialInfo}>
+                <span className={styles.socialName}>{s.label}</span>
+                <span className={styles.socialHandle}>{s.handle}</span>
+              </span>
+            </a>
+          ))}
+        </div>
+
+        <div className={styles.resumeRow} data-visible={visible}>
+          <Button
+            as="a"
+            href="/aniket-adhav-resume.pdf"
+            target="_blank"
+            rel="noopener noreferrer"
+            icon="chevron-right"
+            iconHoverShift
+          >
+            View Resume
+          </Button>
         </div>
       </div>
     </section>
