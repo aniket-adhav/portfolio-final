@@ -1,8 +1,8 @@
-import { Button } from '~/components/button';
 import { Divider } from '~/components/divider';
 import { Section } from '~/components/section';
 import { Transition } from '~/components/transition';
 import { useState, useEffect, useRef } from 'react';
+import profileEn from './profile-en.svg';
 import styles from './profile.module.css';
 
 const TYPING_LINES = [
@@ -45,10 +45,10 @@ function LiveTypingCard({ visible }) {
   }, [visible, displayed, typing, lineIdx]);
 
   return (
-    <div className={styles.typingCard}>
-      <span className={styles.typingPrompt}>~</span>
+    <div className={styles.typingCard} data-visible={visible}>
+      <span className={styles.typingPrompt}>~$</span>
       <span className={styles.typingText}>{displayed}</span>
-      <span className={styles.typingCursor} />
+      <span className={styles.typingCursor} aria-hidden="true" />
     </div>
   );
 }
@@ -82,9 +82,9 @@ const education = [
 
 const achievements = [
   { value: '1800+', label: 'LeetCode Rating', icon: '⚡' },
-  { value: '700+', label: 'DSA Problems', icon: '🧠' },
-  { value: '290', label: 'Day Streak', icon: '🔥' },
-  { value: '10/10', label: 'SGPA — Rank 1', icon: '🏅' },
+  { value: '700+',  label: 'DSA Problems',    icon: '🧠' },
+  { value: '290',   label: 'Day Streak',       icon: '🔥' },
+  { value: '10/10', label: 'SGPA — Rank 1',    icon: '🏅' },
 ];
 
 const honours = [
@@ -145,109 +145,151 @@ export const Profile = ({ id, visible, sectionRef }) => {
       aria-labelledby={titleId}
       tabIndex={-1}
     >
-      <Transition in={visible || focused} timeout={1500}>
+      <Transition in={visible || focused} timeout={0}>
         {({ visible: vis, nodeRef }) => (
           <div className={styles.profileWrapper} ref={nodeRef}>
 
-            {/* BLOCK 1 — Intro 2-col */}
+            {/* ══ BLOCK 1 — Intro 2-col ══ */}
             <div className={styles.introGrid}>
               <div className={styles.introLeft}>
-                <div className={styles.introTag}>
+                <div className={styles.tag}>
                   <Divider notchWidth="64px" notchHeight="8px" collapsed={!vis} collapseDelay={1000} />
-                  <span className={styles.introTagText} data-visible={vis}>About me</span>
+                  <span className={styles.tagText} data-visible={vis}>About me</span>
                 </div>
-                <h2 className={styles.introHeading} id={titleId} data-visible={vis}>
+                <h2 className={styles.title} id={titleId} data-visible={vis}>
                   A passionate Full Stack Web &amp; Android Developer from Maharashtra, India.
                 </h2>
-                <p className={styles.introBio} data-visible={vis}>
+                <p className={styles.bio} data-visible={vis}>
                   I build fast, scalable web apps and polished Android experiences — and I love
                   solving hard problems through competitive programming and open-source work.
                 </p>
-                <ul className={styles.introBullets} data-visible={vis}>
+                <ul className={styles.summaryList} data-visible={vis}>
                   <li>🚀 Currently pursuing B.E. Computer Engineering with <strong>9.74 CGPA</strong></li>
                   <li>💡 Technical Head · led cross-functional teams on full-stack products</li>
                   <li>🏆 Hackathon winner &amp; top DSA performer with <strong>1800+ LeetCode rating</strong></li>
                 </ul>
+              </div>
+
+              {/* Right: photo */}
+              <div className={styles.introRight}>
+                <div className={styles.imageWrap} data-visible={vis}>
+                  <span className={styles.glowOrb} aria-hidden="true" />
+                  <span className={styles.borderRing} aria-hidden="true" />
+                  <span className={styles.p1} aria-hidden="true" />
+                  <span className={styles.p2} aria-hidden="true" />
+                  <span className={styles.p3} aria-hidden="true" />
+                  <span className={styles.p4} aria-hidden="true" />
+                  <span className={styles.p5} aria-hidden="true" />
+                  <div className={styles.photoClip}>
+                    <img
+                      src="/profile.jpg"
+                      alt="Aniket Adhav — Full Stack Web and Android Developer"
+                      className={styles.photo}
+                    />
+                  </div>
+                  <span className={styles.shimmer} aria-hidden="true" />
+                  <span className={styles.cornerTL} aria-hidden="true" />
+                  <span className={styles.cornerTR} aria-hidden="true" />
+                  <span className={styles.cornerBL} aria-hidden="true" />
+                  <span className={styles.cornerBR} aria-hidden="true" />
+                  <svg className={styles.svg} data-visible={vis} viewBox="0 0 80 760">
+                    <use href={`${profileEn}#profile-en`} />
+                  </svg>
+                </div>
+
+                <div className={styles.badge} data-visible={vis}>
+                  <span className={styles.badgeName}>Aniket Adhav</span>
+                  <span className={styles.badgeDivider} aria-hidden="true" />
+                  <span className={styles.badgeRole}>
+                    <span className={styles.badgeDot} />
+                    Full Stack &amp; Android Dev
+                  </span>
+                </div>
+
                 <LiveTypingCard visible={vis} />
               </div>
-
-              <div className={styles.introRight} data-visible={vis}>
-                <div className={styles.photoWrap}>
-                  <img
-                    src="/profile.jpg"
-                    alt="Aniket Adhav — Full Stack Web and Android Developer"
-                    className={styles.photo}
-                  />
-                  <div className={styles.photoBadge}>
-                    <span className={styles.photoBadgeName}>Aniket Adhav</span>
-                    <span className={styles.photoBadgeRole}>Full Stack &amp; Android Dev</span>
-                  </div>
-                </div>
-              </div>
             </div>
 
-            {/* BLOCK 2 — Education */}
-            <div className={styles.block} data-visible={vis}>
-              <h3 className={styles.blockHeading}>🎓 Education</h3>
-              <div className={styles.eduGrid}>
+            {/* ══ BLOCK 2 — Education ══ */}
+            <div className={styles.fullSection} data-visible={vis}>
+              <div className={styles.fullSectionHeader}>
+                <span className={styles.fullSectionLine} />
+                <span className={styles.fullSectionTitle}>🎓 Education</span>
+                <span className={styles.fullSectionLine} />
+              </div>
+              <div className={styles.eduCardsRow}>
                 {education.map((e, i) => (
-                  <div key={i} className={styles.eduCard} style={{ '--delay': `${i * 80}ms` }}>
-                    <span className={styles.eduIcon}>{e.icon}</span>
-                    <div className={styles.eduScore}>
-                      <span className={styles.eduScoreValue}>{e.score}</span>
-                      <span className={styles.eduScoreLabel}>{e.scoreLabel}</span>
+                  <div key={i} className={styles.eduCardFull} style={{ animationDelay: `${0.1 + i * 0.12}s` }}>
+                    <div className={styles.eduCardTop}>
+                      <span className={styles.eduCardIcon}>{e.icon}</span>
+                      <div className={styles.eduScoreBadge}>
+                        <span className={styles.eduScoreValFull}>{e.score}</span>
+                        <span className={styles.eduScoreLabelFull}>{e.scoreLabel}</span>
+                      </div>
                     </div>
-                    <p className={styles.eduDegree}>{e.degree}</p>
-                    <p className={styles.eduInstitute}>{e.institute}</p>
-                    <p className={styles.eduPeriod}>{e.period}</p>
+                    <div className={styles.eduCardDegree}>{e.degree}</div>
+                    <div className={styles.eduCardInstitute}>{e.institute}</div>
+                    <div className={styles.eduCardPeriod}>{e.period}</div>
                   </div>
                 ))}
               </div>
             </div>
 
-            {/* BLOCK 3 — Achievements */}
-            <div className={styles.block} data-visible={vis}>
-              <h3 className={styles.blockHeading}>🏆 Achievements</h3>
-              <div className={styles.statsGrid}>
+            {/* ══ BLOCK 3 — Achievements ══ */}
+            <div className={styles.fullSection} data-visible={vis}>
+              <div className={styles.fullSectionHeader}>
+                <span className={styles.fullSectionLine} />
+                <span className={styles.fullSectionTitle}>🏆 Achievements</span>
+                <span className={styles.fullSectionLine} />
+              </div>
+              <div className={styles.statsRowFull}>
                 {achievements.map((a, i) => (
-                  <div key={i} className={styles.statCard} style={{ '--delay': `${i * 60}ms` }}>
-                    <span className={styles.statIcon}>{a.icon}</span>
-                    <span className={styles.statValue}>{a.value}</span>
-                    <span className={styles.statLabel}>{a.label}</span>
+                  <div key={i} className={styles.statCardFull} style={{ animationDelay: `${0.1 + i * 0.1}s` }}>
+                    <span className={styles.statIconFull}>{a.icon}</span>
+                    <span className={styles.statValueFull}>{a.value}</span>
+                    <span className={styles.statLabelFull}>{a.label}</span>
                   </div>
                 ))}
               </div>
-              <div className={styles.honoursGrid}>
+              <div className={styles.honourCardsRow}>
                 {honours.map((h, i) => (
-                  <div key={i} className={styles.honourCard}>
+                  <div key={i} className={styles.honourCardFull}>
                     <span className={styles.honourEmoji}>{h.emoji}</span>
-                    <div>
-                      <p className={styles.honourTitle}>{h.title}</p>
-                      <p className={styles.honourDesc}>{h.desc}</p>
+                    <div className={styles.honourCardBody}>
+                      <p className={styles.honourCardTitle}>{h.title}</p>
+                      <p className={styles.honourCardDesc}>{h.desc}</p>
                     </div>
                   </div>
                 ))}
               </div>
             </div>
 
-            {/* BLOCK 4 — Certificates */}
-            <div className={styles.block} data-visible={vis}>
-              <h3 className={styles.blockHeading}>🎖️ Certificates</h3>
+            {/* ══ BLOCK 4 — Certificates ══ */}
+            <div className={styles.fullSection} data-visible={vis}>
+              <div className={styles.fullSectionHeader}>
+                <span className={styles.fullSectionLine} />
+                <span className={styles.fullSectionTitle}>🎖️ Certificates</span>
+                <span className={styles.fullSectionLine} />
+              </div>
               <div className={styles.certGrid}>
                 {certificates.map((c, i) => (
                   <div
                     key={i}
                     className={styles.certCard}
-                    style={{ '--accent': c.accentColor, '--delay': `${i * 80}ms` }}
+                    style={{ '--cert-accent': c.accentColor, animationDelay: `${0.1 + i * 0.1}s` }}
                   >
-                    <img src={c.image} alt={c.title} className={styles.certImage} loading="lazy" />
-                    <div className={styles.certMeta}>
-                      <span className={styles.certBadge}>{c.badge}</span>
-                      <span className={styles.certIssuer}>{c.issuer}</span>
-                      <span className={styles.certDate}>{c.date}</span>
+                    <div className={styles.certImageWrap}>
+                      <img src={c.image} alt={c.title} className={styles.certImage} loading="lazy" />
                     </div>
-                    <p className={styles.certTitle}>{c.title}</p>
-                    <p className={styles.certDuration}>{c.duration}</p>
+                    <div className={styles.certBody}>
+                      <div className={styles.certMeta}>
+                        <span className={styles.certBadge}>{c.badge}</span>
+                        <span className={styles.certIssuer}>{c.issuer}</span>
+                        <span className={styles.certDate}>{c.date}</span>
+                      </div>
+                      <p className={styles.certTitle}>{c.title}</p>
+                      <p className={styles.certDuration}>{c.duration}</p>
+                    </div>
                   </div>
                 ))}
               </div>

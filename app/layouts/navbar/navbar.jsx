@@ -1,3 +1,4 @@
+import { Button } from '~/components/button';
 import { Icon } from '~/components/icon';
 import { Monogram } from '~/components/monogram';
 import { useTheme } from '~/components/theme-provider';
@@ -17,6 +18,7 @@ export const Navbar = () => {
   const [current, setCurrent] = useState();
   const [menuOpen, setMenuOpen] = useState(false);
   const [target, setTarget] = useState();
+  const [resumeOpen, setResumeOpen] = useState(false);
   const { theme } = useTheme();
   const location = useLocation();
   const windowSize = useWindowSize();
@@ -25,18 +27,15 @@ export const Navbar = () => {
   const scrollToHash = useScrollToHash();
 
   useEffect(() => {
-    // Prevent ssr mismatch by storing this in state
     setCurrent(`${location.pathname}${location.hash}`);
   }, [location]);
 
-  // Handle smooth scroll nav items
   useEffect(() => {
     if (!target || location.pathname !== '/') return;
     setCurrent(`${location.pathname}${target}`);
     scrollToHash(target, () => setTarget(null));
   }, [location.pathname, scrollToHash, target]);
 
-  // Handle swapping the theme when intersecting with inverse themed elements
   useEffect(() => {
     const navItems = document.querySelectorAll('[data-navbar-item]');
     const inverseTheme = theme === 'dark' ? 'light' : 'dark';
@@ -90,11 +89,9 @@ export const Navbar = () => {
       }
     };
 
-    // Currently only the light theme has dark full-width elements
     if (theme === 'light') {
       navItemMeasurements = Array.from(navItems).map(item => {
         const rect = item.getBoundingClientRect();
-
         return {
           element: item,
           top: rect.top,
@@ -112,22 +109,15 @@ export const Navbar = () => {
     };
   }, [theme, windowSize, location.key]);
 
-  // Check if a nav item should be active
   const getCurrent = (url = '') => {
     const nonTrailing = current?.endsWith('/') ? current?.slice(0, -1) : current;
-
-    if (url === nonTrailing) {
-      return 'page';
-    }
-
+    if (url === nonTrailing) return 'page';
     return '';
   };
 
-  // Store the current hash to scroll to
   const handleNavItemClick = event => {
     const hash = event.currentTarget.href.split('#')[1];
     setTarget(null);
-
     if (hash && location.pathname === '/') {
       setTarget(`#${hash}`);
       event.preventDefault();
@@ -140,67 +130,114 @@ export const Navbar = () => {
   };
 
   return (
-    <header className={styles.navbar} ref={headerRef}>
-      <RouterLink
-        unstable_viewTransition
-        prefetch="intent"
-        to={location.pathname === '/' ? '/#intro' : '/'}
-        data-navbar-item
-        className={styles.logo}
-        aria-label={`${config.name}, ${config.role}`}
-        onClick={handleMobileNavClick}
-      >
-        <Monogram highlight />
-      </RouterLink>
-      <NavToggle onClick={() => setMenuOpen(!menuOpen)} menuOpen={menuOpen} />
-      <nav className={styles.nav}>
-        <div className={styles.navList}>
-          {navLinks.map(({ label, pathname }) => (
-            <RouterLink
-              unstable_viewTransition
-              prefetch="intent"
-              to={pathname}
-              key={label}
-              data-navbar-item
-              className={styles.navLink}
-              aria-current={getCurrent(pathname)}
-              onClick={handleNavItemClick}
-            >
-              {label}
-            </RouterLink>
-          ))}
-        </div>
-        <NavbarIcons desktop />
-      </nav>
-      <Transition unmount in={menuOpen} timeout={msToNum(tokens.base.durationL)}>
-        {({ visible, nodeRef }) => (
-          <nav className={styles.mobileNav} data-visible={visible} ref={nodeRef}>
-            {navLinks.map(({ label, pathname }, index) => (
+    <>
+      <header className={styles.navbar} ref={headerRef}>
+        <RouterLink
+          unstable_viewTransition
+          prefetch="intent"
+          to={location.pathname === '/' ? '/#intro' : '/'}
+          data-navbar-item
+          className={styles.logo}
+          aria-label={`${config.name}, ${config.role}`}
+          onClick={handleMobileNavClick}
+        >
+          <Monogram highlight />
+        </RouterLink>
+        <NavToggle onClick={() => setMenuOpen(!menuOpen)} menuOpen={menuOpen} />
+        <nav className={styles.nav}>
+          <div className={styles.navList}>
+            {navLinks.map(({ label, pathname }) => (
               <RouterLink
                 unstable_viewTransition
                 prefetch="intent"
                 to={pathname}
                 key={label}
-                className={styles.mobileNavLink}
-                data-visible={visible}
+                data-navbar-item
+                className={styles.navLink}
                 aria-current={getCurrent(pathname)}
-                onClick={handleMobileNavClick}
-                style={cssProps({
-                  transitionDelay: numToMs(
-                    Number(msToNum(tokens.base.durationS)) + index * 50
-                  ),
-                })}
+                onClick={handleNavItemClick}
               >
                 {label}
               </RouterLink>
             ))}
-            <NavbarIcons />
-            <ThemeToggle isMobile />
-          </nav>
-        )}
-      </Transition>
-      {!isMobile && <ThemeToggle data-navbar-item />}
-    </header>
+          </div>
+          <NavbarIcons desktop />
+        </nav>
+        <Transition unmount in={menuOpen} timeout={msToNum(tokens.base.durationL)}>
+          {({ visible, nodeRef }) => (
+            <nav className={styles.mobileNav} data-visible={visible} ref={nodeRef}>
+              {navLinks.map(({ label, pathname }, index) => (
+                <RouterLink
+                  unstable_viewTransition
+                  prefetch="intent"
+                  to={pathname}
+                  key={label}
+                  className={styles.mobileNavLink}
+                  data-visible={visible}
+                  aria-current={getCurrent(pathname)}
+                  onClick={handleMobileNavClick}
+                  style={cssProps({
+                    transitionDelay: numToMs(
+                      Number(msToNum(tokens.base.durationS)) + index * 50
+                    ),
+                  })}
+                >
+                  {label}
+                </RouterLink>
+              ))}
+              <NavbarIcons />
+              <ThemeToggle isMobile />
+            </nav>
+          )}
+        </Transition>
+        {!isMobile && <ThemeToggle data-navbar-item />}
+      </header>
+
+      {!menuOpen && (
+        <div className={styles.resumeButtonWrap}>
+          <Button
+            onClick={() => setResumeOpen(true)}
+            icon="resume"
+            secondary
+          >
+            Resume
+          </Button>
+        </div>
+      )}
+
+      {resumeOpen && (
+        <div className={styles.resumeOverlay} onClick={() => setResumeOpen(false)}>
+          <div className={styles.resumeModal} onClick={e => e.stopPropagation()}>
+            <div className={styles.resumeModalHeader}>
+              <span className={styles.resumeModalTitle}>Aniket Adhav — Resume</span>
+              <div className={styles.resumeModalActions}>
+                <a
+                  href="/aniket-adhav-resume.pdf"
+                  download="Aniket_Adhav_Resume.pdf"
+                  className={styles.resumeDownloadBtn}
+                  aria-label="Download Resume"
+                >
+                  <Icon icon="download" size={18} />
+                  <span>Download</span>
+                </a>
+                <button
+                  className={styles.resumeCloseBtn}
+                  onClick={() => setResumeOpen(false)}
+                  aria-label="Close"
+                >
+                  <Icon icon="close" size={20} />
+                </button>
+              </div>
+            </div>
+            <iframe
+              src="/aniket-adhav-resume.pdf"
+              className={styles.resumeFrame}
+              title="Aniket Adhav Resume"
+            />
+          </div>
+        </div>
+      )}
+    </>
   );
 };
 

@@ -1,5 +1,4 @@
-import parakramScreenshot from '~/assets/parakram-screenshot.png';
-import parakramScreenshotLarge from '~/assets/parakram-screenshot-large.png';
+import parakramHero from '~/assets/parakram-screenshot.png';
 import parakramJersey from '~/assets/parakram-jersey.png';
 import parakramChampions from '~/assets/parakram-champions.png';
 import parakramSports from '~/assets/parakram-sports.png';
@@ -22,7 +21,7 @@ import styles from './parakram.module.css';
 
 const title = 'Parakram — Sports Event Platform';
 const description =
-  'A full-stack sports event management platform serving 1500+ registered users, featuring Google OAuth, QR-based payment verification, jersey validation, and real-time admin workflows.';
+  'A full-stack sports event management platform serving 1500+ users with Google OAuth authentication, QR-based payments, jersey validation, and real-time admin workflows.';
 
 export const meta = () => {
   return baseMeta({ title, description, prefix: 'Project' });
@@ -52,6 +51,15 @@ export function Parakram() {
                 <Button
                   iconHoverShift
                   iconEnd="arrow-right"
+                  href="https://parakram-sportsmanagement.vercel.app/"
+                  target="_blank"
+                  rel="noopener noreferrer"
+                >
+                  Live Demo
+                </Button>
+                <Button
+                  iconHoverShift
+                  iconEnd="arrow-right"
                   href="https://github.com/aniket-adhav/parakram"
                   target="_blank"
                   rel="noopener noreferrer"
@@ -64,13 +72,13 @@ export function Parakram() {
               <li className={styles.techLabel}>Tech Stack</li>
               {[
                 'React.js',
-                'Tailwind CSS',
-                'Node.js / Express',
-                'MongoDB',
-                'Google OAuth 2.0',
-                'JWT',
-                'UPI QR Payments',
-                'Vercel + Render',
+                'Node.js',
+                'MongoDB Atlas',
+                'Google OAuth',
+                'Framer Motion',
+                'Vercel',
+                'Email Services',
+                'QR Payments',
               ].map(tech => (
                 <li key={tech} className={styles.techItem}>{tech}</li>
               ))}
@@ -82,15 +90,15 @@ export function Parakram() {
           <ProjectSectionContent data-width="xl">
             <div className={styles.heroImageWrap}>
               <Image
-                src={parakramScreenshot}
+                src={parakramHero}
                 width={1280}
-                height={800}
-                alt="Parakram sports event platform landing page showing sports categories and registration"
+                height={720}
+                alt="Parakram sports event platform homepage showing countdown timer and event registration"
                 sizes="(max-width: 768px) 100vw, 90vw"
                 className={styles.heroImage}
               />
               <div className={styles.imageCaption}>
-                Parakram Platform — Sports event registration and management for 1500+ athletes
+                Homepage — College Sports Fest 2026 with countdown timer and event navigation
               </div>
             </div>
           </ProjectSectionContent>
@@ -99,25 +107,24 @@ export function Parakram() {
         <ProjectSection>
           <ProjectSectionColumns centered className={styles.overviewColumns}>
             <div className={styles.overviewText}>
-              <ProjectSectionHeading>About Parakram</ProjectSectionHeading>
+              <ProjectSectionHeading>The Challenge</ProjectSectionHeading>
               <ProjectSectionText>
-                Parakram is a comprehensive sports event management platform built for a
-                large-scale college sports meet. The platform managed the entire event
-                lifecycle — from athlete registration and team formation to payment
-                verification and results tracking.
+                Managing a college sports fest with 1500+ participants meant dealing with
+                fragile spreadsheet-based registrations, manual payment tracking, and zero
+                anti-cheating safeguards — resulting in duplicate registrations and revenue loss.
               </ProjectSectionText>
               <ProjectSectionText>
-                With <strong>1500+ registered users</strong> across 20+ sports, Parakram
-                replaced manual spreadsheet workflows with a real-time, auditable digital
-                system, reducing registration errors and admin overhead by over 80%.
+                Parakram replaced this chaos with a unified digital platform: secure login via
+                Google OAuth, instant QR payment verification, jersey validation tied to secret
+                codes, and a live admin dashboard to oversee every registration in real time.
               </ProjectSectionText>
             </div>
             <div className={styles.statsColumn}>
               {[
-                { value: '1500+', label: 'Registered Users' },
-                { value: '20+', label: 'Sports Events' },
-                { value: '80%', label: 'Admin Time Saved' },
-                { value: '3', label: 'User Portals' },
+                { value: '1500+', label: 'Users Served' },
+                { value: 'QR',    label: 'Payment System' },
+                { value: 'OAuth', label: 'Secure Auth' },
+                { value: 'Live',  label: 'Admin Dashboard' },
               ].map(stat => (
                 <div key={stat.label} className={styles.statCard}>
                   <span className={styles.statValue}>{stat.value}</span>
@@ -132,38 +139,43 @@ export function Parakram() {
           <ProjectSectionContent>
             <ProjectTextRow>
               <ProjectSectionHeading>Key Features</ProjectSectionHeading>
+              <ProjectSectionText>
+                Built around three pillars — secure access, fair play, and seamless
+                administration — each feature was designed to eliminate a real pain point
+                from traditional event management.
+              </ProjectSectionText>
             </ProjectTextRow>
             <div className={styles.featureGrid}>
               {[
                 {
                   icon: '🔐',
                   title: 'Google OAuth',
-                  desc: 'Secure, one-click login via Google OAuth 2.0 — no passwords to manage for 1500+ participants.',
+                  desc: 'Secure single-click login via Google. No passwords to manage, no fake accounts — every registration is tied to a verified Google identity.',
                 },
                 {
                   icon: '📱',
-                  title: 'QR-Based Payments',
-                  desc: 'UPI QR code generation for each registration. Admin scans to verify payment in real time.',
+                  title: 'QR Payment System',
+                  desc: 'Students scan a QR code to pay, then submit proof. Admins verify and approve payments through a dedicated dashboard before access is granted.',
                 },
                 {
                   icon: '👕',
                   title: 'Jersey Validation',
-                  desc: 'Unique jersey number assignment with validation to prevent duplicates across teams and sports.',
+                  desc: 'Anti-cheating logic using secret codes tied to jersey numbers. Only valid code holders can complete registration for their sport.',
                 },
                 {
-                  icon: '🏟️',
-                  title: 'Multi-Sport Management',
-                  desc: '20+ sports events managed from a single admin dashboard with category and team-size support.',
+                  icon: '🛡️',
+                  title: 'Anti-Cheat Logic',
+                  desc: 'Server-side validation prevents duplicate registrations, reuse of secret codes, and manipulation of payment status.',
                 },
                 {
                   icon: '📊',
-                  title: 'Real-Time Admin Panel',
-                  desc: 'Live overview of registrations, payments, sport-wise participation counts, and approval queues.',
+                  title: 'Admin Dashboard',
+                  desc: 'Real-time view of all registrations, payment statuses, sport-wise headcounts, and order management — all in one place.',
                 },
                 {
-                  icon: '🏆',
-                  title: 'Results & Rankings',
-                  desc: 'Per-sport result entry and leaderboard display for participants to track their standing.',
+                  icon: '🚀',
+                  title: 'Production Deploy',
+                  desc: 'Deployed on Vercel with custom domain, MongoDB Atlas for cloud data storage, and email services for confirmation notifications.',
                 },
               ].map(f => (
                 <div key={f.title} className={styles.featureCard}>
@@ -181,8 +193,8 @@ export function Parakram() {
             <ProjectTextRow>
               <ProjectSectionHeading>Event Gallery</ProjectSectionHeading>
               <ProjectSectionText>
-                From jersey assignment to champion celebrations — Parakram handled every
-                aspect of the sports event with a seamless digital experience.
+                From jersey assignment to champion celebrations — Parakram handled every aspect
+                of the sports event with a seamless digital experience for all 1500+ participants.
               </ProjectSectionText>
             </ProjectTextRow>
             <div className={styles.screenshotGrid}>
@@ -196,7 +208,7 @@ export function Parakram() {
                   className={styles.screenshotImage}
                 />
                 <p className={styles.screenshotCaption}>
-                  Jersey Validation — Unique number assignment with duplicate prevention
+                  Jersey Validation — Unique number assignment with secret-code anti-cheat
                 </p>
               </div>
               <div className={styles.screenshotItem}>
@@ -217,12 +229,12 @@ export function Parakram() {
                   src={parakramSports}
                   width={1280}
                   height={800}
-                  alt="Sports selection page showing 20+ available sports events"
+                  alt="Sports selection page showing available events for registration"
                   sizes="(max-width: 768px) 100vw, 90vw"
                   className={styles.screenshotImage}
                 />
                 <p className={styles.screenshotCaption}>
-                  Sports Selection — 20+ events available for athlete registration
+                  Sports Selection — Event registration across 20+ sports categories
                 </p>
               </div>
             </div>
@@ -232,11 +244,21 @@ export function Parakram() {
         <ProjectSection className={styles.ctaSection}>
           <ProjectSectionContent>
             <ProjectTextRow center>
-              <ProjectSectionHeading>View the source</ProjectSectionHeading>
+              <ProjectSectionHeading>See it in action</ProjectSectionHeading>
               <ProjectSectionText>
-                Parakram is open source. Browse the full-stack codebase on GitHub.
+                Parakram is live and open source. Visit the live demo or explore
+                the full-stack codebase on GitHub.
               </ProjectSectionText>
               <div className={styles.ctaButtons}>
+                <Button
+                  iconHoverShift
+                  iconEnd="arrow-right"
+                  href="https://parakram-sportsmanagement.vercel.app/"
+                  target="_blank"
+                  rel="noopener noreferrer"
+                >
+                  Visit Live Demo
+                </Button>
                 <Button
                   iconHoverShift
                   iconEnd="arrow-right"
@@ -244,7 +266,7 @@ export function Parakram() {
                   target="_blank"
                   rel="noopener noreferrer"
                 >
-                  View on GitHub
+                  View Source Code
                 </Button>
               </div>
             </ProjectTextRow>

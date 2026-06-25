@@ -9,6 +9,10 @@
   align-items: center;
   justify-content: center;
 
+  &[data-alternate='true'] {
+    margin-bottom: 160px;
+  }
+
   @media (--mediaDesktop) {
     margin: var(--space2XL) 0;
   }
@@ -19,8 +23,13 @@
   }
 
   @media (--mediaMobile) {
-    padding-bottom: var(--space4XL);
-    margin-bottom: 0;
+    height: auto;
+    margin: var(--spaceXL) 0;
+    padding-bottom: var(--spaceXL);
+
+    &[data-alternate='true'] {
+      margin-bottom: var(--spaceXL);
+    }
   }
 
   &[data-first='true'] {
@@ -60,11 +69,22 @@
     flex-direction: column-reverse;
     height: auto;
   }
+
+  @media (--mediaMobile) {
+    display: flex;
+    flex-direction: column;
+    align-items: stretch;
+    gap: var(--spaceXL);
+  }
 }
 
 .details {
   z-index: var(--zIndex1);
   position: relative;
+
+  .summary[data-alternate='true'] & {
+    padding-left: 12%;
+  }
 
   @media (--mediaTablet) {
     flex: 0 0 auto;
@@ -72,6 +92,22 @@
     grid-row: 2;
     grid-column: 1;
     justify-self: center;
+
+    .summary[data-alternate='true'] & {
+      padding-left: 0;
+    }
+  }
+
+  @media (--mediaMobile) {
+    grid-row: unset;
+    grid-column: unset;
+    max-width: 100%;
+    justify-self: unset;
+    padding-left: 0;
+
+    .summary[data-alternate='true'] & {
+      padding-left: 0;
+    }
   }
 }
 
@@ -83,6 +119,12 @@
   justify-content: center;
   height: 100%;
   width: 100%;
+
+  @media (--mediaMobile) {
+    height: auto;
+    width: 100%;
+    overflow: visible;
+  }
 }
 
 .model {
@@ -100,6 +142,10 @@
 
     @media (--mediaDesktop) {
       --width: 180%;
+
+      .summary[data-alternate='true'] & {
+        left: -25%;
+      }
     }
 
     @media (--mediaTablet) {
@@ -107,6 +153,25 @@
 
       top: 10%;
       left: 0;
+
+      .summary[data-alternate='true'] & {
+        --width: 100%;
+        left: 0;
+        top: 0;
+      }
+    }
+
+    @media (--mediaMobile) {
+      --width: 100%;
+
+      top: 0;
+      left: 0;
+
+      .summary[data-alternate='true'] & {
+        --width: 100%;
+        left: 0;
+        top: 0;
+      }
     }
   }
 
@@ -154,7 +219,7 @@
   fill: var(--textTitle);
 
   &[data-visible='true'] {
-    opacity: var(--opacity);
+    opacity: var(--opacity, 0.065);
   }
 
   &[data-device='laptop'] {
