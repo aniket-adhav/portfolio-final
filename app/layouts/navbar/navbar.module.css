@@ -234,14 +234,17 @@
   }
 
   /* ── Resume button — bottom-right corner ── */
-  .resumeButtonWrap {
+  .resumeButton {
     position: fixed;
-    bottom: var(--spaceOuter);
-    right: var(--spaceOuter);
+    bottom: 32px;
+    right: 32px;
+    left: auto;
     z-index: var(--zIndex4);
+    font-weight: var(--fontWeightBold);
 
-    @media (--mediaMobile), (--mediaMobileLS) {
-      display: none;
+    @media (--mediaMobile) {
+      bottom: 20px;
+      right: 20px;
     }
   }
 
