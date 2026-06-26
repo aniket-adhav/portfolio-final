@@ -103,6 +103,7 @@ export const ContactSection = ({ id, visible, sectionRef }) => {
   const [sending, setSending]     = useState(false);
   const [success, setSuccess]     = useState(false);
   const [errors, setErrors]       = useState({});
+  const [resumeOpen, setResumeOpen] = useState(false);
   const errorRef  = useRef();
   const email     = useFormInput('');
   const message   = useFormInput('');
@@ -197,15 +198,47 @@ export const ContactSection = ({ id, visible, sectionRef }) => {
 
               <div className={styles.resumeRow} data-visible={vis}>
                 <Button
-                  href="https://drive.google.com/file/d/1nbPm15_tTJj_bYGErZE13EmTl1ndr8Qz/view?usp=drive_link"
-                  target="_blank"
-                  rel="noopener noreferrer"
+                  onClick={() => setResumeOpen(true)}
                   icon="resume"
                   iconEnd="arrow-right"
                 >
                   View Resume
                 </Button>
               </div>
+
+              {resumeOpen && (
+                <div className={styles.resumeOverlay} onClick={() => setResumeOpen(false)}>
+                  <div className={styles.resumeModal} onClick={e => e.stopPropagation()}>
+                    <div className={styles.resumeModalHeader}>
+                      <span className={styles.resumeModalTitle}>Aniket Adhav — Resume</span>
+                      <div className={styles.resumeModalActions}>
+                        <a
+                          href="https://drive.google.com/uc?export=download&id=1nbPm15_tTJj_bYGErZE13EmTl1ndr8Qz"
+                          target="_blank"
+                          rel="noopener noreferrer"
+                          className={styles.resumeDownloadBtn}
+                          aria-label="Download Resume"
+                        >
+                          <Icon icon="download" size={18} />
+                          <span>Download</span>
+                        </a>
+                        <button
+                          className={styles.resumeCloseBtn}
+                          onClick={() => setResumeOpen(false)}
+                          aria-label="Close"
+                        >
+                          <Icon icon="close" size={20} />
+                        </button>
+                      </div>
+                    </div>
+                    <iframe
+                      src="https://drive.google.com/file/d/1nbPm15_tTJj_bYGErZE13EmTl1ndr8Qz/preview"
+                      className={styles.resumeFrame}
+                      title="Aniket Adhav Resume"
+                    />
+                  </div>
+                </div>
+              )}
 
             </div>
 

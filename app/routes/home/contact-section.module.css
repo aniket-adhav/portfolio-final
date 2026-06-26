@@ -577,3 +577,103 @@
     opacity: 1;
   }
 }
+
+.resumeOverlay {
+  position: fixed;
+  inset: 0;
+  background: color-mix(in lab, var(--background) 60%, transparent);
+  -webkit-backdrop-filter: blur(16px);
+  backdrop-filter: blur(16px);
+  z-index: calc(var(--zIndex4) + 10);
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  padding: var(--spaceL);
+  animation: overlay-in var(--durationM) ease;
+}
+
+@keyframes overlay-in {
+  from { opacity: 0; }
+  to   { opacity: 1; }
+}
+
+.resumeModal {
+  display: flex;
+  flex-direction: column;
+  width: min(900px, 90vw);
+  height: min(85vh, 1100px);
+  background: var(--background);
+  border: 1px solid color-mix(in lab, var(--text) 12%, transparent);
+  border-radius: 16px;
+  overflow: hidden;
+  box-shadow: 0 32px 80px rgba(0, 0, 0, 0.35);
+  animation: modal-in var(--durationM) cubic-bezier(0.34, 1.56, 0.64, 1);
+}
+
+@keyframes modal-in {
+  from { opacity: 0; transform: scale(0.94) translateY(16px); }
+  to   { opacity: 1; transform: scale(1)    translateY(0);    }
+}
+
+.resumeModalHeader {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  padding: var(--spaceM) var(--spaceL);
+  border-bottom: 1px solid color-mix(in lab, var(--text) 10%, transparent);
+  flex-shrink: 0;
+}
+
+.resumeModalTitle {
+  font-size: var(--fontSizeBodyS);
+  font-weight: var(--fontWeightMedium);
+  color: var(--textLight);
+  letter-spacing: 0.04em;
+}
+
+.resumeModalActions {
+  display: flex;
+  align-items: center;
+  gap: var(--spaceM);
+}
+
+.resumeDownloadBtn {
+  display: inline-flex;
+  align-items: center;
+  gap: 6px;
+  padding: 6px 14px;
+  border-radius: 8px;
+  background: var(--accent);
+  color: oklch(1 0 0);
+  font-size: var(--fontSizeBodyS);
+  font-weight: var(--fontWeightMedium);
+  text-decoration: none;
+  transition: opacity var(--durationS) ease;
+
+  &:hover { opacity: 0.85; }
+}
+
+.resumeCloseBtn {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  width: 36px;
+  height: 36px;
+  border-radius: 8px;
+  border: 1px solid color-mix(in lab, var(--text) 12%, transparent);
+  background: transparent;
+  color: var(--textLight);
+  cursor: pointer;
+  transition: background var(--durationS) ease, color var(--durationS) ease;
+
+  &:hover {
+    background: color-mix(in lab, var(--text) 8%, transparent);
+    color: var(--text);
+  }
+}
+
+.resumeFrame {
+  flex: 1;
+  width: 100%;
+  border: none;
+}
