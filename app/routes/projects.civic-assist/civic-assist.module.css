@@ -316,7 +316,7 @@
 }
 
 .ctaSection {
-  background: color-mix(in lab, var(--accent) 6%, var(--background));
+  background: var(--background);
 }
 
 .ctaButtons {
