@@ -18,7 +18,7 @@ import { Error } from '~/layouts/error';
 import { VisuallyHidden } from '~/components/visually-hidden';
 import { Navbar } from '~/layouts/navbar';
 import { Progress } from '~/components/progress';
-import { CustomCursor } from '~/components/cursor/cursor';
+import { PageTransition } from '~/components/page-transition/page-transition';
 import config from '~/config.json';
 import styles from './root.module.css';
 import './reset.module.css';
@@ -119,7 +119,7 @@ export default function App() {
       </head>
       <body data-theme={theme}>
         <ThemeProvider theme={theme} toggleTheme={toggleTheme}>
-          <CustomCursor />
+          <PageTransition isLoading={state === 'loading'} />
           <Progress />
           <VisuallyHidden showOnFocus as="a" className={styles.skip} href="#main-content">
             Skip to main content

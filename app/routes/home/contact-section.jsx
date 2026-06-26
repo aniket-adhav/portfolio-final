@@ -4,6 +4,7 @@ import { DecoderText } from '~/components/decoder-text';
 import { Divider } from '~/components/divider';
 import { Button } from '~/components/button';
 import { Icon } from '~/components/icon';
+import { WipeReveal } from '~/components/wipe-reveal/wipe-reveal';
 import { useState } from 'react';
 import styles from './contact-section.module.css';
 
@@ -117,7 +118,9 @@ export const ContactSection = ({ id, visible, sectionRef }) => {
               <div className={styles.header} data-visible={vis}>
                 <div className={styles.tag} aria-hidden>
                   <Divider notchWidth="64px" notchHeight="8px" collapsed={!vis} collapseDelay={1000} />
-                  <span className={styles.tagText} data-visible={vis}>Contact</span>
+                  <WipeReveal visible={vis} delay={200} as="span">
+                    <span className={styles.tagText}>Contact</span>
+                  </WipeReveal>
                 </div>
                 <h2 className={styles.heading}>
                   <DecoderText text="Let's Connect" start={vis} delay={400} />
