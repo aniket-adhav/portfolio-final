@@ -14,13 +14,17 @@ const initDelay = 300;
 
 function ScrollDownIndicator() {
   return (
-    <div className={styles.scrollIndicator} aria-hidden="true">
-      <svg className={styles.scrollChevron} width="28" height="28" viewBox="0 0 24 24" fill="none">
-        <path d="M6 9L12 15L18 9" stroke="currentColor" strokeWidth="2.2" strokeLinecap="round" strokeLinejoin="round"/>
-      </svg>
-      <svg className={styles.scrollChevronDelayed} width="28" height="28" viewBox="0 0 24 24" fill="none">
-        <path d="M6 9L12 15L18 9" stroke="currentColor" strokeWidth="2.2" strokeLinecap="round" strokeLinejoin="round"/>
-      </svg>
+    <div
+      aria-hidden="true"
+      style={{
+        marginTop: '24px',
+        color: 'var(--accent)',
+        fontSize: '24px',
+        lineHeight: 1,
+        letterSpacing: '-0.02em',
+      }}
+    >
+      ↓
     </div>
   );
 }
