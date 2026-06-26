@@ -1,10 +1,11 @@
 import { AnimatePresence, motion } from 'framer-motion';
 import { useLocation, useNavigate } from '@remix-run/react';
 import { useEffect, useRef, useState } from 'react';
+import { flushSync } from 'react-dom';
 import styles from './page-transition.module.css';
 
-const ENTER_DURATION = 460;
-const MIN_VISIBLE = 700;
+const ENTER_MS = 420;
+const MIN_VISIBLE_MS = 620;
 
 export function PageTransition() {
   const location = useLocation();
@@ -13,16 +14,17 @@ export function PageTransition() {
   const prevPathname = useRef(null);
   const showTimeRef = useRef(null);
   const hideTimer = useRef(null);
+  const navTimer = useRef(null);
 
-  function startCurtain() {
+  function showCurtain() {
     clearTimeout(hideTimer.current);
-    setShow(true);
     showTimeRef.current = Date.now();
+    flushSync(() => setShow(true));
   }
 
   function scheduleCurtainHide() {
     const elapsed = Date.now() - (showTimeRef.current ?? 0);
-    const wait = Math.max(0, MIN_VISIBLE - elapsed);
+    const wait = Math.max(0, MIN_VISIBLE_MS - elapsed);
     clearTimeout(hideTimer.current);
     hideTimer.current = setTimeout(() => setShow(false), wait);
   }
@@ -35,15 +37,17 @@ export function PageTransition() {
       const href = anchor.getAttribute('href');
       if (!href) return;
 
-      const isExternal = href.startsWith('http') || href.startsWith('//') || href.startsWith('mailto');
+      const isExternal =
+        href.startsWith('http') || href.startsWith('//') || href.startsWith('mailto');
       if (isExternal || !href.startsWith('/projects/')) return;
 
       e.preventDefault();
       e.stopPropagation();
 
-      startCurtain();
+      showCurtain();
 
-      setTimeout(() => navigate(href), 16);
+      clearTimeout(navTimer.current);
+      navTimer.current = setTimeout(() => navigate(href), ENTER_MS);
     }
 
     document.addEventListener('click', handleClick, { capture: true });
@@ -63,12 +67,18 @@ export function PageTransition() {
     const returningFromProject =
       prev.startsWith('/projects/') && !location.pathname.startsWith('/projects/');
 
-    if (returningFromProject) startCurtain();
+    if (returningFromProject) showCurtain();
 
     scheduleCurtainHide();
   }, [location.pathname]);
 
-  useEffect(() => () => clearTimeout(hideTimer.current), []);
+  useEffect(
+    () => () => {
+      clearTimeout(hideTimer.current);
+      clearTimeout(navTimer.current);
+    },
+    []
+  );
 
   return (
     <AnimatePresence>
@@ -76,21 +86,31 @@ export function PageTransition() {
         <motion.div
           className={styles.curtain}
           initial={{ y: '100%' }}
-          animate={{ y: '0%', transition: { duration: ENTER_DURATION / 1000, ease: [0.76, 0, 0.24, 1] } }}
-          exit={{ y: '-100%', transition: { duration: 0.42, ease: [0.76, 0, 0.24, 1] } }}
+          animate={{
+            y: '0%',
+            transition: { duration: ENTER_MS / 1000, ease: [0.76, 0, 0.24, 1] },
+          }}
+          exit={{ y: '-100%', transition: { duration: 0.38, ease: [0.76, 0, 0.24, 1] } }}
           aria-hidden="true"
         >
           <motion.div
             className={styles.stripe}
             initial={{ scaleX: 0 }}
-            animate={{ scaleX: 1, transition: { duration: 0.35, ease: [0.76, 0, 0.24, 1], delay: 0.12 } }}
-            exit={{ scaleX: 0, transition: { duration: 0.2 } }}
+            animate={{
+              scaleX: 1,
+              transition: { duration: 0.32, ease: [0.76, 0, 0.24, 1], delay: 0.1 },
+            }}
+            exit={{ scaleX: 0, transition: { duration: 0.18 } }}
           />
           <motion.div
             className={styles.label}
             initial={{ opacity: 0, y: 10 }}
-            animate={{ opacity: 1, y: 0, transition: { duration: 0.3, ease: 'easeOut', delay: 0.25 } }}
-            exit={{ opacity: 0, y: -10, transition: { duration: 0.18 } }}
+            animate={{
+              opacity: 1,
+              y: 0,
+              transition: { duration: 0.28, ease: 'easeOut', delay: 0.22 },
+            }}
+            exit={{ opacity: 0, y: -10, transition: { duration: 0.15 } }}
           >
             <span className={styles.dot} />
             <span className={styles.labelText}>Loading</span>
