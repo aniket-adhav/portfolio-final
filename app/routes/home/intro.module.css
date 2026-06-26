@@ -124,11 +124,11 @@
 
 @keyframes introTextReveal {
   0% {
-    color: color-mix(in lab, var(--text) 0%, transparent);
+    color: color-mix(in srgb, var(--text) 0%, transparent);
   }
 
   50% {
-    color: color-mix(in lab, var(--text) 0%, transparent);
+    color: color-mix(in srgb, var(--text) 0%, transparent);
   }
 
   60% {
@@ -143,15 +143,13 @@
 .word {
   position: relative;
   display: flex;
-  flex-shrink: 0;
   align-items: center;
   line-height: 1;
-  white-space: nowrap;
   animation-duration: 1.5s;
   animation-delay: var(--delay);
   animation-fill-mode: forwards;
   animation-timing-function: var(--bezierFastoutSlowin);
-  color: color-mix(in lab, var(--text) 0%, transparent);
+  color: color-mix(in srgb, var(--text) 0%, transparent);
   transition: opacity 0.5s ease var(--durationM);
   isolation: isolate;
 
@@ -220,7 +218,7 @@
 .line {
   content: '';
   height: 2px;
-  background: color-mix(in lab, var(--text) 30%, transparent);
+  background: color-mix(in srgb, var(--text) 30%, transparent);
   width: 120%;
   display: flex;
   margin-left: 20px;
@@ -232,12 +230,6 @@
   opacity: 0;
   position: relative;
   top: 0.05em;
-
-  @media (--mediaMobile) {
-    width: auto;
-    flex: 1;
-    min-width: 0;
-  }
 
   &[data-status='entering'] {
     animation-name: fade-in;
