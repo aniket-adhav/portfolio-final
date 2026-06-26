@@ -211,8 +211,9 @@ export const Navbar = () => {
               <span className={styles.resumeModalTitle}>Aniket Adhav — Resume</span>
               <div className={styles.resumeModalActions}>
                 <a
-                  href="/aniket-adhav-resume.pdf"
-                  download="Aniket_Adhav_Resume.pdf"
+                  href="https://drive.google.com/uc?export=download&id=1nbPm15_tTJj_bYGErZE13EmTl1ndr8Qz"
+                  target="_blank"
+                  rel="noopener noreferrer"
                   className={styles.resumeDownloadBtn}
                   aria-label="Download Resume"
                 >
@@ -229,7 +230,7 @@ export const Navbar = () => {
               </div>
             </div>
             <iframe
-              src="/aniket-adhav-resume.pdf"
+              src="https://drive.google.com/file/d/1nbPm15_tTJj_bYGErZE13EmTl1ndr8Qz/preview"
               className={styles.resumeFrame}
               title="Aniket Adhav Resume"
             />

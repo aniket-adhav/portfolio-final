@@ -197,7 +197,7 @@ export const ContactSection = ({ id, visible, sectionRef }) => {
 
               <div className={styles.resumeRow} data-visible={vis}>
                 <Button
-                  href="/aniket-adhav-resume.pdf"
+                  href="https://drive.google.com/file/d/1nbPm15_tTJj_bYGErZE13EmTl1ndr8Qz/view?usp=drive_link"
                   target="_blank"
                   rel="noopener noreferrer"
                   icon="resume"
