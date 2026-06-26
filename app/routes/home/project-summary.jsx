@@ -7,7 +7,6 @@ import { Text } from '~/components/text';
 import { useTheme } from '~/components/theme-provider';
 import { Transition } from '~/components/transition';
 import { Loader } from '~/components/loader';
-import { WipeReveal } from '~/components/wipe-reveal/wipe-reveal';
 import { useWindowSize } from '~/hooks';
 import { Suspense, lazy, useState } from 'react';
 import { cssProps, media } from '~/utils/style';
@@ -60,17 +59,15 @@ export function ProjectSummary({
             {indexText}
           </span>
         </div>
-        <WipeReveal visible={visible} delay={300} as="div">
-          <Heading
-            level={3}
-            as="h2"
-            className={styles.title}
-            data-visible={visible}
-            id={titleId}
-          >
-            {title}
-          </Heading>
-        </WipeReveal>
+        <Heading
+          level={3}
+          as="h2"
+          className={styles.title}
+          data-visible={visible}
+          id={titleId}
+        >
+          {title}
+        </Heading>
         <Text className={styles.description} data-visible={visible} as="p">
           {description}
         </Text>

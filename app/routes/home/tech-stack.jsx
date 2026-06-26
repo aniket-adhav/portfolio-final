@@ -1,4 +1,3 @@
-import { WipeReveal } from '~/components/wipe-reveal/wipe-reveal';
 import styles from './tech-stack.module.css';
 
 const techRows = [
@@ -73,12 +72,8 @@ export function TechStack({ id, visible, sectionRef }) {
     >
       <div className={styles.content}>
         <div className={styles.heading} data-visible={visible}>
-          <WipeReveal visible={visible} delay={0} as="div">
-            <p className={styles.label}>Tech Stack</p>
-          </WipeReveal>
-          <WipeReveal visible={visible} delay={150} as="div">
-            <h2 className={styles.title}>Tools I work with</h2>
-          </WipeReveal>
+          <p className={styles.label}>Tech Stack</p>
+          <h2 className={styles.title}>Tools I work with</h2>
         </div>
 
         <div className={styles.pyramid} data-visible={visible}>
