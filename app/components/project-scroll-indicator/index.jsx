@@ -13,16 +13,17 @@ export function ProjectScrollIndicator() {
   }, []);
 
   return (
-    <a
-      href="#content"
-      className={styles.indicator}
-      data-hidden={hidden}
-      aria-hidden="true"
-      tabIndex={-1}
-    >
-      <svg aria-hidden stroke="currentColor" width="43" height="15" viewBox="0 0 43 15">
-        <path d="M1 1l20.5 12L42 1" strokeWidth="2" fill="none" />
-      </svg>
-    </a>
+    <div className={styles.wrapper} data-hidden={hidden}>
+      <a
+        href="#content"
+        className={styles.indicator}
+        aria-hidden="true"
+        tabIndex={-1}
+      >
+        <svg aria-hidden stroke="currentColor" width="36" height="12" viewBox="0 0 43 15">
+          <path d="M1 1l20.5 12L42 1" strokeWidth="2" fill="none" />
+        </svg>
+      </a>
+    </div>
   );
 }
