@@ -2,19 +2,18 @@ import { useEffect, useState } from 'react';
 import styles from './splash-screen.module.css';
 
 const greetings = [
-  { text: 'नमस्ते', lang: 'Hindi' },
-  { text: 'नमस्कार', lang: 'Marathi' },
-  { text: 'प्रणाम', lang: 'Hindi' },
-  { text: 'राम राम', lang: 'Hindi' },
-  { text: 'आदाब', lang: 'Hindi' },
-  { text: 'जय हिंद', lang: 'Hindi' },
-  { text: 'जय महाराष्ट्र', lang: 'Marathi' },
-  { text: 'स्वागत आहे', lang: 'Marathi' },
-  { text: 'नमन', lang: 'Hindi · Marathi' },
-  { text: 'नमस्ते', lang: 'Hindi' },
+  { text: 'Hello',          lang: 'English',  code: 'en' },
+  { text: 'नमस्कार',         lang: 'Marathi',  code: 'mr' },
+  { text: 'নমস্কার',          lang: 'Bengali',  code: 'bn' },
+  { text: 'வணக்கம்',         lang: 'Tamil',    code: 'ta' },
+  { text: 'నమస్కారం',        lang: 'Telugu',   code: 'te' },
+  { text: 'ನಮಸ್ಕಾರ',         lang: 'Kannada',  code: 'kn' },
+  { text: 'નમસ્તે',           lang: 'Gujarati', code: 'gu' },
+  { text: 'ਸਤ ਸ੍ਰੀ ਅਕਾਲ',    lang: 'Punjabi',  code: 'pa' },
+  { text: 'नमस्ते',           lang: 'Hindi',    code: 'hi' },
 ];
 
-const WORD_DURATION = 220;
+const WORD_DURATION = 280;
 
 export function SplashScreen({ onComplete }) {
   const [index, setIndex] = useState(0);
@@ -38,9 +37,11 @@ export function SplashScreen({ onComplete }) {
   return (
     <div className={styles.overlay} data-exiting={exiting}>
       <div className={styles.content}>
-        <span key={index} className={styles.word} data-first={index === 0}>
-          {current.text}
-        </span>
+        <div key={index} className={styles.clip}>
+          <span className={styles.word} lang={current.code}>
+            {current.text}
+          </span>
+        </div>
         <span key={`lang-${index}`} className={styles.lang}>
           {current.lang}
         </span>

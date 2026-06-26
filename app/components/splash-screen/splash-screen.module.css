@@ -1,43 +1,16 @@
-@import url('https://fonts.googleapis.com/css2?family=Tiro+Devanagari+Hindi:ital@0;1&display=swap');
-
 @keyframes wordIn {
-  0% {
-    opacity: 0;
-    transform: translateY(12px);
+  from {
+    transform: translateY(110%);
   }
-  18% {
-    opacity: 1;
+  to {
     transform: translateY(0);
-  }
-  78% {
-    opacity: 1;
-    transform: translateY(0);
-  }
-  100% {
-    opacity: 0;
-    transform: translateY(-12px);
-  }
-}
-
-@keyframes wordFirst {
-  0% {
-    opacity: 1;
-    transform: translateY(0);
-  }
-  78% {
-    opacity: 1;
-    transform: translateY(0);
-  }
-  100% {
-    opacity: 0;
-    transform: translateY(-12px);
   }
 }
 
 @keyframes langIn {
-  0% { opacity: 0; }
-  25% { opacity: 1; }
-  75% { opacity: 1; }
+  0%   { opacity: 0; }
+  25%  { opacity: 1; }
+  75%  { opacity: 1; }
   100% { opacity: 0; }
 }
 
@@ -64,24 +37,32 @@
   flex-direction: column;
   align-items: center;
   gap: 18px;
-  min-height: 120px;
+  min-height: 80px;
   justify-content: center;
 }
 
+.clip {
+  overflow: hidden;
+  line-height: 1.2;
+  padding-top: 0.18em;
+  padding-bottom: 0.1em;
+}
+
 .word {
-  font-family: 'Tiro Devanagari Hindi', 'Kohinoor Devanagari', 'Noto Sans Devanagari', serif;
-  font-size: clamp(3rem, 9vw, 6.5rem);
-  font-weight: 400;
+  display: block;
+  font-size: clamp(1.6rem, 3.5vw, 2.8rem);
+  font-weight: var(--fontWeightRegular, 400);
   color: var(--textTitle, #fff);
   letter-spacing: 0.01em;
-  line-height: 1.15;
-  display: block;
-  animation: wordIn 220ms cubic-bezier(0.4, 0, 0.2, 1) both;
-  will-change: opacity, transform;
+  line-height: 1.2;
+  white-space: nowrap;
+  animation: wordIn 0.65s cubic-bezier(0.16, 1, 0.3, 1) both;
+  will-change: transform;
+}
 
-  &[data-first='true'] {
-    animation: wordFirst 220ms cubic-bezier(0.4, 0, 0.2, 1) both;
-  }
+.word:lang(en) {
+  letter-spacing: 0.08em;
+  font-weight: var(--fontWeightMedium, 500);
 }
 
 .lang {
@@ -91,7 +72,7 @@
   text-transform: uppercase;
   color: var(--accent, #00d4ff);
   display: block;
-  animation: langIn 220ms cubic-bezier(0.4, 0, 0.2, 1) both;
+  animation: langIn 280ms cubic-bezier(0.4, 0, 0.2, 1) both;
   will-change: opacity;
 }
 
@@ -108,5 +89,5 @@
   height: 100%;
   background: var(--accent, #00d4ff);
   width: var(--progress, 0%);
-  transition: width 200ms linear;
+  transition: width 250ms linear;
 }
