@@ -1,13 +1,31 @@
 import { AnimatePresence, motion } from 'framer-motion';
-import { useLocation } from '@remix-run/react';
+import { useLocation, useNavigate } from '@remix-run/react';
 import { useEffect, useRef, useState } from 'react';
 import styles from './page-transition.module.css';
 
+const ENTER_DURATION = 460;
+const MIN_VISIBLE = 700;
+
 export function PageTransition() {
   const location = useLocation();
+  const navigate = useNavigate();
   const [show, setShow] = useState(false);
   const prevPathname = useRef(null);
+  const showTimeRef = useRef(null);
   const hideTimer = useRef(null);
+
+  function startCurtain() {
+    clearTimeout(hideTimer.current);
+    setShow(true);
+    showTimeRef.current = Date.now();
+  }
+
+  function scheduleCurtainHide() {
+    const elapsed = Date.now() - (showTimeRef.current ?? 0);
+    const wait = Math.max(0, MIN_VISIBLE - elapsed);
+    clearTimeout(hideTimer.current);
+    hideTimer.current = setTimeout(() => setShow(false), wait);
+  }
 
   useEffect(() => {
     function handleClick(e) {
@@ -17,40 +35,40 @@ export function PageTransition() {
       const href = anchor.getAttribute('href');
       if (!href) return;
 
-      const isInternal = !href.startsWith('http') && !href.startsWith('//') && !href.startsWith('mailto');
-      const isProjectLink = href.startsWith('/projects/');
+      const isExternal = href.startsWith('http') || href.startsWith('//') || href.startsWith('mailto');
+      if (isExternal || !href.startsWith('/projects/')) return;
 
-      if (isInternal && isProjectLink) {
-        clearTimeout(hideTimer.current);
-        setShow(true);
-      }
+      e.preventDefault();
+      e.stopPropagation();
+
+      startCurtain();
+
+      setTimeout(() => navigate(href), 16);
     }
 
     document.addEventListener('click', handleClick, { capture: true });
     return () => document.removeEventListener('click', handleClick, { capture: true });
-  }, []);
+  }, [navigate]);
 
   useEffect(() => {
     if (prevPathname.current === null) {
       prevPathname.current = location.pathname;
       return;
     }
-
     if (prevPathname.current === location.pathname) return;
 
     const prev = prevPathname.current;
     prevPathname.current = location.pathname;
 
-    const isProjectReturn = prev.startsWith('/projects/') && !location.pathname.startsWith('/projects/');
+    const returningFromProject =
+      prev.startsWith('/projects/') && !location.pathname.startsWith('/projects/');
 
-    if (isProjectReturn) {
-      clearTimeout(hideTimer.current);
-      setShow(true);
-    }
+    if (returningFromProject) startCurtain();
 
-    hideTimer.current = setTimeout(() => setShow(false), 800);
-    return () => clearTimeout(hideTimer.current);
+    scheduleCurtainHide();
   }, [location.pathname]);
+
+  useEffect(() => () => clearTimeout(hideTimer.current), []);
 
   return (
     <AnimatePresence>
@@ -58,7 +76,7 @@ export function PageTransition() {
         <motion.div
           className={styles.curtain}
           initial={{ y: '100%' }}
-          animate={{ y: '0%', transition: { duration: 0.45, ease: [0.76, 0, 0.24, 1] } }}
+          animate={{ y: '0%', transition: { duration: ENTER_DURATION / 1000, ease: [0.76, 0, 0.24, 1] } }}
           exit={{ y: '-100%', transition: { duration: 0.42, ease: [0.76, 0, 0.24, 1] } }}
           aria-hidden="true"
         >
