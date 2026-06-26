@@ -13,7 +13,7 @@ import { createCookieSessionStorage, json } from '@remix-run/node';
 import { ThemeProvider, themeStyles } from '~/components/theme-provider';
 import GothamBook from '~/assets/fonts/gotham-book.woff2';
 import GothamMedium from '~/assets/fonts/gotham-medium.woff2';
-import { useEffect, useState, useCallback } from 'react';
+import { useEffect, useState, useCallback, useRef } from 'react';
 import { Error } from '~/layouts/error';
 import { SplashScreen } from '~/components/splash-screen';
 import { SplashContext } from '~/components/splash-screen/context';
@@ -84,8 +84,12 @@ export default function App() {
   let { canonicalUrl, theme } = useLoaderData();
   const fetcher = useFetcher();
   const { state } = useNavigation();
+
+  // SSR-safe initial state — both false so server HTML matches client hydration
   const [showSplash, setShowSplash] = useState(false);
   const [splashDone, setSplashDone] = useState(false);
+  // Track whether we actually showed the splash this session (for fade-in)
+  const splashWasShown = useRef(false);
 
   if (fetcher.formData?.has('theme')) {
     theme = fetcher.formData.get('theme');
@@ -105,6 +109,7 @@ export default function App() {
     );
     const seen = sessionStorage.getItem('splashSeen');
     if (!seen) {
+      splashWasShown.current = true;
       setShowSplash(true);
     } else {
       setSplashDone(true);
@@ -117,12 +122,19 @@ export default function App() {
     setSplashDone(true);
   }, []);
 
+  // Three states:
+  //  "hidden"   — splash active, main content invisible
+  //  "entering" — splash just finished, fade main content in
+  //  "visible"  — return visit, no splash, show immediately
+  let appState = 'visible';
+  if (showSplash) appState = 'hidden';
+  else if (splashDone && splashWasShown.current) appState = 'entering';
+
   return (
     <html lang="en">
       <head>
         <meta charSet="utf-8" />
         <meta name="viewport" content="width=device-width, initial-scale=1" />
-        {/* Theme color doesn't support oklch so I'm hard coding these hexes for now */}
         <meta name="theme-color" content={theme === 'dark' ? '#111' : '#F2F2F2'} />
         <meta
           name="color-scheme"
@@ -135,23 +147,25 @@ export default function App() {
       </head>
       <body data-theme={theme}>
         <SplashContext.Provider value={splashDone}>
-        <ThemeProvider theme={theme} toggleTheme={toggleTheme}>
-          {showSplash && <SplashScreen onComplete={handleSplashComplete} />}
-          <PageTransition />
-          <Progress />
-          <VisuallyHidden showOnFocus as="a" className={styles.skip} href="#main-content">
-            Skip to main content
-          </VisuallyHidden>
-          <Navbar />
-          <main
-            id="main-content"
-            className={styles.container}
-            tabIndex={-1}
-            data-loading={state === 'loading'}
-          >
-            <Outlet />
-          </main>
-        </ThemeProvider>
+          <ThemeProvider theme={theme} toggleTheme={toggleTheme}>
+            {showSplash && <SplashScreen onComplete={handleSplashComplete} />}
+            <div className={styles.appContent} data-app-state={appState}>
+              <PageTransition />
+              <Progress />
+              <VisuallyHidden showOnFocus as="a" className={styles.skip} href="#main-content">
+                Skip to main content
+              </VisuallyHidden>
+              <Navbar />
+              <main
+                id="main-content"
+                className={styles.container}
+                tabIndex={-1}
+                data-loading={state === 'loading'}
+              >
+                <Outlet />
+              </main>
+            </div>
+          </ThemeProvider>
         </SplashContext.Provider>
         <ScrollRestoration />
         <Scripts />
