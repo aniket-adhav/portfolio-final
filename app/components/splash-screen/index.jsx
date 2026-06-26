@@ -3,12 +3,11 @@ import styles from './splash-screen.module.css';
 
 const greetings = [
   { text: 'Hello',          lang: 'English',  code: 'en' },
-  { text: 'नमस्कार',         lang: 'Marathi',  code: 'mr' },
   { text: 'নমস্কার',          lang: 'Bengali',  code: 'bn' },
   { text: 'வணக்கம்',         lang: 'Tamil',    code: 'ta' },
   { text: 'నమస్కారం',        lang: 'Telugu',   code: 'te' },
+  { text: 'नमस्कार',         lang: 'Marathi',  code: 'mr' },
   { text: 'ನಮಸ್ಕಾರ',         lang: 'Kannada',  code: 'kn' },
-  { text: 'નમસ્તે',           lang: 'Gujarati', code: 'gu' },
   { text: 'ਸਤ ਸ੍ਰੀ ਅਕਾਲ',    lang: 'Punjabi',  code: 'pa' },
   { text: 'नमस्ते',           lang: 'Hindi',    code: 'hi' },
 ];
