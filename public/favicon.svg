@@ -1,13 +1,17 @@
-<svg xmlns="http://www.w3.org/2000/svg" width="64" height="64" viewBox="0 0 64 64">
-  <style>
-    .fg { fill: #111; }
-    @media (prefers-color-scheme: dark) {
-      .fg { fill: #fff; }
-    }
-  </style>
-  <path class="fg" d="
-    M32 6
-    L14 58 h7 l4-12 h14 l4 12 h7 Z
-    M32 20 l5 18 H27 Z
-  " fill-rule="evenodd"/>
+<svg xmlns="http://www.w3.org/2000/svg" width="32" height="32" viewBox="0 0 30 29">
+  <defs>
+    <clipPath id="mono-clip">
+      <path clip-rule="evenodd" d="M0 29L15 0L30 29ZM4 29L15 8L26 29ZM7 18L23 18L23 22L7 22Z" />
+    </clipPath>
+    <style>
+      .base { fill: #fff; }
+      .accent { fill: #00d4ff; }
+      @media (prefers-color-scheme: light) {
+        .base { fill: #111; }
+        .accent { fill: #00aad4; }
+      }
+    </style>
+  </defs>
+  <rect clip-path="url(#mono-clip)" class="base" width="30" height="29" />
+  <rect clip-path="url(#mono-clip)" class="accent" x="0" y="19" width="30" height="10" />
 </svg>

@@ -14,6 +14,8 @@ import { navLinks, socialLinks } from './nav-data';
 import config from '~/config.json';
 import styles from './navbar.module.css';
 
+const NAV_SECTION_IDS = ['project-1', 'skills', 'details', 'contact'];
+
 export const Navbar = () => {
   const [current, setCurrent] = useState();
   const [menuOpen, setMenuOpen] = useState(false);
@@ -27,7 +29,9 @@ export const Navbar = () => {
   const scrollToHash = useScrollToHash();
 
   useEffect(() => {
-    setCurrent(`${location.pathname}${location.hash}`);
+    if (location.pathname !== '/') {
+      setCurrent(`${location.pathname}${location.hash}`);
+    }
   }, [location]);
 
   useEffect(() => {
@@ -35,6 +39,28 @@ export const Navbar = () => {
     setCurrent(`${location.pathname}${target}`);
     scrollToHash(target, () => setTarget(null));
   }, [location.pathname, scrollToHash, target]);
+
+  useEffect(() => {
+    if (location.pathname !== '/') return;
+
+    const handleScroll = () => {
+      const trigger = window.scrollY + window.innerHeight * 0.35;
+
+      let active = null;
+      for (const id of NAV_SECTION_IDS) {
+        const el = document.getElementById(id);
+        if (el && el.offsetTop <= trigger) {
+          active = `/#${id}`;
+        }
+      }
+      setCurrent(active ?? undefined);
+    };
+
+    window.addEventListener('scroll', handleScroll, { passive: true });
+    handleScroll();
+
+    return () => window.removeEventListener('scroll', handleScroll);
+  }, [location.pathname]);
 
   useEffect(() => {
     const navItems = document.querySelectorAll('[data-navbar-item]');
