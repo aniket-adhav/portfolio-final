@@ -5,10 +5,30 @@ import styles from './page-transition.module.css';
 
 export function PageTransition() {
   const location = useLocation();
-  const prevPathname = useRef(null);
-  const timerRef = useRef(null);
   const [show, setShow] = useState(false);
-  const [animKey, setAnimKey] = useState(0);
+  const prevPathname = useRef(null);
+  const hideTimer = useRef(null);
+
+  useEffect(() => {
+    function handleClick(e) {
+      const anchor = e.target.closest('a[href]');
+      if (!anchor) return;
+
+      const href = anchor.getAttribute('href');
+      if (!href) return;
+
+      const isInternal = !href.startsWith('http') && !href.startsWith('//') && !href.startsWith('mailto');
+      const isProjectLink = href.startsWith('/projects/');
+
+      if (isInternal && isProjectLink) {
+        clearTimeout(hideTimer.current);
+        setShow(true);
+      }
+    }
+
+    document.addEventListener('click', handleClick, { capture: true });
+    return () => document.removeEventListener('click', handleClick, { capture: true });
+  }, []);
 
   useEffect(() => {
     if (prevPathname.current === null) {
@@ -16,32 +36,26 @@ export function PageTransition() {
       return;
     }
 
-    if (prevPathname.current === location.pathname) {
-      return;
-    }
+    if (prevPathname.current === location.pathname) return;
 
     const prev = prevPathname.current;
     prevPathname.current = location.pathname;
 
-    const isProjectNav =
-      location.pathname.startsWith('/projects/') ||
-      prev.startsWith('/projects/');
+    const isProjectReturn = prev.startsWith('/projects/') && !location.pathname.startsWith('/projects/');
 
-    if (!isProjectNav) return;
+    if (isProjectReturn) {
+      clearTimeout(hideTimer.current);
+      setShow(true);
+    }
 
-    clearTimeout(timerRef.current);
-    setAnimKey(k => k + 1);
-    setShow(true);
-
-    timerRef.current = setTimeout(() => setShow(false), 900);
-    return () => clearTimeout(timerRef.current);
+    hideTimer.current = setTimeout(() => setShow(false), 800);
+    return () => clearTimeout(hideTimer.current);
   }, [location.pathname]);
 
   return (
     <AnimatePresence>
       {show && (
         <motion.div
-          key={animKey}
           className={styles.curtain}
           initial={{ y: '100%' }}
           animate={{ y: '0%', transition: { duration: 0.45, ease: [0.76, 0, 0.24, 1] } }}
