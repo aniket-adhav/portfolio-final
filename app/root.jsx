@@ -13,8 +13,9 @@ import { createCookieSessionStorage, json } from '@remix-run/node';
 import { ThemeProvider, themeStyles } from '~/components/theme-provider';
 import GothamBook from '~/assets/fonts/gotham-book.woff2';
 import GothamMedium from '~/assets/fonts/gotham-medium.woff2';
-import { useEffect } from 'react';
+import { useEffect, useState, useCallback } from 'react';
 import { Error } from '~/layouts/error';
+import { SplashScreen } from '~/components/splash-screen';
 import { VisuallyHidden } from '~/components/visually-hidden';
 import { Navbar } from '~/layouts/navbar';
 import { Progress } from '~/components/progress';
@@ -82,6 +83,7 @@ export default function App() {
   let { canonicalUrl, theme } = useLoaderData();
   const fetcher = useFetcher();
   const { state } = useNavigation();
+  const [showSplash, setShowSplash] = useState(false);
 
   if (fetcher.formData?.has('theme')) {
     theme = fetcher.formData.get('theme');
@@ -99,6 +101,15 @@ export default function App() {
       `${config.ascii}\n`,
       `Taking a peek huh? Check out the source code: ${config.repo}\n\n`
     );
+    const seen = sessionStorage.getItem('splashSeen');
+    if (!seen) {
+      setShowSplash(true);
+    }
+  }, []);
+
+  const handleSplashComplete = useCallback(() => {
+    sessionStorage.setItem('splashSeen', '1');
+    setShowSplash(false);
   }, []);
 
   return (
@@ -119,6 +130,7 @@ export default function App() {
       </head>
       <body data-theme={theme}>
         <ThemeProvider theme={theme} toggleTheme={toggleTheme}>
+          {showSplash && <SplashScreen onComplete={handleSplashComplete} />}
           <PageTransition />
           <Progress />
           <VisuallyHidden showOnFocus as="a" className={styles.skip} href="#main-content">
