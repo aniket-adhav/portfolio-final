@@ -49,7 +49,7 @@ export function MoviesHouse() {
                 <Button
                   iconHoverShift
                   iconEnd="arrow-right"
-                  href="https://github.com/aniket-adhav/MoviesHouse"
+                  href="https://github.com/aniket-adhav/Movies-House-App"
                   target="_blank"
                   rel="noopener noreferrer"
                 >
@@ -180,7 +180,7 @@ export function MoviesHouse() {
                 <Button
                   iconHoverShift
                   iconEnd="arrow-right"
-                  href="https://github.com/aniket-adhav/MoviesHouse"
+                  href="https://github.com/aniket-adhav/Movies-House-App"
                   target="_blank"
                   rel="noopener noreferrer"
                 >
