@@ -42,9 +42,6 @@ export function SplashScreen({ onComplete }) {
             {current.text}
           </span>
         </div>
-        <span key={`lang-${index}`} className={styles.lang}>
-          {current.lang}
-        </span>
       </div>
       <div className={styles.bar}>
         <div
