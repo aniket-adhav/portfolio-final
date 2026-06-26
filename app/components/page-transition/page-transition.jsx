@@ -20,7 +20,14 @@ export function PageTransition() {
       return;
     }
 
+    const prev = prevPathname.current;
     prevPathname.current = location.pathname;
+
+    const isProjectNav =
+      location.pathname.startsWith('/projects/') ||
+      prev.startsWith('/projects/');
+
+    if (!isProjectNav) return;
 
     clearTimeout(timerRef.current);
     setAnimKey(k => k + 1);
