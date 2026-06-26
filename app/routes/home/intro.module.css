@@ -75,11 +75,7 @@
   letter-spacing: -0.03em;
 
   @media (--mediaMobile) {
-    font-size: calc((44 / 16) * 1rem);
-  }
-
-  @media (--mediaMobileS) {
-    font-size: calc((36 / 16) * 1rem);
+    --fontSizeH0: clamp(1.9rem, 8.5vw, 2.8rem);
   }
 }
 
