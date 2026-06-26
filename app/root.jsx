@@ -107,6 +107,8 @@ export default function App() {
       `${config.ascii}\n`,
       `Taking a peek huh? Check out the source code: ${config.repo}\n\n`
     );
+    // Remove the pre-hydration CSS lock — React state takes over from here
+    document.documentElement.removeAttribute('data-splash-pending');
     const seen = sessionStorage.getItem('splashSeen');
     if (!seen) {
       splashWasShown.current = true;
@@ -131,7 +133,7 @@ export default function App() {
   else if (splashDone && splashWasShown.current) appState = 'entering';
 
   return (
-    <html lang="en">
+    <html lang="en" suppressHydrationWarning>
       <head>
         <meta charSet="utf-8" />
         <meta name="viewport" content="width=device-width, initial-scale=1" />
@@ -141,6 +143,13 @@ export default function App() {
           content={theme === 'light' ? 'light dark' : 'dark light'}
         />
         <style dangerouslySetInnerHTML={{ __html: themeStyles }} />
+        {/* Hide app content immediately on first visit — prevents flash before splash */}
+        <style dangerouslySetInnerHTML={{
+          __html: `html[data-splash-pending] #app-root-content{visibility:hidden!important;pointer-events:none!important}`
+        }} />
+        <script dangerouslySetInnerHTML={{
+          __html: `try{if(!sessionStorage.getItem('splashSeen')){document.documentElement.setAttribute('data-splash-pending','')}}catch(e){}`
+        }} />
         <Meta />
         <Links />
         <link rel="canonical" href={canonicalUrl} />
@@ -149,7 +158,7 @@ export default function App() {
         <SplashContext.Provider value={splashDone}>
           <ThemeProvider theme={theme} toggleTheme={toggleTheme}>
             {showSplash && <SplashScreen onComplete={handleSplashComplete} />}
-            <div className={styles.appContent} data-app-state={appState}>
+            <div id="app-root-content" className={styles.appContent} data-app-state={appState}>
               <PageTransition />
               <Progress />
               <VisuallyHidden showOnFocus as="a" className={styles.skip} href="#main-content">
