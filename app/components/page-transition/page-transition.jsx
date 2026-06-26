@@ -6,7 +6,7 @@ import styles from './page-transition.module.css';
 
 const DURATION = 0.55;
 const DURATION_MS = DURATION * 1000;
-const MIN_VISIBLE_MS = DURATION_MS + 80;
+const MIN_VISIBLE_MS = DURATION_MS * 2;
 const EASE = [0.76, 0, 0.24, 1];
 
 export function PageTransition() {
