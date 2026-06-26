@@ -16,6 +16,7 @@ import GothamMedium from '~/assets/fonts/gotham-medium.woff2';
 import { useEffect, useState, useCallback } from 'react';
 import { Error } from '~/layouts/error';
 import { SplashScreen } from '~/components/splash-screen';
+import { SplashContext } from '~/components/splash-screen/context';
 import { VisuallyHidden } from '~/components/visually-hidden';
 import { Navbar } from '~/layouts/navbar';
 import { Progress } from '~/components/progress';
@@ -84,6 +85,7 @@ export default function App() {
   const fetcher = useFetcher();
   const { state } = useNavigation();
   const [showSplash, setShowSplash] = useState(false);
+  const [splashDone, setSplashDone] = useState(false);
 
   if (fetcher.formData?.has('theme')) {
     theme = fetcher.formData.get('theme');
@@ -104,12 +106,15 @@ export default function App() {
     const seen = sessionStorage.getItem('splashSeen');
     if (!seen) {
       setShowSplash(true);
+    } else {
+      setSplashDone(true);
     }
   }, []);
 
   const handleSplashComplete = useCallback(() => {
     sessionStorage.setItem('splashSeen', '1');
     setShowSplash(false);
+    setSplashDone(true);
   }, []);
 
   return (
@@ -129,6 +134,7 @@ export default function App() {
         <link rel="canonical" href={canonicalUrl} />
       </head>
       <body data-theme={theme}>
+        <SplashContext.Provider value={splashDone}>
         <ThemeProvider theme={theme} toggleTheme={toggleTheme}>
           {showSplash && <SplashScreen onComplete={handleSplashComplete} />}
           <PageTransition />
@@ -146,6 +152,7 @@ export default function App() {
             <Outlet />
           </main>
         </ThemeProvider>
+        </SplashContext.Provider>
         <ScrollRestoration />
         <Scripts />
       </body>

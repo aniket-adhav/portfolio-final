@@ -11,6 +11,7 @@ import { Suspense, lazy, useEffect, useState } from 'react';
 import { cssProps } from '~/utils/style';
 import config from '~/config.json';
 import { useHydrated } from '~/hooks/useHydrated';
+import { useSplashDone } from '~/components/splash-screen/context';
 import styles from './intro.module.css';
 
 const DisplacementSphere = lazy(() =>
@@ -20,6 +21,7 @@ const DisplacementSphere = lazy(() =>
 export function Intro({ id, sectionRef, scrollIndicatorHidden, ...rest }) {
   const { theme } = useTheme();
   const { disciplines } = config;
+  const splashDone = useSplashDone();
   const [disciplineIndex, setDisciplineIndex] = useState(0);
   const prevTheme = usePrevious(theme);
   const introLabel = [disciplines.slice(0, -1).join(', '), disciplines.slice(-1)[0]].join(
@@ -60,7 +62,7 @@ export function Intro({ id, sectionRef, scrollIndicatorHidden, ...rest }) {
       tabIndex={-1}
       {...rest}
     >
-      <Transition in key={theme} timeout={3000}>
+      <Transition in={splashDone} key={`${theme}-${splashDone}`} timeout={3000}>
         {({ visible, status }) => (
           <>
             {isHydrated && (
@@ -70,7 +72,7 @@ export function Intro({ id, sectionRef, scrollIndicatorHidden, ...rest }) {
             )}
             <header className={styles.text}>
               <h1 className={styles.name} data-visible={visible} id={titleId}>
-                <DecoderText text={config.name} delay={500} />
+                <DecoderText text={config.name} start={splashDone} delay={300} />
               </h1>
               <Heading level={0} as="h2" className={styles.title}>
                 <VisuallyHidden className={styles.label}>

@@ -1,44 +1,29 @@
+@import url('https://fonts.googleapis.com/css2?family=Tiro+Devanagari+Hindi:ital@0;1&display=swap');
+
 @keyframes wordIn {
   0% {
     opacity: 0;
-    transform: translateY(10px);
+    transform: translateY(12px);
   }
-  20% {
+  18% {
     opacity: 1;
     transform: translateY(0);
   }
-  75% {
+  78% {
     opacity: 1;
     transform: translateY(0);
   }
   100% {
     opacity: 0;
-    transform: translateY(-10px);
+    transform: translateY(-12px);
   }
 }
 
 @keyframes langIn {
-  0% {
-    opacity: 0;
-  }
-  30% {
-    opacity: 0.45;
-  }
-  75% {
-    opacity: 0.45;
-  }
-  100% {
-    opacity: 0;
-  }
-}
-
-@keyframes barGrow {
-  from {
-    width: 0%;
-  }
-  to {
-    width: var(--progress);
-  }
+  0% { opacity: 0; }
+  25% { opacity: 1; }
+  75% { opacity: 1; }
+  100% { opacity: 0; }
 }
 
 .overlay {
@@ -63,29 +48,31 @@
   display: flex;
   flex-direction: column;
   align-items: center;
-  gap: 14px;
-  min-height: 100px;
+  gap: 18px;
+  min-height: 120px;
   justify-content: center;
 }
 
 .word {
-  font-size: clamp(2.8rem, 8vw, 6rem);
-  font-weight: var(--fontWeightMedium, 500);
-  color: var(--text, #fff);
-  letter-spacing: -0.02em;
-  line-height: 1;
+  font-family: 'Tiro Devanagari Hindi', 'Kohinoor Devanagari', 'Noto Sans Devanagari', serif;
+  font-size: clamp(3rem, 9vw, 6.5rem);
+  font-weight: 400;
+  color: var(--textTitle, #fff);
+  letter-spacing: 0.01em;
+  line-height: 1.15;
   display: block;
-  animation: wordIn 210ms cubic-bezier(0.4, 0, 0.2, 1) both;
+  animation: wordIn 220ms cubic-bezier(0.4, 0, 0.2, 1) both;
   will-change: opacity, transform;
 }
 
 .lang {
-  font-size: clamp(0.65rem, 1.5vw, 0.78rem);
-  letter-spacing: 0.18em;
+  font-family: var(--fontStack, system-ui, sans-serif);
+  font-size: clamp(0.6rem, 1.4vw, 0.72rem);
+  letter-spacing: 0.22em;
   text-transform: uppercase;
   color: var(--accent, #00d4ff);
   display: block;
-  animation: langIn 210ms cubic-bezier(0.4, 0, 0.2, 1) both;
+  animation: langIn 220ms cubic-bezier(0.4, 0, 0.2, 1) both;
   will-change: opacity;
 }
 

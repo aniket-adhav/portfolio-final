@@ -2,29 +2,19 @@ import { useEffect, useState } from 'react';
 import styles from './splash-screen.module.css';
 
 const greetings = [
-  { text: 'Hello', lang: 'English' },
   { text: 'नमस्ते', lang: 'Hindi' },
   { text: 'नमस्कार', lang: 'Marathi' },
-  { text: 'こんにちは', lang: 'Japanese' },
-  { text: 'Bonjour', lang: 'French' },
-  { text: 'Hola', lang: 'Spanish' },
-  { text: '你好', lang: 'Chinese' },
-  { text: 'مرحبا', lang: 'Arabic' },
-  { text: 'Ciao', lang: 'Italian' },
-  { text: 'Hallo', lang: 'German' },
-  { text: 'Olá', lang: 'Portuguese' },
-  { text: 'Привет', lang: 'Russian' },
-  { text: '안녕하세요', lang: 'Korean' },
-  { text: 'Merhaba', lang: 'Turkish' },
-  { text: 'Γεια σου', lang: 'Greek' },
-  { text: 'שלום', lang: 'Hebrew' },
-  { text: 'สวัสดี', lang: 'Thai' },
-  { text: 'Xin chào', lang: 'Vietnamese' },
-  { text: 'Ahoj', lang: 'Czech' },
-  { text: 'Hello', lang: 'English' },
+  { text: 'प्रणाम', lang: 'Hindi' },
+  { text: 'राम राम', lang: 'Hindi' },
+  { text: 'आदाब', lang: 'Hindi' },
+  { text: 'जय हिंद', lang: 'Hindi' },
+  { text: 'जय महाराष्ट्र', lang: 'Marathi' },
+  { text: 'स्वागत आहे', lang: 'Marathi' },
+  { text: 'नमन', lang: 'Hindi · Marathi' },
+  { text: 'नमस्ते', lang: 'Hindi' },
 ];
 
-const WORD_DURATION = 210;
+const WORD_DURATION = 220;
 
 export function SplashScreen({ onComplete }) {
   const [index, setIndex] = useState(0);
@@ -37,8 +27,8 @@ export function SplashScreen({ onComplete }) {
     } else {
       const t = setTimeout(() => {
         setExiting(true);
-        setTimeout(onComplete, 700);
-      }, WORD_DURATION + 100);
+        setTimeout(onComplete, 680);
+      }, WORD_DURATION + 120);
       return () => clearTimeout(t);
     }
   }, [index, onComplete]);
@@ -48,14 +38,12 @@ export function SplashScreen({ onComplete }) {
   return (
     <div className={styles.overlay} data-exiting={exiting}>
       <div className={styles.content}>
-        <span
-          key={index}
-          className={styles.word}
-          lang={current.lang}
-        >
+        <span key={index} className={styles.word}>
           {current.text}
         </span>
-        <span className={styles.lang}>{current.lang}</span>
+        <span key={`lang-${index}`} className={styles.lang}>
+          {current.lang}
+        </span>
       </div>
       <div className={styles.bar}>
         <div
