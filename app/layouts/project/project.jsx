@@ -6,11 +6,24 @@ import { Text } from '~/components/text';
 import { tokens } from '~/components/theme-provider/theme';
 import { Transition } from '~/components/transition';
 import { useParallax } from '~/hooks';
-import { forwardRef, useRef } from 'react';
+import { forwardRef, useEffect, useRef, useState } from 'react';
 import { classes, cssProps, msToNum, numToMs } from '~/utils/style';
 import styles from './project.module.css';
 
 const initDelay = 300;
+
+function ScrollDownIndicator() {
+  return (
+    <div className={styles.scrollIndicator} aria-hidden="true">
+      <svg className={styles.scrollChevron} width="28" height="28" viewBox="0 0 24 24" fill="none">
+        <path d="M6 9L12 15L18 9" stroke="currentColor" strokeWidth="2.2" strokeLinecap="round" strokeLinejoin="round"/>
+      </svg>
+      <svg className={styles.scrollChevronDelayed} width="28" height="28" viewBox="0 0 24 24" fill="none">
+        <path d="M6 9L12 15L18 9" stroke="currentColor" strokeWidth="2.2" strokeLinecap="round" strokeLinejoin="round"/>
+      </svg>
+    </div>
+  );
+}
 
 export function ProjectHeader({
   title,
@@ -33,6 +46,7 @@ export function ProjectHeader({
           <Text className={styles.description} size="xl" as="p">
             {description}
           </Text>
+          <ScrollDownIndicator />
           {!!url && (
             <Button
               secondary
@@ -58,14 +72,6 @@ export function ProjectHeader({
             ))}
           </ul>
         )}
-      </div>
-      <div className={styles.scrollIndicator} aria-hidden="true">
-        <svg className={styles.scrollChevron} width="24" height="24" viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg">
-          <path d="M6 9L12 15L18 9" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round"/>
-        </svg>
-        <svg className={styles.scrollChevron} width="24" height="24" viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg">
-          <path d="M6 9L12 15L18 9" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round"/>
-        </svg>
       </div>
     </Section>
   );

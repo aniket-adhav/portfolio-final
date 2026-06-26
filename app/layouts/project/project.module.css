@@ -192,61 +192,53 @@
   .scrollIndicator {
     display: flex;
     flex-direction: column;
-    align-items: center;
-    gap: 2px;
-    position: absolute;
-    bottom: var(--spaceXL);
-    left: 50%;
-    transform: translateX(-50%);
-    color: var(--textLight);
-    opacity: 0.5;
-
-    @media (--mediaMobile) {
-      bottom: var(--spaceL);
-    }
+    align-items: flex-start;
+    gap: 0;
+    margin-top: var(--spaceL);
+    color: var(--accent);
+    opacity: 0.75;
   }
 
   .scrollChevron {
-    animation: scrollBounce 1.6s ease-in-out infinite;
-    width: 22px;
-    height: 22px;
+    display: block;
+    animation: scrollBounce 1.4s ease-in-out infinite;
+  }
 
-    &:nth-child(2) {
-      animation-delay: 0.22s;
-      opacity: 0.5;
-    }
+  .scrollChevronDelayed {
+    display: block;
+    animation: scrollBounce 1.4s ease-in-out 0.18s infinite;
+    opacity: 0.4;
+    margin-top: -10px;
   }
 
   @keyframes scrollBounce {
     0%, 100% {
       transform: translateY(0);
-      opacity: 0.5;
     }
 
     50% {
-      transform: translateY(6px);
-      opacity: 1;
+      transform: translateY(8px);
     }
   }
 
   .header {
     position: relative;
     padding-top: calc(var(--space5XL) + var(--space3XL));
-    padding-bottom: 0;
+    padding-bottom: var(--spaceXL);
 
     @media (--mediaLaptop) {
       padding-top: var(--space5XL);
-      padding-bottom: var(--space2XL);
+      padding-bottom: var(--spaceXL);
     }
 
     @media (--mediaTablet) {
       padding-top: var(--space4XL);
-      padding-bottom: 0;
+      padding-bottom: var(--spaceL);
     }
 
     @media (--mediaMobile) {
       padding-top: var(--space5XL);
-      padding-bottom: var(--spaceXL);
+      padding-bottom: var(--spaceL);
     }
   }
 
