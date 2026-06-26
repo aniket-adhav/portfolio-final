@@ -19,6 +19,21 @@
   }
 }
 
+@keyframes wordFirst {
+  0% {
+    opacity: 1;
+    transform: translateY(0);
+  }
+  78% {
+    opacity: 1;
+    transform: translateY(0);
+  }
+  100% {
+    opacity: 0;
+    transform: translateY(-12px);
+  }
+}
+
 @keyframes langIn {
   0% { opacity: 0; }
   25% { opacity: 1; }
@@ -63,6 +78,10 @@
   display: block;
   animation: wordIn 220ms cubic-bezier(0.4, 0, 0.2, 1) both;
   will-change: opacity, transform;
+
+  &[data-first='true'] {
+    animation: wordFirst 220ms cubic-bezier(0.4, 0, 0.2, 1) both;
+  }
 }
 
 .lang {

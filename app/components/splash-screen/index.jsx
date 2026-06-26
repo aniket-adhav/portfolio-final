@@ -38,7 +38,7 @@ export function SplashScreen({ onComplete }) {
   return (
     <div className={styles.overlay} data-exiting={exiting}>
       <div className={styles.content}>
-        <span key={index} className={styles.word}>
+        <span key={index} className={styles.word} data-first={index === 0}>
           {current.text}
         </span>
         <span key={`lang-${index}`} className={styles.lang}>

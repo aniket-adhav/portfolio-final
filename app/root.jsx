@@ -107,13 +107,19 @@ export default function App() {
       `${config.ascii}\n`,
       `Taking a peek huh? Check out the source code: ${config.repo}\n\n`
     );
-    // Remove the pre-hydration CSS lock — React state takes over from here
-    document.documentElement.removeAttribute('data-splash-pending');
     const seen = sessionStorage.getItem('splashSeen');
     if (!seen) {
       splashWasShown.current = true;
       setShowSplash(true);
+      // Wait until React has painted with data-app-state="hidden" before releasing
+      // the pre-hydration CSS lock — prevents any flash of main content
+      requestAnimationFrame(() => {
+        requestAnimationFrame(() => {
+          document.documentElement.removeAttribute('data-splash-pending');
+        });
+      });
     } else {
+      document.documentElement.removeAttribute('data-splash-pending');
       setSplashDone(true);
     }
   }, []);
