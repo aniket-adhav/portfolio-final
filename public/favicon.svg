@@ -5,5 +5,4 @@
     </clipPath>
   </defs>
   <rect clip-path="url(#mono-clip)" fill="#ffffff" width="30" height="29" />
-  <rect clip-path="url(#mono-clip)" fill="#00d4ff" x="0" y="18" width="30" height="4" />
 </svg>
