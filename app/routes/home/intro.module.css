@@ -186,20 +186,6 @@
     }
   }
 
-  &[data-plus='true'][data-status='entering'] {
-    animation-name: disciplineReveal;
-    animation-duration: 0.65s;
-    animation-delay: 0s;
-
-    &::after {
-      @media (--mediaUseMotion) {
-        animation-name: reveal;
-        animation-duration: 0.65s;
-        animation-delay: 0s;
-      }
-    }
-  }
-
   &[data-status='entered'] {
     color: var(--textTitle);
 
@@ -216,21 +202,6 @@
     position: absolute;
     top: 0;
     z-index: var(--zIndex0);
-  }
-}
-
-@keyframes disciplineReveal {
-  0% {
-    color: color-mix(in lab, var(--text) 0%, transparent);
-  }
-  25% {
-    color: color-mix(in lab, var(--text) 0%, transparent);
-  }
-  55% {
-    color: var(--textTitle);
-  }
-  100% {
-    color: var(--textTitle);
   }
 }
 

@@ -101,7 +101,7 @@ export function Intro({ id, sectionRef, scrollIndicatorHidden, ...rest }) {
                           className={styles.word}
                           data-plus={true}
                           data-status={status}
-                          style={cssProps({ delay: tokens.base.durationL })}
+                          style={cssProps({ delay: '1800ms' })}
                         >
                           {item}
                         </span>
