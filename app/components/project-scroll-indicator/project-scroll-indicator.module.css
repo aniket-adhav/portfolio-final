@@ -1,0 +1,53 @@
+@keyframes projectScrollBounce {
+  0% {
+    transform: translateY(0);
+  }
+
+  50% {
+    transform: translateY(-8px);
+  }
+
+  100% {
+    transform: translateY(0);
+  }
+}
+
+.indicator {
+  position: fixed;
+  bottom: 32px;
+  left: 50%;
+  transform: translateX(-50%);
+  opacity: 1;
+  transition: opacity var(--durationM) ease, transform var(--durationM) ease;
+  padding: 16px 20px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  color: color-mix(in lab, var(--text) 45%, transparent);
+  z-index: var(--zIndex1);
+  text-decoration: none;
+
+  @media (--mediaUseMotion) {
+    animation: projectScrollBounce 1.6s ease infinite;
+  }
+
+  &[data-hidden='true'] {
+    opacity: 0;
+    pointer-events: none;
+    transform: translateX(-50%) translateY(12px);
+
+    @media (--mediaUseMotion) {
+      animation: none;
+    }
+  }
+
+  & svg {
+    display: block;
+    stroke: color-mix(in lab, var(--text) 45%, transparent);
+    transition: stroke var(--durationS) ease;
+  }
+
+  &:hover svg {
+    stroke: var(--text);
+  }
+}

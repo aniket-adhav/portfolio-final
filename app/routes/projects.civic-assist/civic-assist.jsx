@@ -5,6 +5,7 @@ import civicLeaderboard from '~/assets/civic-leaderboard.png';
 import { Footer } from '~/components/footer';
 import { Button } from '~/components/button';
 import { Image } from '~/components/image';
+import { ProjectScrollIndicator } from '~/components/project-scroll-indicator';
 import {
   ProjectContainer,
   ProjectSection,
@@ -30,6 +31,7 @@ export const meta = () => {
 export function CivicAssist() {
   return (
     <Fragment>
+      <ProjectScrollIndicator />
       <ProjectContainer className={styles.civicAssist}>
 
         <div className={styles.backRow}>

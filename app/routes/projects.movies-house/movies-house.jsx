@@ -3,6 +3,7 @@ import moviesListImg from '~/assets/movieshouse-screenshot2.png';
 import { Footer } from '~/components/footer';
 import { Button } from '~/components/button';
 import { Image } from '~/components/image';
+import { ProjectScrollIndicator } from '~/components/project-scroll-indicator';
 import {
   ProjectContainer,
   ProjectSection,
@@ -28,6 +29,7 @@ export const meta = () => {
 export function MoviesHouse() {
   return (
     <Fragment>
+      <ProjectScrollIndicator />
       <ProjectContainer className={styles.moviesHouse}>
 
         <div className={styles.backRow}>
