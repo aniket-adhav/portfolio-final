@@ -3,21 +3,7 @@
     <clipPath id="mono-clip">
       <path clip-rule="evenodd" d="M0 29L15 0L30 29ZM4 29L15 8L26 29ZM7 18L23 18L23 22L7 22Z" />
     </clipPath>
-    <linearGradient id="mono-grad" x1="0" y1="0" x2="0" y2="1">
-      <stop offset="0%" stop-color="#ffffff" />
-      <stop offset="60%" stop-color="#ffffff" />
-      <stop offset="100%" stop-color="#00d4ff" />
-    </linearGradient>
-    <linearGradient id="mono-grad-light" x1="0" y1="0" x2="0" y2="1">
-      <stop offset="0%" stop-color="#111111" />
-      <stop offset="60%" stop-color="#111111" />
-      <stop offset="100%" stop-color="#00aad4" />
-    </linearGradient>
-    <style>
-      @media (prefers-color-scheme: light) {
-        .fill { fill: url(#mono-grad-light); }
-      }
-    </style>
   </defs>
-  <rect clip-path="url(#mono-clip)" class="fill" fill="url(#mono-grad)" width="30" height="29" />
+  <rect clip-path="url(#mono-clip)" fill="#ffffff" width="30" height="29" />
+  <rect clip-path="url(#mono-clip)" fill="#00d4ff" x="0" y="18" width="30" height="4" />
 </svg>
