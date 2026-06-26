@@ -4,8 +4,10 @@ import { useEffect, useRef, useState } from 'react';
 import { flushSync } from 'react-dom';
 import styles from './page-transition.module.css';
 
-const ENTER_MS = 420;
-const MIN_VISIBLE_MS = 620;
+const DURATION = 0.55;
+const DURATION_MS = DURATION * 1000;
+const MIN_VISIBLE_MS = DURATION_MS + 80;
+const EASE = [0.76, 0, 0.24, 1];
 
 export function PageTransition() {
   const location = useLocation();
@@ -39,7 +41,14 @@ export function PageTransition() {
 
       const isExternal =
         href.startsWith('http') || href.startsWith('//') || href.startsWith('mailto');
-      if (isExternal || !href.startsWith('/projects/')) return;
+      if (isExternal) return;
+
+      const currentPath = window.location.pathname;
+      const isEnteringProject = href.startsWith('/projects/');
+      const isLeavingProject =
+        currentPath.startsWith('/projects/') && !href.startsWith('/projects/');
+
+      if (!isEnteringProject && !isLeavingProject) return;
 
       e.preventDefault();
       e.stopPropagation();
@@ -47,7 +56,7 @@ export function PageTransition() {
       showCurtain();
 
       clearTimeout(navTimer.current);
-      navTimer.current = setTimeout(() => navigate(href), ENTER_MS);
+      navTimer.current = setTimeout(() => navigate(href), DURATION_MS);
     }
 
     document.addEventListener('click', handleClick, { capture: true });
@@ -61,13 +70,7 @@ export function PageTransition() {
     }
     if (prevPathname.current === location.pathname) return;
 
-    const prev = prevPathname.current;
     prevPathname.current = location.pathname;
-
-    const returningFromProject =
-      prev.startsWith('/projects/') && !location.pathname.startsWith('/projects/');
-
-    if (returningFromProject) showCurtain();
 
     scheduleCurtainHide();
   }, [location.pathname]);
@@ -88,9 +91,9 @@ export function PageTransition() {
           initial={{ y: '100%' }}
           animate={{
             y: '0%',
-            transition: { duration: ENTER_MS / 1000, ease: [0.76, 0, 0.24, 1] },
+            transition: { duration: DURATION, ease: EASE },
           }}
-          exit={{ y: '-100%', transition: { duration: 0.38, ease: [0.76, 0, 0.24, 1] } }}
+          exit={{ y: '-100%', transition: { duration: DURATION, ease: EASE } }}
           aria-hidden="true"
         >
           <motion.div
@@ -98,19 +101,19 @@ export function PageTransition() {
             initial={{ scaleX: 0 }}
             animate={{
               scaleX: 1,
-              transition: { duration: 0.32, ease: [0.76, 0, 0.24, 1], delay: 0.1 },
+              transition: { duration: DURATION * 0.6, ease: EASE, delay: DURATION * 0.2 },
             }}
-            exit={{ scaleX: 0, transition: { duration: 0.18 } }}
+            exit={{ scaleX: 0, transition: { duration: DURATION * 0.35, ease: EASE } }}
           />
           <motion.div
             className={styles.label}
-            initial={{ opacity: 0, y: 10 }}
+            initial={{ opacity: 0, y: 12 }}
             animate={{
               opacity: 1,
               y: 0,
-              transition: { duration: 0.28, ease: 'easeOut', delay: 0.22 },
+              transition: { duration: DURATION * 0.5, ease: 'easeOut', delay: DURATION * 0.4 },
             }}
-            exit={{ opacity: 0, y: -10, transition: { duration: 0.15 } }}
+            exit={{ opacity: 0, y: -10, transition: { duration: DURATION * 0.3, ease: 'easeIn' } }}
           >
             <span className={styles.dot} />
             <span className={styles.labelText}>Loading</span>
