@@ -165,7 +165,7 @@ export const Profile = ({ id, visible, sectionRef }) => {
                 </p>
                 <ul className={styles.summaryList} data-visible={vis}>
                   <li>🚀 Currently pursuing B.E. Computer Engineering with <strong>9.74 CGPA</strong></li>
-                  <li>💡 Technical Head · led cross-functional teams on full-stack products</li>
+                  <li>💡 Technical Head of DIT Sport Club · led development &amp; handling of Parakram website</li>
                   <li>🏆 Hackathon winner &amp; Knight on LeetCode with <strong>1866 max rating</strong></li>
                 </ul>
               </div>
@@ -202,7 +202,7 @@ export const Profile = ({ id, visible, sectionRef }) => {
                   <span className={styles.badgeDivider} aria-hidden="true" />
                   <span className={styles.badgeRole}>
                     <span className={styles.badgeDot} />
-                    Full Stack &amp; Android Dev
+                    Full Stack Web &amp; Android Dev
                   </span>
                 </div>
 

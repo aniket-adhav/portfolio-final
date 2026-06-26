@@ -28,14 +28,9 @@
   width: 100%;
   padding: 0 var(--spaceOuter);
   display: grid;
-  grid-template-columns: 1fr 1fr;
-  gap: 64px;
+  grid-template-columns: 1fr;
+  gap: 48px;
   align-items: start;
-
-  @media (--mediaTablet) {
-    grid-template-columns: 1fr;
-    gap: 48px;
-  }
 }
 
 .leftCol {

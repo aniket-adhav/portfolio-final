@@ -3,12 +3,8 @@ import { Transition } from '~/components/transition';
 import { DecoderText } from '~/components/decoder-text';
 import { Divider } from '~/components/divider';
 import { Button } from '~/components/button';
-import { Input } from '~/components/input';
 import { Icon } from '~/components/icon';
-import { tokens } from '~/components/theme-provider/theme';
-import { useFormInput } from '~/hooks';
-import { cssProps, msToNum, numToMs } from '~/utils/style';
-import { useState, useRef } from 'react';
+import { useState } from 'react';
 import styles from './contact-section.module.css';
 
 function IconGitHub() {
@@ -92,22 +88,10 @@ const DIRECT_CONTACTS = [
   { label: 'Email', value: 'aniketadhav2006@gmail.com', href: 'mailto:aniketadhav2006@gmail.com', color: '#ea4335', Icon: IconEmail },
 ];
 
-function getDelay(delayMs, offset = numToMs(0), multiplier = 1) {
-  const numDelay = msToNum(delayMs) * multiplier;
-  return cssProps({ delay: numToMs((msToNum(offset) + numDelay).toFixed(0)) });
-}
-
 export const ContactSection = ({ id, visible, sectionRef }) => {
   const [copiedIdx, setCopiedIdx] = useState(null);
   const [focused, setFocused]     = useState(false);
-  const [sending, setSending]     = useState(false);
-  const [success, setSuccess]     = useState(false);
-  const [errors, setErrors]       = useState({});
   const [resumeOpen, setResumeOpen] = useState(false);
-  const errorRef  = useRef();
-  const email     = useFormInput('');
-  const message   = useFormInput('');
-  const initDelay = tokens.base.durationS;
 
   const handleCopy = (text, idx) => {
     navigator.clipboard.writeText(text.replace(/\s/g, ''));
@@ -237,108 +221,6 @@ export const ContactSection = ({ id, visible, sectionRef }) => {
                       title="Aniket Adhav Resume"
                     />
                   </div>
-                </div>
-              )}
-
-            </div>
-
-            <div className={styles.rightCol} data-visible={vis}>
-
-              {!success ? (
-                <form
-                  className={styles.form}
-                  onSubmit={async e => {
-                    e.preventDefault();
-                    const emailVal = email.value;
-                    const messageVal = message.value;
-                    const errs = {};
-                    if (!emailVal || !EMAIL_PATTERN.test(emailVal))
-                      errs.email = 'Please enter a valid email address.';
-                    if (!messageVal)
-                      errs.message = 'Please enter a message.';
-                    if (emailVal.length > MAX_EMAIL_LENGTH)
-                      errs.email = `Email must be shorter than ${MAX_EMAIL_LENGTH} characters.`;
-                    if (messageVal.length > MAX_MESSAGE_LENGTH)
-                      errs.message = `Message must be shorter than ${MAX_MESSAGE_LENGTH} characters.`;
-                    if (Object.keys(errs).length > 0) { setErrors(errs); return; }
-                    setErrors({});
-                    setSending(true);
-                    try {
-                      const fd = new FormData();
-                      fd.append('email', emailVal);
-                      fd.append('message', messageVal);
-                      await fetch('/contact', { method: 'POST', body: fd });
-                      setSuccess(true);
-                    } finally {
-                      setSending(false);
-                    }
-                  }}
-                >
-                  <div className={styles.formGlow} />
-
-                  <h3 className={styles.formTitle} data-status="entered">
-                    <DecoderText text="Send a message" start={vis} delay={300} />
-                  </h3>
-
-                  <Divider className={styles.formDivider} data-status="entered" />
-
-                  <Input
-                    required
-                    className={styles.input}
-                    data-status="entered"
-                    style={getDelay(tokens.base.durationXS, initDelay)}
-                    autoComplete="email"
-                    label="Your email"
-                    type="email"
-                    name="email"
-                    maxLength={MAX_EMAIL_LENGTH}
-                    {...email}
-                  />
-                  <Input
-                    required
-                    multiline
-                    className={styles.input}
-                    data-status="entered"
-                    style={getDelay(tokens.base.durationS, initDelay)}
-                    autoComplete="off"
-                    label="Message"
-                    name="message"
-                    maxLength={MAX_MESSAGE_LENGTH}
-                    {...message}
-                  />
-
-                  {(errors.email || errors.message) && (
-                    <div className={styles.formError} data-status="entered">
-                      <div className={styles.formErrorContent} ref={errorRef}>
-                        <div className={styles.formErrorMessage}>
-                          <Icon className={styles.formErrorIcon} icon="error" />
-                          {errors.email || errors.message}
-                        </div>
-                      </div>
-                    </div>
-                  )}
-
-                  <Button
-                    className={styles.button}
-                    data-status="entered"
-                    data-sending={sending}
-                    style={getDelay(tokens.base.durationM, initDelay)}
-                    disabled={sending}
-                    loading={sending}
-                    loadingText="Sending..."
-                    icon="send"
-                    type="submit"
-                  >
-                    Send message
-                  </Button>
-                </form>
-              ) : (
-                <div className={styles.complete} aria-live="polite">
-                  <div className={styles.completeIcon}>✉️</div>
-                  <h3 className={styles.completeTitle} data-status="entered">Message Sent!</h3>
-                  <p className={styles.completeText} data-status="entered">
-                    I&apos;ll get back to you within a couple days, sit tight.
-                  </p>
                 </div>
               )}
 
