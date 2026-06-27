@@ -1,0 +1,11 @@
+.magnet {
+  display: inline-flex;
+  /* Expand the mouse-detection zone beyond the visible button */
+  padding: 28px;
+  margin: -28px;
+}
+
+.inner {
+  display: inline-flex;
+  will-change: transform;
+}
