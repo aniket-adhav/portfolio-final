@@ -45,7 +45,7 @@ export const links = () => [
   { rel: 'preconnect', href: 'https://fonts.gstatic.com', crossOrigin: '' },
   {
     rel: 'stylesheet',
-    href: 'https://fonts.googleapis.com/css2?family=Six+Caps&display=swap',
+    href: 'https://fonts.googleapis.com/css2?family=Six+Caps&display=block',
   },
   { rel: 'manifest', href: '/manifest.json' },
   { rel: 'icon', href: '/favicon.ico' },
