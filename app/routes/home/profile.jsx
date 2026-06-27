@@ -164,7 +164,7 @@ export const Profile = ({ id, visible, sectionRef }) => {
                   solving hard problems through competitive programming and open-source work.
                 </p>
                 <ul className={styles.summaryList} data-visible={vis}>
-                  <li>🚀 Currently pursuing B.E. Computer Engineering with <strong>9.74 CGPA</strong></li>
+                  <li>Currently pursuing Bachelor of Engineering in Computer Engineering</li>
                   <li>💡 Technical Head of DIT Sport Club · led development &amp; handling of Parakram website</li>
                   <li>🏆 Hackathon winner &amp; Knight on LeetCode with <strong>1866 max rating</strong></li>
                 </ul>
