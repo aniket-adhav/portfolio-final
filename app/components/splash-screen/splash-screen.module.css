@@ -1,202 +1,227 @@
-/* ─────────────────────────────────────
-   Keyframes
-───────────────────────────────────── */
+/*
+ * Exact values sourced from:
+ * github.com/hisamikurita/hisamikurita-portfoliosite-v2022
+ *
+ * $skinColor:  #f0efeb   (loading background)
+ * $black:      #302c1a   (text)
+ * $transform-easing: cubic-bezier(0.43, 0.05, 0.17, 1)
+ * $colorAndOpacity-easing: cubic-bezier(0.26, 0.16, 0.1, 1)
+ * font: 'Six Caps' (Google Fonts, loaded in root.jsx)
+ */
 
-@keyframes fadeUp {
-  from { opacity: 0; transform: translateY(16px); }
-  to   { opacity: 1; transform: translateY(0); }
+/* ── Keyframes ─────────────────────────── */
+
+@keyframes revealUp {
+  from { transform: translateY(20px); opacity: 0; }
+  to   { transform: translateY(0);    opacity: 1; }
 }
 
-@keyframes exitWipe {
-  0%   { clip-path: inset(0 0 0 0); }
+/* Exit: overlay wipes upward off screen */
+@keyframes wipeUp {
+  0%   { clip-path: inset(0 0 0% 0); }
   100% { clip-path: inset(0 0 100% 0); }
 }
 
 @keyframes fadeOut {
-  to { opacity: 0; }
+  from { opacity: 1; }
+  to   { opacity: 0; }
 }
 
-/* ─────────────────────────────────────
-   Overlay — matches hsmkrt1996.com's
-   warm cream light-mode aesthetic,
-   inverted for dark mode.
-───────────────────────────────────── */
+/* ── Overlay ────────────────────────────── */
 
 .overlay {
   position: fixed;
   inset: 0;
   z-index: 9999;
+
+  /* Exact repo color: $skinColor */
+  background: #f0efeb;
+
+  display: flex;
+  align-items: center;
+  justify-content: center;
+
+  /* Prevent flash */
+  will-change: clip-path;
+
+  &[data-exit='true'] {
+    animation: wipeUp 1s cubic-bezier(0.43, 0.05, 0.17, 1) forwards;
+  }
+}
+
+/* Dark-mode variant */
+body[data-theme='dark'] .overlay {
+  background: #0a0808;
+}
+
+/* ── Center block ───────────────────────── */
+
+.center {
+  position: relative;
   display: flex;
   flex-direction: column;
   align-items: center;
   justify-content: center;
-  padding: clamp(24px, 3vw, 48px);
-
-  /* Light theme values (matches reference) */
-  --bg:    #e8e5dc;
-  --text:  #2e2b24;
-  --muted: rgba(46, 43, 36, 0.38);
-  --digit: #2e2b24;
-
-  background: var(--bg);
-  color: var(--text);
-
-  /* Exit: clip from top to bottom (wipe up) */
-  &[data-exiting='true'] {
-    animation: exitWipe 0.85s cubic-bezier(0.76, 0, 0.24, 1) forwards;
-  }
 }
 
-/* Dark theme override */
-body[data-theme='dark'] .overlay {
-  --bg:    #0c0c0a;
-  --text:  #e8e5dc;
-  --muted: rgba(232, 229, 220, 0.38);
-  --digit: #e8e5dc;
-}
-
-/* ─────────────────────────────────────
-   Center block
-───────────────────────────────────── */
-
-.center {
-  display: flex;
-  flex-direction: column;
-  align-items: center;
-  gap: clamp(28px, 4vw, 48px);
-}
-
-/* ─────────────────────────────────────
-   Slot-machine odometer counter
-───────────────────────────────────── */
+/* ── Slot-machine counter ───────────────── */
 
 .counter {
   display: flex;
   align-items: flex-start;
-  /* digit-h drives all column math — small like the reference */
-  --digit-h: clamp(34px, 4.5vw, 52px);
-  transition: opacity 0.5s ease;
+  /* digit height — same compact size as reference */
+  --dh: clamp(36px, 5vw, 60px);
 
-  &[data-done='true'] {
-    animation: fadeOut 0.4s ease 0.1s forwards;
+  transition: opacity 0.5s cubic-bezier(0.26, 0.16, 0.1, 1),
+              transform 0.5s cubic-bezier(0.43, 0.05, 0.17, 1);
+
+  &[data-hide='true'] {
+    opacity: 0;
+    transform: translateY(-10px);
+    pointer-events: none;
   }
 }
 
-/* One clipped column per digit */
-.slotOuter {
+/* Clipping window for each digit column */
+.col {
   overflow: hidden;
-  height: var(--digit-h);
+  height: var(--dh);
 }
 
-/* The scrolling reel */
-.slotInner {
+/* The scrolling reel inside each column */
+.reel {
   display: flex;
   flex-direction: column;
-  transform: translateY(calc(var(--vp) * var(--digit-h) * -1));
-  transition: transform 160ms cubic-bezier(0.25, 0, 0.75, 1);
+  transform: translateY(calc(var(--vp, 0) * var(--dh) * -1));
+  /* Exact easing from repo: $transform-easing */
+  transition: transform 150ms cubic-bezier(0.43, 0.05, 0.17, 1);
   will-change: transform;
 }
 
-/* Individual digit character — condensed via scaleX to match reference font */
-.slotDigit {
+/* Each digit — Six Caps font exactly as used in reference */
+.digit {
   display: flex;
   align-items: center;
   justify-content: center;
-  height: var(--digit-h);
+  height: var(--dh);
   line-height: 1;
-  font-family: 'Gotham', system-ui, sans-serif;
-  font-size: var(--digit-h);
-  font-weight: 500;
-  letter-spacing: 0;
-  color: var(--digit);
+
+  font-family: 'Six Caps', sans-serif;
+  font-size: var(--dh);
+  font-weight: 400;
+  letter-spacing: 0.02em;
+
+  /* Exact repo color: $black */
+  color: #302c1a;
+
   font-variant-numeric: tabular-nums;
   user-select: none;
-  /* Condense horizontally — reference uses a very narrow condensed font */
-  transform: scaleX(0.62);
-  transform-origin: left center;
-  width: 0.68em;
 }
 
-/* The % sign */
-.pctMark {
-  font-family: 'Gotham', system-ui, sans-serif;
-  font-size: clamp(9px, 1.2vw, 13px);
+body[data-theme='dark'] .digit {
+  color: #f0efeb;
+}
+
+/* The % mark */
+.pct {
+  font-family: 'Six Caps', sans-serif;
+  font-size: clamp(11px, 1.4vw, 16px);
   font-weight: 400;
-  color: var(--muted);
-  letter-spacing: 0;
-  margin-top: 0.22em;
-  margin-left: 0.05em;
+  color: #302c1a;
+  opacity: 0.55;
+  margin-top: calc(var(--dh) * 0.12);
+  margin-left: 2px;
   user-select: none;
+  letter-spacing: 0.05em;
 }
 
-/* ─────────────────────────────────────
-   Name + role (appear after 100%)
-───────────────────────────────────── */
+body[data-theme='dark'] .pct {
+  color: #f0efeb;
+}
 
-.nameBlock {
+/* ── Name + role ────────────────────────── */
+
+.nameWrap {
+  position: absolute;
   display: flex;
   flex-direction: column;
   align-items: center;
   gap: 6px;
+
   opacity: 0;
+  transform: translateY(14px);
   pointer-events: none;
 
-  &[data-visible='true'] {
-    animation: fadeUp 0.6s cubic-bezier(0.16, 1, 0.3, 1) 0.1s forwards;
+  /* $colorAndOpacity-easing */
+  transition: opacity  0.6s cubic-bezier(0.26, 0.16, 0.1, 1),
+              transform 0.6s cubic-bezier(0.43, 0.05, 0.17, 1);
+
+  &[data-show='true'] {
+    opacity: 1;
+    transform: translateY(0);
     pointer-events: auto;
   }
 }
 
 .name {
   margin: 0;
-  font-family: 'Gotham', system-ui, sans-serif;
-  font-size: clamp(1.1rem, 3vw, 2.2rem);
-  font-weight: 500;
-  letter-spacing: 0.22em;
+  font-family: 'Six Caps', sans-serif;
+  font-size: clamp(1.6rem, 4vw, 3.2rem);
+  font-weight: 400;
+  letter-spacing: 0.18em;
   text-transform: uppercase;
-  color: var(--text);
+  color: #302c1a;
   white-space: nowrap;
+  line-height: 1;
+}
+
+body[data-theme='dark'] .name {
+  color: #f0efeb;
 }
 
 .role {
   margin: 0;
-  font-family: 'Gotham', system-ui, sans-serif;
-  font-size: clamp(0.6rem, 1.1vw, 0.78rem);
+  font-family: 'Six Caps', sans-serif;
+  font-size: clamp(0.75rem, 1.3vw, 1rem);
   font-weight: 400;
-  letter-spacing: 0.35em;
+  letter-spacing: 0.45em;
   text-transform: uppercase;
-  color: var(--muted);
+  color: #302c1a;
+  opacity: 0.45;
   white-space: nowrap;
+  line-height: 1;
 }
 
-/* ─────────────────────────────────────
-   Corner labels (reference site style)
-───────────────────────────────────── */
+body[data-theme='dark'] .role {
+  color: #f0efeb;
+}
 
-.bottomLeft,
-.bottomRight {
-  position: absolute;
+/* ── Bottom corner labels ───────────────── */
+
+.labelBL,
+.labelBR {
+  position: fixed;
   bottom: clamp(20px, 3vw, 40px);
-  font-family: 'Gotham', system-ui, sans-serif;
-  font-size: clamp(0.5rem, 0.9vw, 0.65rem);
+  font-family: 'Six Caps', sans-serif;
+  font-size: clamp(11px, 1.4vw, 16px);
   font-weight: 400;
   letter-spacing: 0.2em;
   text-transform: uppercase;
-  color: var(--muted);
+  color: #302c1a;
+  opacity: 0.45;
 }
 
-.bottomLeft  { left:  clamp(24px, 3.5vw, 52px); }
-.bottomRight {
-  right: clamp(24px, 3.5vw, 52px);
-  transition: opacity 0.3s ease;
+body[data-theme='dark'] .labelBL,
+body[data-theme='dark'] .labelBR {
+  color: #f0efeb;
+}
 
-  &[data-done='true'] {
+.labelBL { left:  clamp(20px, 3vw, 40px); }
+.labelBR {
+  right: clamp(20px, 3vw, 40px);
+  transition: opacity 0.4s cubic-bezier(0.26, 0.16, 0.1, 1);
+
+  &[data-hide='true'] {
     opacity: 0;
   }
-}
-
-.siteLabel,
-.loadingLabel {
-  display: block;
-  letter-spacing: inherit;
 }
