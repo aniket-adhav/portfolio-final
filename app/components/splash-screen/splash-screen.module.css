@@ -1,18 +1,26 @@
-/* ─────────────────────────────────────────────────────────
-   Exact repo values from hisamikurita-portfoliosite-v2022:
-     $skinColor: #f0efeb  |  $black: #302c1a
-     $transform-easing:        cubic-bezier(0.43, 0.05, 0.17, 1)
-     $colorAndOpacity-easing:  cubic-bezier(0.26, 0.16, 0.1,  1)
-   Font: 'Six Caps' only — loaded in root.jsx with display=block
-   so zero fallback-font flash before Six Caps is ready.
-───────────────────────────────────────────────────────── */
+/*
+ * Exact values from hisamikurita/hisamikurita-portfoliosite-v2022
+ *
+ * $skinColor: #f0efeb   ← background (ALWAYS — not theme-dependent)
+ * $black:     #302c1a   ← text
+ * $transform-easing:       cubic-bezier(0.43, 0.05, 0.17, 1)
+ * $colorAndOpacity-easing: cubic-bezier(0.26, 0.16, 0.1,  1)
+ * $sixcaps: 'Six Caps', sans-serif
+ * fullDuration: 2.0s  |  baseDuration: 1.0s
+ *
+ * NOTE: No dark-mode overrides. The loading screen is always cream,
+ * exactly like the reference site, regardless of user's theme.
+ */
 
+/* ── Keyframes ─────────────────────────────────────────── */
+
+/* Exit: cream panel wipes upward to reveal the dark portfolio below */
 @keyframes wipeUp {
   from { clip-path: inset(0 0 0%   0); }
   to   { clip-path: inset(0 0 100% 0); }
 }
 
-/* ── Overlay ─────────────────────────────────────────── */
+/* ── Overlay: always #f0efeb ───────────────────────────── */
 .overlay {
   position: fixed;
   inset: 0;
@@ -23,13 +31,12 @@
   justify-content: center;
   will-change: clip-path;
 }
-body[data-theme='dark'] .overlay { background: #0d0c0a; }
 
 .overlay[data-exit='true'] {
-  animation: wipeUp 0.9s cubic-bezier(0.43, 0.05, 0.17, 1) forwards;
+  animation: wipeUp 1s cubic-bezier(0.43, 0.05, 0.17, 1) forwards;
 }
 
-/* ── Center stage ────────────────────────────────────── */
+/* ── Stage: the centred content area ───────────────────── */
 .stage {
   position: relative;
   display: flex;
@@ -37,29 +44,29 @@ body[data-theme='dark'] .overlay { background: #0d0c0a; }
   justify-content: center;
 }
 
-/* ── Counter ─────────────────────────────────────────── */
+/* ── Counter ────────────────────────────────────────────── */
 /*
-  font-size on .counter makes 1em = digit height everywhere
-  inside .col, .reel, .digit, and the CSS translateY calc.
+  font-size drives 1em = digit height for all children.
+  Reference digits are roughly 10–12 vw at desktop.
+  Using clamp(50px, 11vw, 130px) → 140 px at 1280 px viewport.
 */
 .counter {
-  font-size: clamp(80px, 18vw, 200px);
+  font-size: clamp(50px, 11vw, 130px);
   display: flex;
-  align-items: center;        /* all cols + % on same centre axis */
+  align-items: center;
   line-height: 1;
-  gap: 0;
-  transition: opacity 0.45s cubic-bezier(0.26, 0.16, 0.1, 1),
-              transform 0.45s cubic-bezier(0.43, 0.05, 0.17, 1);
+  transition: opacity 0.5s cubic-bezier(0.26, 0.16, 0.1, 1),
+              transform 0.5s cubic-bezier(0.43, 0.05, 0.17, 1);
 }
+
 .counter[data-hide='true'] {
   opacity: 0;
-  transform: translateY(-0.06em);
+  transform: translateY(-0.1em);
   pointer-events: none;
 }
 
-/* Clipping window — exactly one digit tall.
-   clip-path: inset(0) is more reliable than overflow:hidden
-   when child uses will-change:transform (different stacking context). */
+/* One-digit clipping window — clip-path more reliable than overflow
+   when children use transforms (avoids stacking-context issues) */
 .col {
   position: relative;
   height: 1em;
@@ -67,24 +74,21 @@ body[data-theme='dark'] .overlay { background: #0d0c0a; }
   clip-path: inset(0);
 }
 
-/* Scrolling reel — NO CSS transition.
-   The slot roll effect comes from rAF firing ~60 times/sec,
-   not from a CSS easing that would show two digits at once. */
+/* Scrolling reel — NO CSS transition; instant snap.
+   The visual roll comes from rAF firing ~60×/s, never two digits visible. */
 .reel {
   display: flex;
   flex-direction: column;
 }
 
-/* Individual digit cell — Six Caps, fixed width so columns never shift */
+/* Digit cells — Six Caps only, fixed width keeps counter stable */
 .digit {
   display: flex;
   align-items: center;
   justify-content: center;
   height: 1em;
-  /* 0–9 in Six Caps are ~0.52× cap-height wide; lock it so counter width
-     stays stable as digits change */
-  width: 0.52em;
-  min-width: 0.52em;
+  width: 0.54em;      /* Six Caps 0–9 natural aspect ~0.52-0.54× height */
+  min-width: 0.54em;
   font-family: 'Six Caps', sans-serif;
   font-size: 1em;
   font-weight: 400;
@@ -92,90 +96,93 @@ body[data-theme='dark'] .overlay { background: #0d0c0a; }
   color: #302c1a;
   user-select: none;
 }
-body[data-theme='dark'] .digit { color: #f0efeb; }
 
-/* % superscript — same font, smaller */
+/* Percent sign — same font, treated as small superscript */
 .pct {
   font-family: 'Six Caps', sans-serif;
-  font-size: 0.2em;
+  font-size: 0.19em;
   font-weight: 400;
   line-height: 1;
   color: #302c1a;
-  opacity: 0.55;
-  /* nudge up slightly so it reads as a superscript */
+  opacity: 0.5;
   align-self: flex-start;
-  margin-top: 0.15em;
-  margin-left: 0.3em;
+  margin-top: 0.18em;
+  margin-left: 0.35em;
   user-select: none;
-  letter-spacing: 0.05em;
+  letter-spacing: 0.04em;
 }
-body[data-theme='dark'] .pct { color: #f0efeb; }
 
-/* ── Name block ──────────────────────────────────────── */
+/* ── Name block — matches openning-name from BaseOpenning.vue ─ */
+/*
+  Reference: the name appears BELOW the counter area,
+  character-by-character with a slide-up + fade.
+  Here we do the full name at once (same final look).
+*/
 .nameBlock {
   position: absolute;
   display: flex;
   flex-direction: column;
   align-items: center;
-  gap: 0.5em;
+  gap: 14px;
   opacity: 0;
-  transform: translateY(18px);
+  transform: translateY(20px);
   pointer-events: none;
   white-space: nowrap;
-  transition: opacity  0.65s cubic-bezier(0.26, 0.16, 0.1, 1),
-              transform 0.65s cubic-bezier(0.43, 0.05, 0.17, 1);
+  /* $colorAndOpacity-easing for opacity, $transform-easing for move */
+  transition: opacity  0.7s cubic-bezier(0.26, 0.16, 0.1, 1),
+              transform 0.7s cubic-bezier(0.43, 0.05, 0.17, 1);
 }
+
 .nameBlock[data-show='true'] {
   opacity: 1;
   transform: translateY(0);
   pointer-events: auto;
 }
 
+/* "ANIKET ADHAV" — matches openning-name sizing from the reference */
 .name {
   margin: 0;
   font-family: 'Six Caps', sans-serif;
-  font-size: clamp(2rem, 6vw, 5.2rem);
+  font-size: clamp(1.8rem, 4.5vw, 4rem);
   font-weight: 400;
-  letter-spacing: 0.22em;
+  letter-spacing: 0.28em;   /* wide letter-spacing like the reference name */
   text-transform: uppercase;
   color: #302c1a;
   line-height: 1;
 }
-body[data-theme='dark'] .name { color: #f0efeb; }
 
+/* "Developer" — matches openning-portfolio style */
 .role {
   margin: 0;
   font-family: 'Six Caps', sans-serif;
-  font-size: clamp(0.7rem, 1.4vw, 1.1rem);
+  font-size: clamp(0.65rem, 1.3vw, 0.95rem);
   font-weight: 400;
-  letter-spacing: 0.55em;
+  letter-spacing: 0.5em;
   text-transform: uppercase;
   color: #302c1a;
-  opacity: 0.4;
+  opacity: 0.45;
   line-height: 1;
 }
-body[data-theme='dark'] .role { color: #f0efeb; }
 
-/* ── Corner labels ───────────────────────────────────── */
+/* ── Corner labels — Six Caps, same style as reference UI labels ─ */
 .labelBL,
 .labelBR {
   position: fixed;
-  bottom: clamp(20px, 3vw, 44px);
+  bottom: clamp(22px, 3.2vw, 48px);
   font-family: 'Six Caps', sans-serif;
-  font-size: clamp(11px, 1.3vw, 16px);
+  font-size: clamp(11px, 1.2vw, 15px);
   font-weight: 400;
-  letter-spacing: 0.22em;
+  letter-spacing: 0.24em;
   text-transform: uppercase;
   color: #302c1a;
   opacity: 0.38;
   user-select: none;
 }
-body[data-theme='dark'] .labelBL,
-body[data-theme='dark'] .labelBR { color: #f0efeb; }
 
-.labelBL { left: clamp(20px, 3vw, 44px); }
+.labelBL { left:  clamp(22px, 3.2vw, 48px); }
 .labelBR {
-  right: clamp(20px, 3vw, 44px);
-  transition: opacity 0.4s cubic-bezier(0.26, 0.16, 0.1, 1);
+  right: clamp(22px, 3.2vw, 48px);
+  transition: opacity 0.45s cubic-bezier(0.26, 0.16, 0.1, 1);
 }
+
 .labelBR[data-hide='true'] { opacity: 0; }
