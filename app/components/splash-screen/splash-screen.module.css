@@ -57,6 +57,22 @@
   to   { transform: scaleX(1); }
 }
 
+/*
+ * 100-point sweep lines — openning-circle-line-01/02 from BaseOpenning.vue
+ * Line 01 (above screen) sweeps DOWN into center: translateY(50vh + 43px)
+ * Line 02 (below screen) sweeps UP  into center: translateY(-50vh - 43px)
+ * Both finish at vertical center, overlapping over the number, masking 099→100
+ */
+@keyframes sweepDown {
+  from { transform: translateY(0); }
+  to   { transform: translateY(calc(50vh + 43px)); }
+}
+
+@keyframes sweepUp {
+  from { transform: translateY(0); }
+  to   { transform: translateY(calc(-50vh - 43px)); }
+}
+
 /* Overlay wipes upward to reveal site */
 @keyframes wipeUp {
   from { clip-path: inset(0 0 0%   0); }
@@ -251,3 +267,53 @@
 }
 
 .labelBR[data-hide='true'] { opacity: 0; }
+
+/* ── 100-point sweep lines ───────────────────────────────── */
+/*
+ * Thin vertical bars (14×86px, same width as a digit column) with a
+ * gradient fade at top and bottom (so they look like a soft slice of light).
+ * Line 01 sits above the screen (top: -86px), line 02 below (bottom: -86px).
+ *
+ * Timing (matching BaseOpenning.vue GSAP config):
+ *   sweepDown / sweepUp : 0.18s at 3.48s delay  → arrive at center by 3.66s
+ *   fadeOut             : 0.08s at 3.54s delay  → gone before the name reveals
+ *
+ * The lines converge on the number exactly while second/third fade out and
+ * forth/five fade in — they physically mask the 099→100 digit switch.
+ */
+.circleLine01,
+.circleLine02 {
+  position: absolute;
+  left: 0;
+  right: 0;
+  width: 14px;
+  height: 86px;
+  margin: 0 auto;
+  border-radius: 8px;
+  background: linear-gradient(
+    to bottom,
+    transparent,
+    #302c1a 25%,
+    #302c1a 75%,
+    transparent
+  );
+  pointer-events: none;
+}
+
+/* Starts 86px above top of overlay (off-screen) → sweeps DOWN to center */
+.circleLine01 {
+  top: -86px;
+  transform-origin: bottom center;
+  animation:
+    sweepDown 0.18s cubic-bezier(0.43, 0.05, 0.17, 1) 3.48s both,
+    fadeOut   0.08s ease                              3.54s both;
+}
+
+/* Starts 86px below bottom of overlay (off-screen) → sweeps UP to center */
+.circleLine02 {
+  bottom: -86px;
+  transform-origin: top center;
+  animation:
+    sweepUp 0.18s cubic-bezier(0.43, 0.05, 0.17, 1) 3.48s both,
+    fadeOut 0.08s ease                              3.54s both;
+}

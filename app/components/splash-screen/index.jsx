@@ -61,6 +61,15 @@ export function SplashScreen({ onComplete }) {
         </div>
       </div>
 
+      {/*
+       * 100-point sweep lines — from BaseOpenning.vue openning-circle-line-01/02
+       * Line 01 starts off-screen above and sweeps DOWN to center
+       * Line 02 starts off-screen below and sweeps UP to center
+       * Both converge at 3.48s to mask the 099→100 digit transition, fade at 3.54s
+       */}
+      <div className={styles.circleLine01} />
+      <div className={styles.circleLine02} />
+
       {/* Name + role revealed after 100% */}
       <div className={styles.nameBlock} data-show={isReveal}>
         <p className={styles.name}>ANIKET ADHAV</p>
