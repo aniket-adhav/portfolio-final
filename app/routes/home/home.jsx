@@ -18,7 +18,7 @@ import { baseMeta } from '~/utils/meta';
 import { Intro } from './intro';
 import { Profile } from './profile';
 import { ProjectSummary } from './project-summary';
-import { SkillRadar } from './skill-radar';
+import { TechStack } from './tech-stack';
 import { ContactSection } from './contact-section';
 import { useEffect, useRef, useState } from 'react';
 import config from '~/config.json';
@@ -198,7 +198,7 @@ export const Home = () => {
           <span className={styles.githubBtnShort}>GitHub Projects</span>
         </Button>
       </div>
-      <SkillRadar
+      <TechStack
         id="skills"
         sectionRef={skills}
         visible={visibleSections.includes(skills.current)}
