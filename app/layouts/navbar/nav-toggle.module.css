@@ -9,6 +9,21 @@
     z-index: var(--zIndex4);
     display: none;
 
+    /* Remove browser tap highlight on touch devices */
+    -webkit-tap-highlight-color: transparent;
+
+    /* Suppress the clipped ::after background that sticks on mobile after touch */
+    &::after {
+      background: transparent !important;
+    }
+
+    /* Only show hover background on devices that truly support hover */
+    @media (hover: hover) {
+      &:hover::after {
+        background: color-mix(in lab, var(--text) 10%, transparent) !important;
+      }
+    }
+
     @media (--mediaMobile), (--mediaMobileLS) {
       display: flex;
     }
