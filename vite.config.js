@@ -17,6 +17,13 @@ export default defineConfig({
     port: 5000,
     host: '0.0.0.0',
     allowedHosts: true,
+    proxy: {
+      '/__mockup': {
+        target: 'http://localhost:23636',
+        changeOrigin: true,
+        ws: true,
+      },
+    },
   },
   plugins: [
     mdx({
