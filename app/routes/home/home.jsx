@@ -13,7 +13,6 @@ import moviesHouseTexture from '~/assets/movieshouse-screenshot.png';
 import macbookProModel from '~/assets/macbook-pro.glb';
 import iphoneModel from '~/assets/iphone-11.glb';
 import { Button } from '~/components/button';
-import { MagneticButton } from '~/components/magnetic-button';
 import { Footer } from '~/components/footer';
 import { baseMeta } from '~/utils/meta';
 import { Intro } from './intro';
@@ -188,18 +187,16 @@ export const Home = () => {
         }}
       />
       <div className={styles.githubRow}>
-        <MagneticButton>
-          <Button
-            href="https://github.com/aniket-adhav"
-            target="_blank"
-            rel="noopener noreferrer"
-            iconEnd="arrow-right"
-            secondary
-          >
-            <span className={styles.githubBtnFull}>See all projects on GitHub</span>
-            <span className={styles.githubBtnShort}>GitHub Projects</span>
-          </Button>
-        </MagneticButton>
+        <Button
+          href="https://github.com/aniket-adhav"
+          target="_blank"
+          rel="noopener noreferrer"
+          iconEnd="arrow-right"
+          secondary
+        >
+          <span className={styles.githubBtnFull}>See all projects on GitHub</span>
+          <span className={styles.githubBtnShort}>GitHub Projects</span>
+        </Button>
       </div>
       <TechStack
         id="skills"

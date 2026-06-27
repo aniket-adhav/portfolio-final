@@ -1,5 +1,4 @@
 import { Button } from '~/components/button';
-import { MagneticButton } from '~/components/magnetic-button';
 import { Divider } from '~/components/divider';
 import { Heading } from '~/components/heading';
 import { deviceModels } from '~/components/model/device-models';
@@ -73,11 +72,9 @@ export function ProjectSummary({
           {description}
         </Text>
         <div className={styles.button} data-visible={visible}>
-          <MagneticButton>
-            <Button iconHoverShift href={buttonLink} iconEnd="arrow-right">
-              {buttonText}
-            </Button>
-          </MagneticButton>
+          <Button iconHoverShift href={buttonLink} iconEnd="arrow-right">
+            {buttonText}
+          </Button>
         </div>
       </div>
     );
