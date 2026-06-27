@@ -1,26 +1,45 @@
 /*
  * Exact values from hisamikurita/hisamikurita-portfoliosite-v2022
  *
- * $skinColor: #f0efeb   ← background (ALWAYS — not theme-dependent)
- * $black:     #302c1a   ← text
+ * $skinColor:              #f0efeb   (background — always cream)
+ * $black:                  #302c1a   (text)
  * $transform-easing:       cubic-bezier(0.43, 0.05, 0.17, 1)
  * $colorAndOpacity-easing: cubic-bezier(0.26, 0.16, 0.1,  1)
- * $sixcaps: 'Six Caps', sans-serif
- * fullDuration: 2.0s  |  baseDuration: 1.0s
+ * $sixcaps:                'Six Caps', sans-serif
  *
- * NOTE: No dark-mode overrides. The loading screen is always cream,
- * exactly like the reference site, regardless of user's theme.
+ * CSS animations reproduce the exact GSAP timings from BaseOpenning.vue:
+ *   openning-num-second (tens):    duration 2.98s, delay 0.58s
+ *   openning-num-third  (units):   duration 2.98s, delay 0.58s
+ *   openning-num-first  (hundreds):duration 0.28s, delay 3.44s
  */
 
-/* ── Keyframes ─────────────────────────────────────────── */
+/* ── Reel keyframes ──────────────────────────────────────── */
 
-/* Exit: cream panel wipes upward to reveal the dark portfolio below */
+/* Hundreds "01": scrolls from showing "0" to showing "1" */
+@keyframes scrollH {
+  from { transform: translateY(0); }
+  to   { transform: translateY(calc(-1 * 1em)); }
+}
+
+/* Tens "0123456789": shows "0" → scrolls to "9" (index 9 × 1em up) */
+@keyframes scrollT {
+  from { transform: translateY(0); }
+  to   { transform: translateY(calc(-9 * 1em)); }
+}
+
+/* Units "01234567890123456789": shows "0" → scrolls to last "9" (index 19) */
+@keyframes scrollU {
+  from { transform: translateY(0); }
+  to   { transform: translateY(calc(-19 * 1em)); }
+}
+
+/* Exit: cream panel wipes upward to reveal the dark portfolio */
 @keyframes wipeUp {
   from { clip-path: inset(0 0 0%   0); }
   to   { clip-path: inset(0 0 100% 0); }
 }
 
-/* ── Overlay: always #f0efeb ───────────────────────────── */
+/* ── Overlay — always cream, never dark ──────────────────── */
 .overlay {
   position: fixed;
   inset: 0;
@@ -33,10 +52,10 @@
 }
 
 .overlay[data-exit='true'] {
-  animation: wipeUp 1s cubic-bezier(0.43, 0.05, 0.17, 1) forwards;
+  animation: wipeUp 0.95s cubic-bezier(0.43, 0.05, 0.17, 1) forwards;
 }
 
-/* ── Stage: the centred content area ───────────────────── */
+/* ── Stage ───────────────────────────────────────────────── */
 .stage {
   position: relative;
   display: flex;
@@ -44,60 +63,82 @@
   justify-content: center;
 }
 
-/* ── Counter ────────────────────────────────────────────── */
-/*
-  font-size drives 1em = digit height for all children.
-  Reference digits are roughly 10–12 vw at desktop.
-  Using clamp(50px, 11vw, 130px) → 140 px at 1280 px viewport.
-*/
-.counter {
-  font-size: clamp(50px, 11vw, 130px);
-  display: flex;
-  align-items: center;
-  line-height: 1;
-  transition: opacity 0.5s cubic-bezier(0.26, 0.16, 0.1, 1),
-              transform 0.5s cubic-bezier(0.43, 0.05, 0.17, 1);
+/* ── Counter wrapper ─────────────────────────────────────── */
+.counterWrap {
+  transition: opacity 0.45s cubic-bezier(0.26, 0.16, 0.1, 1),
+              transform 0.45s cubic-bezier(0.43, 0.05, 0.17, 1);
 }
 
-.counter[data-hide='true'] {
+.counterWrap[data-hide='true'] {
   opacity: 0;
-  transform: translateY(-0.1em);
+  transform: translateY(-0.05em);
   pointer-events: none;
 }
 
-/* One-digit clipping window — clip-path more reliable than overflow
-   when children use transforms (avoids stacking-context issues) */
+/* ── Counter row ─────────────────────────────────────────── */
+.counter {
+  font-size: clamp(52px, 11vw, 132px);
+  display: flex;
+  align-items: center;
+  line-height: 1;
+  gap: 0;
+}
+
+/* ── Clip window — one digit tall ────────────────────────── */
 .col {
   position: relative;
   height: 1em;
+  width: 0.54em;
   overflow: hidden;
   clip-path: inset(0);
+  flex-shrink: 0;
 }
 
-/* Scrolling reel — NO CSS transition; instant snap.
-   The visual roll comes from rAF firing ~60×/s, never two digits visible. */
+/* ── Reels ────────────────────────────────────────────────── */
+/* Base reel (used for static digits) */
 .reel {
   display: flex;
   flex-direction: column;
 }
 
-/* Digit cells — Six Caps only, fixed width keeps counter stable */
+/* Hundreds "01" — 0.28s at 3.44s delay, $transform-easing */
+.reelH {
+  display: flex;
+  flex-direction: column;
+  animation: scrollH 0.28s cubic-bezier(0.43, 0.05, 0.17, 1) 3.44s both;
+}
+
+/* Tens "0123456789" — 2.98s at 0.58s delay, $transform-easing */
+.reelT {
+  display: flex;
+  flex-direction: column;
+  animation: scrollT 2.98s cubic-bezier(0.43, 0.05, 0.17, 1) 0.58s both;
+}
+
+/* Units "01234567890123456789" — 2.98s at 0.58s delay, $transform-easing */
+.reelU {
+  display: flex;
+  flex-direction: column;
+  animation: scrollU 2.98s cubic-bezier(0.43, 0.05, 0.17, 1) 0.58s both;
+}
+
+/* ── Digit cell ──────────────────────────────────────────── */
 .digit {
   display: flex;
   align-items: center;
   justify-content: center;
   height: 1em;
-  width: 0.54em;      /* Six Caps 0–9 natural aspect ~0.52-0.54× height */
-  min-width: 0.54em;
+  width: 0.54em;
   font-family: 'Six Caps', sans-serif;
   font-size: 1em;
   font-weight: 400;
   line-height: 1;
   color: #302c1a;
   user-select: none;
+  flex-shrink: 0;
 }
 
-/* Percent sign — same font, treated as small superscript */
+/* ── Percent sign ────────────────────────────────────────── */
 .pct {
   font-family: 'Six Caps', sans-serif;
   font-size: 0.19em;
@@ -109,15 +150,9 @@
   margin-top: 0.18em;
   margin-left: 0.35em;
   user-select: none;
-  letter-spacing: 0.04em;
 }
 
-/* ── Name block — matches openning-name from BaseOpenning.vue ─ */
-/*
-  Reference: the name appears BELOW the counter area,
-  character-by-character with a slide-up + fade.
-  Here we do the full name at once (same final look).
-*/
+/* ── Name block — openning-name from BaseOpenning.vue ───── */
 .nameBlock {
   position: absolute;
   display: flex;
@@ -128,7 +163,6 @@
   transform: translateY(20px);
   pointer-events: none;
   white-space: nowrap;
-  /* $colorAndOpacity-easing for opacity, $transform-easing for move */
   transition: opacity  0.7s cubic-bezier(0.26, 0.16, 0.1, 1),
               transform 0.7s cubic-bezier(0.43, 0.05, 0.17, 1);
 }
@@ -139,19 +173,19 @@
   pointer-events: auto;
 }
 
-/* "ANIKET ADHAV" — matches openning-name sizing from the reference */
+/* ANIKET ADHAV — matches openning-name sizing */
 .name {
   margin: 0;
   font-family: 'Six Caps', sans-serif;
   font-size: clamp(1.8rem, 4.5vw, 4rem);
   font-weight: 400;
-  letter-spacing: 0.28em;   /* wide letter-spacing like the reference name */
+  letter-spacing: 0.28em;
   text-transform: uppercase;
   color: #302c1a;
   line-height: 1;
 }
 
-/* "Developer" — matches openning-portfolio style */
+/* Developer — matches openning-portfolio sizing */
 .role {
   margin: 0;
   font-family: 'Six Caps', sans-serif;
@@ -164,7 +198,7 @@
   line-height: 1;
 }
 
-/* ── Corner labels — Six Caps, same style as reference UI labels ─ */
+/* ── Corner labels ───────────────────────────────────────── */
 .labelBL,
 .labelBR {
   position: fixed;
@@ -182,7 +216,7 @@
 .labelBL { left:  clamp(22px, 3.2vw, 48px); }
 .labelBR {
   right: clamp(22px, 3.2vw, 48px);
-  transition: opacity 0.45s cubic-bezier(0.26, 0.16, 0.1, 1);
+  transition: opacity 0.4s cubic-bezier(0.26, 0.16, 0.1, 1);
 }
 
 .labelBR[data-hide='true'] { opacity: 0; }
