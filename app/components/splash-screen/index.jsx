@@ -1,52 +1,96 @@
-import { useEffect, useState } from 'react';
+import { useEffect, useState, useRef } from 'react';
 import styles from './splash-screen.module.css';
 
-const greetings = [
-  { text: 'Hello',          lang: 'English',  code: 'en' },
-  { text: 'নমস্কার',          lang: 'Bengali',  code: 'bn' },
-  { text: 'வணக்கம்',         lang: 'Tamil',    code: 'ta' },
-  { text: 'నమస్కారం',        lang: 'Telugu',   code: 'te' },
-  { text: 'नमस्कार',         lang: 'Marathi',  code: 'mr' },
-  { text: 'ನಮಸ್ಕಾರ',         lang: 'Kannada',  code: 'kn' },
-  { text: 'ਸਤ ਸ੍ਰੀ ਅਕਾਲ',    lang: 'Punjabi',  code: 'pa' },
-  { text: 'नमस्ते',           lang: 'Hindi',    code: 'hi' },
-];
+const DURATION = 2200;
+const EXIT_DURATION = 900;
 
-const WORD_DURATION = 280;
+function easeOutCubic(t) {
+  return 1 - Math.pow(1 - t, 3);
+}
+
+function padNum(n) {
+  return String(Math.floor(n)).padStart(3, '0');
+}
 
 export function SplashScreen({ onComplete }) {
-  const [index, setIndex] = useState(0);
-  const [exiting, setExiting] = useState(false);
+  const [progress, setProgress] = useState(0);
+  const [phase, setPhase] = useState('idle'); // idle | counting | done | exiting
+  const startRef = useRef(null);
+  const rafRef = useRef(null);
 
   useEffect(() => {
-    if (index < greetings.length - 1) {
-      const t = setTimeout(() => setIndex(i => i + 1), WORD_DURATION);
-      return () => clearTimeout(t);
-    } else {
-      const t = setTimeout(() => {
-        setExiting(true);
-        setTimeout(onComplete, 680);
-      }, WORD_DURATION + 120);
-      return () => clearTimeout(t);
-    }
-  }, [index, onComplete]);
+    const introDelay = setTimeout(() => {
+      setPhase('counting');
+      startRef.current = performance.now();
 
-  const current = greetings[index];
+      function tick(now) {
+        const elapsed = now - startRef.current;
+        const t = Math.min(elapsed / DURATION, 1);
+        const eased = easeOutCubic(t);
+        setProgress(eased * 100);
+
+        if (t < 1) {
+          rafRef.current = requestAnimationFrame(tick);
+        } else {
+          setProgress(100);
+          setTimeout(() => {
+            setPhase('done');
+            setTimeout(() => {
+              setPhase('exiting');
+              setTimeout(onComplete, EXIT_DURATION);
+            }, 400);
+          }, 200);
+        }
+      }
+
+      rafRef.current = requestAnimationFrame(tick);
+    }, 200);
+
+    return () => {
+      clearTimeout(introDelay);
+      if (rafRef.current) cancelAnimationFrame(rafRef.current);
+    };
+  }, [onComplete]);
+
+  const pct = Math.floor(progress);
+  const isExiting = phase === 'exiting';
+  const isStarted = phase !== 'idle';
+  const isDone = phase === 'done' || phase === 'exiting';
 
   return (
-    <div className={styles.overlay} data-exiting={exiting}>
-      <div className={styles.content}>
-        <div key={index} className={styles.clip}>
-          <span className={styles.word} lang={current.code}>
-            {current.text}
-          </span>
+    <div className={styles.overlay} data-exiting={isExiting}>
+      <div className={styles.inner}>
+
+        <div className={styles.topRow} data-visible={isStarted}>
+          <span className={styles.label}>Portfolio</span>
+          <span className={styles.label}>Loading</span>
         </div>
-      </div>
-      <div className={styles.bar}>
-        <div
-          className={styles.barFill}
-          style={{ '--progress': `${((index + 1) / greetings.length) * 100}%` }}
-        />
+
+        <div className={styles.centerBlock}>
+          <div className={styles.nameWrap} data-visible={isStarted}>
+            <span className={styles.nameFirst}>ANIKET</span>
+            <span className={styles.nameLast}>ADHAV</span>
+          </div>
+          <div className={styles.roleWrap} data-visible={isStarted}>
+            <span className={styles.role}>Developer</span>
+          </div>
+        </div>
+
+        <div className={styles.bottomRow}>
+          <div className={styles.progressLine}>
+            <div
+              className={styles.progressFill}
+              style={{ transform: `scaleX(${progress / 100})` }}
+            />
+          </div>
+          <div className={styles.counterRow}>
+            <span className={styles.counter} data-done={isDone}>
+              {padNum(pct)}
+            </span>
+            <span className={styles.pct} data-done={isDone}>%</span>
+          </div>
+        </div>
+
       </div>
     </div>
   );
