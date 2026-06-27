@@ -1,45 +1,69 @@
 /*
- * Exact values from hisamikurita/hisamikurita-portfoliosite-v2022
+ * Exact values from hisamikurita/hisamikurita-portfoliosite-v2022 — BaseOpenning.vue
  *
- * $skinColor:              #f0efeb   (background — always cream)
- * $black:                  #302c1a   (text)
+ * $skinColor:              #f0efeb
+ * $black:                  #302c1a
+ * $sixcaps:                'Six Caps', sans-serif
  * $transform-easing:       cubic-bezier(0.43, 0.05, 0.17, 1)
  * $colorAndOpacity-easing: cubic-bezier(0.26, 0.16, 0.1,  1)
- * $sixcaps:                'Six Caps', sans-serif
  *
- * CSS animations reproduce the exact GSAP timings from BaseOpenning.vue:
- *   openning-num-second (tens):    duration 2.98s, delay 0.58s
- *   openning-num-third  (units):   duration 2.98s, delay 0.58s
- *   openning-num-first  (hundreds):duration 0.28s, delay 3.44s
+ * Counter font-size: 72px (fixed, matching original)
+ * Container: 63px × 72px, overflow hidden
+ * Each digit column: 14px wide — Six Caps at 72px naturally wraps one digit per row
+ *
+ * Timings:
+ *   numSecond (tens):    2.98s at 0.58s  → ends 3.56s  scrollY -648px (9 × 72)
+ *   numThird  (units):   2.98s at 0.58s  → ends 3.56s  scrollY -1368px (19 × 72)
+ *   numFirst  (hundreds):0.28s at 3.44s  → ends 3.72s  scrollY -72px (1 × 72)
+ *   fadeOut second/third: 0.08s at 3.54s
+ *   fadeIn  forth/five:   0.08s at 3.54s
+ *
+ * No React state change during counting → zero 100-glitch.
  */
 
-/* ── Reel keyframes ──────────────────────────────────────── */
+/* ── Keyframes ───────────────────────────────────────────── */
 
-/* Hundreds "01": scrolls from showing "0" to showing "1" */
+/* Hundreds "01": 0 → -72px (shows "1") */
 @keyframes scrollH {
   from { transform: translateY(0); }
-  to   { transform: translateY(calc(-1 * 1em)); }
+  to   { transform: translateY(-72px); }
 }
 
-/* Tens "0123456789": shows "0" → scrolls to "9" (index 9 × 1em up) */
+/* Tens "0123456789": 0 → -648px (9 rows × 72px) */
 @keyframes scrollT {
   from { transform: translateY(0); }
-  to   { transform: translateY(calc(-9 * 1em)); }
+  to   { transform: translateY(-648px); }
 }
 
-/* Units "01234567890123456789": shows "0" → scrolls to last "9" (index 19) */
+/* Units "01234567890123456789": 0 → -1368px (19 rows × 72px) */
 @keyframes scrollU {
   from { transform: translateY(0); }
-  to   { transform: translateY(calc(-19 * 1em)); }
+  to   { transform: translateY(-1368px); }
 }
 
-/* Exit: cream panel wipes upward to reveal the dark portfolio */
+@keyframes fadeOut {
+  from { opacity: 1; }
+  to   { opacity: 0; }
+}
+
+@keyframes fadeInAnim {
+  from { opacity: 0; }
+  to   { opacity: 1; }
+}
+
+/* Bottom loading line grows left→right */
+@keyframes progressGrow {
+  from { transform: scaleX(0); }
+  to   { transform: scaleX(1); }
+}
+
+/* Overlay wipes upward to reveal site */
 @keyframes wipeUp {
   from { clip-path: inset(0 0 0%   0); }
   to   { clip-path: inset(0 0 100% 0); }
 }
 
-/* ── Overlay — always cream, never dark ──────────────────── */
+/* ── Overlay ─────────────────────────────────────────────── */
 .overlay {
   position: fixed;
   inset: 0;
@@ -48,6 +72,7 @@
   display: flex;
   align-items: center;
   justify-content: center;
+  overflow: hidden;
   will-change: clip-path;
 }
 
@@ -55,15 +80,20 @@
   animation: wipeUp 0.95s cubic-bezier(0.43, 0.05, 0.17, 1) forwards;
 }
 
-/* ── Stage ───────────────────────────────────────────────── */
-.stage {
-  position: relative;
-  display: flex;
-  align-items: center;
-  justify-content: center;
+/* ── Progress line — at the very bottom edge ─────────────── */
+.progressLine {
+  position: absolute;
+  bottom: 0;
+  left: 0;
+  width: 100%;
+  height: 2px;
+  background: #302c1a;
+  transform: scaleX(0);
+  transform-origin: left center;
+  animation: progressGrow 2.98s cubic-bezier(0.43, 0.05, 0.17, 1) 0.58s both;
 }
 
-/* ── Counter wrapper ─────────────────────────────────────── */
+/* ── Counter wrapper (fade-out when name reveals) ────────── */
 .counterWrap {
   transition: opacity 0.45s cubic-bezier(0.26, 0.16, 0.1, 1),
               transform 0.45s cubic-bezier(0.43, 0.05, 0.17, 1);
@@ -71,88 +101,91 @@
 
 .counterWrap[data-hide='true'] {
   opacity: 0;
-  transform: translateY(-0.05em);
+  transform: translateY(-5px);
   pointer-events: none;
 }
 
-/* ── Counter row ─────────────────────────────────────────── */
-.counter {
-  font-size: clamp(52px, 11vw, 132px);
-  display: flex;
-  align-items: center;
-  line-height: 1;
-  gap: 0;
-}
-
-/* ── Clip window — one digit tall ────────────────────────── */
-.col {
+/* ── Number container — 63×72px overflow:hidden ─────────── */
+.numContainer {
   position: relative;
-  height: 1em;
-  width: 0.54em;
+  width: 63px;
+  height: 72px;
   overflow: hidden;
-  clip-path: inset(0);
-  flex-shrink: 0;
-}
-
-/* ── Reels ────────────────────────────────────────────────── */
-/* Base reel (used for static digits) */
-.reel {
-  display: flex;
-  flex-direction: column;
-}
-
-/* Hundreds "01" — 0.28s at 3.44s delay, $transform-easing */
-.reelH {
-  display: flex;
-  flex-direction: column;
-  animation: scrollH 0.28s cubic-bezier(0.43, 0.05, 0.17, 1) 3.44s both;
-}
-
-/* Tens "0123456789" — 2.98s at 0.58s delay, $transform-easing */
-.reelT {
-  display: flex;
-  flex-direction: column;
-  animation: scrollT 2.98s cubic-bezier(0.43, 0.05, 0.17, 1) 0.58s both;
-}
-
-/* Units "01234567890123456789" — 2.98s at 0.58s delay, $transform-easing */
-.reelU {
-  display: flex;
-  flex-direction: column;
-  animation: scrollU 2.98s cubic-bezier(0.43, 0.05, 0.17, 1) 0.58s both;
-}
-
-/* ── Digit cell ──────────────────────────────────────────── */
-.digit {
-  display: flex;
-  align-items: center;
-  justify-content: center;
-  height: 1em;
-  width: 0.54em;
   font-family: 'Six Caps', sans-serif;
-  font-size: 1em;
+  font-size: 72px;
   font-weight: 400;
   line-height: 1;
   color: #302c1a;
-  user-select: none;
-  flex-shrink: 0;
+}
+
+/* ── All digit columns ───────────────────────────────────── */
+.numFirst,
+.numSecond,
+.numThird,
+.numForth,
+.numFive {
+  position: absolute;
+  top: 0;
+  width: 14px;
+  font-family: 'Six Caps', sans-serif;
+  font-size: 72px;
+  font-weight: 400;
+  line-height: 1;
+  color: #302c1a;
+  word-break: break-all;
+  text-align: left;
+  white-space: normal;
+}
+
+/* Hundreds "01" — scrolls 0→1 (one row = 72px) */
+.numFirst {
+  left: 0;
+  animation: scrollH 0.28s cubic-bezier(0.43, 0.05, 0.17, 1) 3.44s both;
+}
+
+/* Tens "0123456789" — scrolls to show 9, then fades out */
+.numSecond {
+  left: 14px;
+  animation:
+    scrollT 2.98s cubic-bezier(0.43, 0.05, 0.17, 1) 0.58s both,
+    fadeOut  0.08s ease                              3.54s both;
+}
+
+/* Units "01234567890123456789" — scrolls to show last 9, then fades out */
+.numThird {
+  left: 28px;
+  animation:
+    scrollU 2.98s cubic-bezier(0.43, 0.05, 0.17, 1) 0.58s both,
+    fadeOut  0.08s ease                              3.54s both;
+}
+
+/* Static tens "0" — fades IN when second fades out (shows "0" in "100") */
+.numForth {
+  left: 14px;
+  animation: fadeInAnim 0.08s ease 3.54s both;
+}
+
+/* Static units "0" — fades IN when third fades out (shows "0" in "100") */
+.numFive {
+  left: 28px;
+  animation: fadeInAnim 0.08s ease 3.54s both;
 }
 
 /* ── Percent sign ────────────────────────────────────────── */
-.pct {
+.numPercent {
+  position: absolute;
+  bottom: 2px;
+  right: 0;
   font-family: 'Six Caps', sans-serif;
-  font-size: 0.19em;
+  font-size: 18px;
   font-weight: 400;
   line-height: 1;
   color: #302c1a;
   opacity: 0.5;
-  align-self: flex-start;
-  margin-top: 0.18em;
-  margin-left: 0.35em;
   user-select: none;
 }
 
-/* ── Name block — openning-name from BaseOpenning.vue ───── */
+/* ── Name block ──────────────────────────────────────────── */
 .nameBlock {
   position: absolute;
   display: flex;
@@ -173,7 +206,6 @@
   pointer-events: auto;
 }
 
-/* ANIKET ADHAV — matches openning-name sizing */
 .name {
   margin: 0;
   font-family: 'Six Caps', sans-serif;
@@ -185,7 +217,6 @@
   line-height: 1;
 }
 
-/* Developer — matches openning-portfolio sizing */
 .role {
   margin: 0;
   font-family: 'Six Caps', sans-serif;

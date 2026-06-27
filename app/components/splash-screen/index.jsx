@@ -4,112 +4,73 @@ import styles from './splash-screen.module.css';
 /*
  * Matches BaseOpenning.vue from hisamikurita/hisamikurita-portfoliosite-v2022
  *
- * Template structure replicated exactly:
- *   openning-num-first  = "01"                     (hundreds)
- *   openning-num-second = "0123456789"              (tens, 10 digits)
- *   openning-num-third  = "01234567890123456789"    (units, 20 digits × 2 cycles)
- *   openning-num-forth  = "0"                       (final tens — static)
- *   openning-num-five   = "0"                       (final units — static)
- *   openning-percent    = "%"
+ * Exact structure (overflow:hidden columns, single-string vertical scroll):
+ *   numFirst   = "01"                     – hundreds column (left: 0)
+ *   numSecond  = "0123456789"              – tens column    (left: 14px)
+ *   numThird   = "01234567890123456789"    – units column   (left: 28px)
+ *   numForth   = "0"                       – static tens    (left: 14px, initially hidden)
+ *   numFive    = "0"                       – static units   (left: 28px, initially hidden)
+ *   numPercent = "%"
  *
- * GSAP timings replicated as CSS animations (config.client.js):
- *   NumSecond (tens):   duration 2.98s, delay 0.58s → ends at 3.56s
- *   NumThird  (units):  duration 2.98s, delay 0.58s → ends at 3.56s
- *   NumFirst  (hundreds): duration 0.28s, delay 3.44s → ends at 3.72s
+ * CSS animations replace GSAP — no React state changes mid-animation
+ * → eliminates the "100 glitch" caused by component re-mount.
  *
- * Using CSS animation (not rAF+easeInOut) eliminates the "lag at 100" issue
- * because the browser compositor drives it at exactly cubic-bezier(0.43,0.05,0.17,1).
+ * Timings from config.client.js:
+ *   NumSecond / NumThird : duration 2.98s, delay 0.58s  → ends at 3.56s
+ *   NumFirst (hundreds)  : duration 0.28s, delay 3.44s  → ends at 3.72s
+ *   fadeOut second/third : delay 3.54s (just before they stop)
+ *   fadeIn  forth/five   : delay 3.54s
  */
 
-// Digits for each reel position
-const TENS_DIGITS  = [0,1,2,3,4,5,6,7,8,9];
-const UNITS_DIGITS = [0,1,2,3,4,5,6,7,8,9, 0,1,2,3,4,5,6,7,8,9];
-const HUND_DIGITS  = [0,1];
-
-function Reel({ digits, cls }) {
-  return (
-    <div className={styles.col}>
-      <div className={`${styles.reel} ${cls}`}>
-        {digits.map((d, i) => (
-          <span key={i} className={styles.digit}>{d}</span>
-        ))}
-      </div>
-    </div>
-  );
-}
-
-// The spinning counter — CSS animations running
-function AnimatedCounter() {
-  return (
-    <div className={styles.counter}>
-      <Reel digits={HUND_DIGITS}  cls={styles.reelH} />
-      <Reel digits={TENS_DIGITS}  cls={styles.reelT} />
-      <Reel digits={UNITS_DIGITS} cls={styles.reelU} />
-      <span className={styles.pct}>%</span>
-    </div>
-  );
-}
-
-// Static "100 %" shown after animation completes
-function StaticCounter() {
-  return (
-    <div className={styles.counter}>
-      <div className={styles.col}><div className={styles.reel}><span className={styles.digit}>1</span></div></div>
-      <div className={styles.col}><div className={styles.reel}><span className={styles.digit}>0</span></div></div>
-      <div className={styles.col}><div className={styles.reel}><span className={styles.digit}>0</span></div></div>
-      <span className={styles.pct}>%</span>
-    </div>
-  );
-}
-
 export function SplashScreen({ onComplete }) {
-  // phase: 'counting' → 'show100' → 'reveal' → 'exit'
   const [phase, setPhase] = useState('counting');
 
   useEffect(() => {
-    let timers = [];
+    const timers = [];
     const schedule = (fn, ms) => timers.push(setTimeout(fn, ms));
 
-    // Wait for Six Caps before starting (display=block in root.jsx)
     document.fonts.ready.then(() => {
-      // CSS animations start immediately on mount.
-      // Switch to static "100%" 80 ms after the last CSS animation ends (3720 ms).
-      schedule(() => setPhase('show100'),  3800);
-      // Reveal name 600 ms later
-      schedule(() => setPhase('reveal'),   4500);
-      // Start wipe-up exit
-      schedule(() => setPhase('exit'),     5400);
-      // Unmount — give wipe animation 950 ms to complete
-      schedule(onComplete,                 6350);
+      schedule(() => setPhase('show100'), 3800);
+      schedule(() => setPhase('reveal'),  4500);
+      schedule(() => setPhase('exit'),    5400);
+      schedule(onComplete,               6350);
     });
 
     return () => timers.forEach(clearTimeout);
   }, [onComplete]);
 
-  const isCounting = phase === 'counting';
-  const isReveal   = phase === 'reveal' || phase === 'exit';
-  const isExit     = phase === 'exit';
+  const counterVisible = phase === 'counting' || phase === 'show100';
+  const isReveal       = phase === 'reveal' || phase === 'exit';
+  const isExit         = phase === 'exit';
 
   return (
     <div className={styles.overlay} data-exit={isExit}>
-      <div className={styles.stage}>
 
-        {/* Animated counter while counting, static after */}
-        <div className={styles.counterWrap}
-             data-hide={!isCounting && phase !== 'show100'}>
-          {isCounting ? <AnimatedCounter /> : <StaticCounter />}
+      {/* Loading progress line — bottom edge, grows left→right in sync with counter */}
+      <div className={styles.progressLine} />
+
+      {/* Counter — all spans always mounted; CSS handles the 0→100 transition */}
+      <div className={styles.counterWrap} data-hide={!counterVisible}>
+        <div className={styles.numContainer}>
+          <span className={styles.numFirst}>01</span>
+          <span className={styles.numSecond}>0123456789</span>
+          <span className={styles.numThird}>01234567890123456789</span>
+          <span className={styles.numForth}>0</span>
+          <span className={styles.numFive}>0</span>
+          <span className={styles.numPercent}>%</span>
         </div>
-
-        {/* Name + role — revealed after 100% */}
-        <div className={styles.nameBlock} data-show={isReveal}>
-          <p className={styles.name}>ANIKET ADHAV</p>
-          <p className={styles.role}>Developer</p>
-        </div>
-
       </div>
 
-      <span className={styles.labelBL}>© 2025</span>
-      <span className={styles.labelBR} data-hide={!isCounting}>Loading</span>
+      {/* Name + role revealed after 100% */}
+      <div className={styles.nameBlock} data-show={isReveal}>
+        <p className={styles.name}>ANIKET ADHAV</p>
+        <p className={styles.role}>Developer</p>
+      </div>
+
+      {/* Corner labels */}
+      <span className={styles.labelBL}>portfolio</span>
+      <span className={styles.labelBR} data-hide={!counterVisible}>Loading</span>
+
     </div>
   );
 }
