@@ -1,420 +1,202 @@
-/* ─────────────────────────────────────────
+/* ─────────────────────────────────────
    Keyframes
-───────────────────────────────────────── */
+───────────────────────────────────── */
 
-@keyframes letterIn {
-  from {
-    opacity: 0;
-    transform: translateY(60%) skewY(4deg);
-    filter: blur(6px);
-  }
-  60% {
-    filter: blur(0px);
-  }
-  to {
-    opacity: 1;
-    transform: translateY(0) skewY(0deg);
-    filter: blur(0px);
-  }
-}
-
-@keyframes roleLetterIn {
-  from {
-    opacity: 0;
-    transform: translateY(12px);
-  }
-  to {
-    opacity: 1;
-    transform: translateY(0);
-  }
-}
-
-@keyframes topRowIn {
-  from { opacity: 0; transform: translateY(-10px); }
+@keyframes fadeUp {
+  from { opacity: 0; transform: translateY(16px); }
   to   { opacity: 1; transform: translateY(0); }
 }
 
-@keyframes dividerGrow {
-  from { transform: scaleX(0); }
-  to   { transform: scaleX(1); }
+@keyframes exitWipe {
+  0%   { clip-path: inset(0 0 0 0); }
+  100% { clip-path: inset(0 0 100% 0); }
 }
 
-@keyframes scanDown {
-  0%   { top: 0%;   opacity: 1; }
-  85%  { opacity: 1; }
-  100% { top: 100%; opacity: 0; }
+@keyframes fadeOut {
+  to { opacity: 0; }
 }
 
-@keyframes cornerIn {
-  from { opacity: 0; transform: scale(0.7); }
-  to   { opacity: 1; transform: scale(1); }
-}
-
-@keyframes glowPulse {
-  0%, 100% { opacity: 0.5; }
-  50%       { opacity: 1; }
-}
-
-@keyframes exitSlideUp {
-  0%   { transform: translateY(0); clip-path: inset(0 0 0 0); }
-  100% { transform: translateY(-100%); clip-path: inset(0 0 0 0); }
-}
-
-@keyframes ghostIn {
-  from { opacity: 0; }
-  to   { opacity: 1; }
-}
-
-/* ─────────────────────────────────────────
-   Overlay
-───────────────────────────────────────── */
+/* ─────────────────────────────────────
+   Overlay — matches hsmkrt1996.com's
+   warm cream light-mode aesthetic,
+   inverted for dark mode.
+───────────────────────────────────── */
 
 .overlay {
   position: fixed;
   inset: 0;
   z-index: 9999;
-
-  /* Dark mode (default) */
-  --sp-bg:        #080808;
-  --sp-surface:   #111111;
-  --sp-text:      #ffffff;
-  --sp-muted:     rgba(255,255,255,0.28);
-  --sp-faint:     rgba(255,255,255,0.07);
-  --sp-accent:    #c8ff00;
-  --sp-line:      rgba(255,255,255,0.12);
-  --sp-fill:      #ffffff;
-
-  background: var(--sp-bg);
   display: flex;
   flex-direction: column;
-  overflow: hidden;
-  will-change: transform;
-  padding: clamp(20px, 3.5vw, 52px) clamp(20px, 4vw, 60px);
-  gap: 0;
+  align-items: center;
+  justify-content: center;
+  padding: clamp(24px, 3vw, 48px);
 
+  /* Light theme values (matches reference) */
+  --bg:    #e8e5dc;
+  --text:  #2e2b24;
+  --muted: rgba(46, 43, 36, 0.38);
+  --digit: #2e2b24;
+
+  background: var(--bg);
+  color: var(--text);
+
+  /* Exit: clip from top to bottom (wipe up) */
   &[data-exiting='true'] {
-    animation: exitSlideUp 1s cubic-bezier(0.76, 0, 0.24, 1) forwards;
+    animation: exitWipe 0.85s cubic-bezier(0.76, 0, 0.24, 1) forwards;
   }
 }
 
-/* Light theme override */
-body[data-theme='light'] .overlay {
-  --sp-bg:        #f4f4f0;
-  --sp-surface:   #eaeae4;
-  --sp-text:      #0a0a0a;
-  --sp-muted:     rgba(0,0,0,0.35);
-  --sp-faint:     rgba(0,0,0,0.05);
-  --sp-accent:    #1a1a1a;
-  --sp-line:      rgba(0,0,0,0.12);
-  --sp-fill:      #0a0a0a;
+/* Dark theme override */
+body[data-theme='dark'] .overlay {
+  --bg:    #0c0c0a;
+  --text:  #e8e5dc;
+  --muted: rgba(232, 229, 220, 0.38);
+  --digit: #e8e5dc;
 }
 
-/* ─────────────────────────────────────────
-   Noise grain layer
-───────────────────────────────────────── */
+/* ─────────────────────────────────────
+   Center block
+───────────────────────────────────── */
 
-.grain {
-  position: absolute;
-  inset: -50%;
-  width: 200%;
-  height: 200%;
-  pointer-events: none;
-  z-index: 0;
-  opacity: 0.035;
-  background-image: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='300' height='300'%3E%3Cfilter id='n'%3E%3CfeTurbulence type='fractalNoise' baseFrequency='0.75' numOctaves='4' stitchTiles='stitch'/%3E%3C/filter%3E%3Crect width='300' height='300' filter='url(%23n)' opacity='1'/%3E%3C/svg%3E");
-  background-size: 200px 200px;
-  animation: none;
+.center {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: clamp(28px, 4vw, 48px);
 }
 
-body[data-theme='dark'] .grain {
-  opacity: 0.045;
-}
+/* ─────────────────────────────────────
+   Slot-machine odometer counter
+───────────────────────────────────── */
 
-/* ─────────────────────────────────────────
-   Scan line
-───────────────────────────────────────── */
+.counter {
+  display: flex;
+  align-items: flex-start;
+  /* digit-h drives all column math — small like the reference */
+  --digit-h: clamp(34px, 4.5vw, 52px);
+  transition: opacity 0.5s ease;
 
-.scanLine {
-  position: absolute;
-  left: 0;
-  right: 0;
-  top: 0;
-  height: 1px;
-  background: linear-gradient(
-    to right,
-    transparent 0%,
-    var(--sp-accent) 30%,
-    var(--sp-fill) 50%,
-    var(--sp-accent) 70%,
-    transparent 100%
-  );
-  z-index: 2;
-  pointer-events: none;
-  opacity: 0;
-
-  &[data-active='true'] {
-    animation: scanDown 1.6s cubic-bezier(0.4, 0, 0.6, 1) 0.3s forwards;
+  &[data-done='true'] {
+    animation: fadeOut 0.4s ease 0.1s forwards;
   }
 }
 
-/* ─────────────────────────────────────────
-   Corner brackets
-───────────────────────────────────────── */
-
-.cornerTL,
-.cornerTR,
-.cornerBL,
-.cornerBR {
-  position: absolute;
-  width: 22px;
-  height: 22px;
-  opacity: 0;
-  animation: cornerIn 0.5s cubic-bezier(0.16, 1, 0.3, 1) 0.1s forwards;
-  z-index: 3;
+/* One clipped column per digit */
+.slotOuter {
+  overflow: hidden;
+  height: var(--digit-h);
 }
 
-.cornerTL {
-  top:    clamp(20px, 3.5vw, 52px);
-  left:   clamp(20px, 4vw,   60px);
-  border-top:  1px solid var(--sp-muted);
-  border-left: 1px solid var(--sp-muted);
+/* The scrolling reel */
+.slotInner {
+  display: flex;
+  flex-direction: column;
+  transform: translateY(calc(var(--vp) * var(--digit-h) * -1));
+  transition: transform 160ms cubic-bezier(0.25, 0, 0.75, 1);
+  will-change: transform;
 }
 
-.cornerTR {
-  top:    clamp(20px, 3.5vw, 52px);
-  right:  clamp(20px, 4vw,   60px);
-  border-top:   1px solid var(--sp-muted);
-  border-right: 1px solid var(--sp-muted);
-}
-
-.cornerBL {
-  bottom: clamp(20px, 3.5vw, 52px);
-  left:   clamp(20px, 4vw,   60px);
-  border-bottom: 1px solid var(--sp-muted);
-  border-left:   1px solid var(--sp-muted);
-}
-
-.cornerBR {
-  bottom: clamp(20px, 3.5vw, 52px);
-  right:  clamp(20px, 4vw,   60px);
-  border-bottom: 1px solid var(--sp-muted);
-  border-right:  1px solid var(--sp-muted);
-}
-
-/* ─────────────────────────────────────────
-   Top row
-───────────────────────────────────────── */
-
-.topRow {
-  position: relative;
-  z-index: 2;
+/* Individual digit character — condensed via scaleX to match reference font */
+.slotDigit {
   display: flex;
   align-items: center;
-  gap: clamp(10px, 2vw, 20px);
-  opacity: 0;
-
-  &[data-visible='true'] {
-    animation: topRowIn 0.6s cubic-bezier(0.16, 1, 0.3, 1) 0.2s forwards;
-  }
-}
-
-.topLabel {
+  justify-content: center;
+  height: var(--digit-h);
+  line-height: 1;
   font-family: 'Gotham', system-ui, sans-serif;
-  font-size: clamp(0.55rem, 1vw, 0.7rem);
+  font-size: var(--digit-h);
   font-weight: 500;
-  letter-spacing: 0.3em;
-  text-transform: uppercase;
-  color: var(--sp-muted);
-  white-space: nowrap;
-  flex-shrink: 0;
-}
-
-.topDivider {
-  flex: 1;
-  height: 1px;
-  background: var(--sp-line);
+  letter-spacing: 0;
+  color: var(--digit);
+  font-variant-numeric: tabular-nums;
+  user-select: none;
+  /* Condense horizontally — reference uses a very narrow condensed font */
+  transform: scaleX(0.62);
   transform-origin: left center;
-  animation: dividerGrow 1s cubic-bezier(0.16, 1, 0.3, 1) 0.4s both;
+  width: 0.68em;
 }
 
-/* ─────────────────────────────────────────
-   Center name block
-───────────────────────────────────────── */
+/* The % sign */
+.pctMark {
+  font-family: 'Gotham', system-ui, sans-serif;
+  font-size: clamp(9px, 1.2vw, 13px);
+  font-weight: 400;
+  color: var(--muted);
+  letter-spacing: 0;
+  margin-top: 0.22em;
+  margin-left: 0.05em;
+  user-select: none;
+}
+
+/* ─────────────────────────────────────
+   Name + role (appear after 100%)
+───────────────────────────────────── */
 
 .nameBlock {
-  position: relative;
-  z-index: 2;
-  flex: 1;
   display: flex;
   flex-direction: column;
-  justify-content: center;
-  padding-top: clamp(1rem, 3vw, 2rem);
-}
-
-.nameRow {
-  display: flex;
-  line-height: 0.88;
-  overflow: visible;
-  gap: 0.02em;
-}
-
-.nameLetter {
-  display: inline-block;
-  font-family: 'Gotham', system-ui, sans-serif;
-  font-size: clamp(4rem, 13.5vw, 12rem);
-  font-weight: 700;
-  letter-spacing: -0.03em;
-  color: var(--sp-text);
-  line-height: 0.88;
+  align-items: center;
+  gap: 6px;
   opacity: 0;
-  transform: translateY(60%) skewY(4deg);
-  will-change: transform, opacity;
-  transition: color 0.3s ease;
+  pointer-events: none;
 
   &[data-visible='true'] {
-    animation: letterIn 0.7s cubic-bezier(0.16, 1, 0.3, 1) calc(var(--i) * 55ms) forwards;
+    animation: fadeUp 0.6s cubic-bezier(0.16, 1, 0.3, 1) 0.1s forwards;
+    pointer-events: auto;
   }
 }
 
-/* Accent on first letter */
-.nameRow:first-child .nameLetter:first-child {
-  color: var(--sp-accent);
-}
-
-.roleRow {
-  display: flex;
-  margin-top: clamp(0.5rem, 1.5vw, 1rem);
-  gap: 0.05em;
-  overflow: hidden;
-}
-
-.roleLetter {
-  display: inline-block;
+.name {
+  margin: 0;
   font-family: 'Gotham', system-ui, sans-serif;
-  font-size: clamp(0.65rem, 1.3vw, 0.95rem);
-  font-weight: 400;
-  letter-spacing: 0.45em;
+  font-size: clamp(1.1rem, 3vw, 2.2rem);
+  font-weight: 500;
+  letter-spacing: 0.22em;
   text-transform: uppercase;
-  color: var(--sp-muted);
-  opacity: 0;
-
-  .roleRow[data-visible='true'] & {
-    animation: roleLetterIn 0.5s cubic-bezier(0.16, 1, 0.3, 1)
-      calc(0.7s + var(--i) * 35ms) forwards;
-  }
+  color: var(--text);
+  white-space: nowrap;
 }
 
-/* ─────────────────────────────────────────
-   Ghost counter in background
-───────────────────────────────────────── */
-
-.ghostCounter {
-  position: absolute;
-  right: clamp(20px, 4vw, 60px);
-  bottom: clamp(56px, 10vw, 100px);
+.role {
+  margin: 0;
   font-family: 'Gotham', system-ui, sans-serif;
-  font-size: clamp(10rem, 28vw, 22rem);
-  font-weight: 700;
-  letter-spacing: -0.06em;
-  line-height: 1;
-  color: transparent;
-  -webkit-text-stroke: 1px var(--sp-faint);
-  text-stroke: 1px var(--sp-faint);
-  pointer-events: none;
-  user-select: none;
-  z-index: 1;
-  animation: ghostIn 1s ease 0.8s both;
+  font-size: clamp(0.6rem, 1.1vw, 0.78rem);
+  font-weight: 400;
+  letter-spacing: 0.35em;
+  text-transform: uppercase;
+  color: var(--muted);
+  white-space: nowrap;
 }
 
-/* ─────────────────────────────────────────
-   Bottom block
-───────────────────────────────────────── */
+/* ─────────────────────────────────────
+   Corner labels (reference site style)
+───────────────────────────────────── */
 
-.bottomBlock {
-  position: relative;
-  z-index: 2;
-  display: flex;
-  flex-direction: column;
-  gap: clamp(10px, 1.5vw, 16px);
-}
-
-.progressTrack {
-  position: relative;
-  width: 100%;
-  height: 1px;
-  background: var(--sp-line);
-  overflow: visible;
-}
-
-.progressFill {
+.bottomLeft,
+.bottomRight {
   position: absolute;
-  inset: 0;
-  background: var(--sp-fill);
-  transform-origin: left center;
-  transform: scaleX(0);
-  will-change: transform;
-}
-
-.progressGlow {
-  position: absolute;
-  top: 50%;
-  transform: translate(-50%, -50%);
-  width: 40px;
-  height: 10px;
-  background: radial-gradient(ellipse, var(--sp-accent) 0%, transparent 70%);
-  pointer-events: none;
-  animation: glowPulse 0.8s ease-in-out infinite;
-  transition: left 80ms linear;
-}
-
-.bottomRow {
-  display: flex;
-  align-items: flex-end;
-  justify-content: space-between;
-}
-
-.bottomLabel {
+  bottom: clamp(20px, 3vw, 40px);
   font-family: 'Gotham', system-ui, sans-serif;
   font-size: clamp(0.5rem, 0.9vw, 0.65rem);
   font-weight: 400;
   letter-spacing: 0.2em;
   text-transform: uppercase;
-  color: var(--sp-muted);
-  opacity: 0;
-  transition: opacity 0.6s ease;
-
-  &[data-visible='true'] {
-    opacity: 1;
-    transition-delay: 0.9s;
-  }
+  color: var(--muted);
 }
 
-.counter {
-  display: flex;
-  align-items: baseline;
-  gap: 2px;
-  transition: opacity 0.4s ease;
+.bottomLeft  { left:  clamp(24px, 3.5vw, 52px); }
+.bottomRight {
+  right: clamp(24px, 3.5vw, 52px);
+  transition: opacity 0.3s ease;
 
   &[data-done='true'] {
-    opacity: 0.35;
+    opacity: 0;
   }
 }
 
-.digits {
-  font-family: 'Gotham', system-ui, sans-serif;
-  font-size: clamp(3.5rem, 9vw, 8rem);
-  font-weight: 700;
-  letter-spacing: -0.04em;
-  color: var(--sp-text);
-  line-height: 1;
-  font-variant-numeric: tabular-nums;
-}
-
-.pctSign {
-  font-family: 'Gotham', system-ui, sans-serif;
-  font-size: clamp(1.1rem, 2.8vw, 2.4rem);
-  font-weight: 400;
-  color: var(--sp-muted);
-  line-height: 1;
-  margin-bottom: 0.25em;
+.siteLabel,
+.loadingLabel {
+  display: block;
+  letter-spacing: inherit;
 }
