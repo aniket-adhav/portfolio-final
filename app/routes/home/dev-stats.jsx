@@ -177,11 +177,12 @@ export function DevStats({ id, sectionRef, visible, github, leetcode }) {
             <div className={styles.cardGlow} />
 
             <div className={styles.cardHeader}>
-              <svg className={styles.platformIcon} viewBox="0 0 95 115" fill="currentColor" aria-hidden="true">
-                <path d="M68.8 58.5 44.2 83.2a8 8 0 0 1-11.3-11.3l19-19-19-19A8 8 0 0 1 44 22.6l24.7 24.7a8 8 0 0 1 0 11.2z"/>
-                <path d="M27 90h41a5 5 0 0 1 0 10H27a5 5 0 0 1 0-10z"/>
-                <path d="M13 55 2 44 13 33" fill="none" stroke="currentColor" strokeWidth="9" strokeLinecap="round" strokeLinejoin="round"/>
-              </svg>
+              <img
+                src="https://cdn.simpleicons.org/leetcode/FFA116"
+                alt="LeetCode"
+                className={styles.platformIcon}
+                loading="lazy"
+              />
               <span className={styles.platformName}>LeetCode</span>
               <span className={styles.liveChip}>
                 <span className={styles.liveDot} style={{ '--dot': '#FFA116' }} />
