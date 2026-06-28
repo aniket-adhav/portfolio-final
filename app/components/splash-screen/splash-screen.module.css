@@ -103,7 +103,7 @@
   left: 0;
   width: 100%;
   height: 2px;
-  background: oklch(84.42% 0.19 202.24);
+  background: #302c1a;
   transform: scaleX(0);
   transform-origin: left center;
   z-index: 10000;
