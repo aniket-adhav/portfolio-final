@@ -232,7 +232,7 @@ export function DevStats({ id, sectionRef, visible, github, leetcode }) {
                     <span className={styles.statValue} style={{ color: '#FFA116' }}>
                       {visible ? <AnimatedNumber value={lc.badgeCount} /> : 0}
                     </span>
-                    <span className={styles.statKey}>Badges earned 🏅</span>
+                    <span className={styles.statKey}>Badges 🏅</span>
                   </div>
                 </div>
               </div>
