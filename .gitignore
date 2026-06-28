@@ -9,3 +9,11 @@ node_modules
 
 public/draco
 storybook-static
+
+# Replit
+artifacts/
+attached_assets/
+.storybook/
+.agents/
+.local/
+.canvas/
