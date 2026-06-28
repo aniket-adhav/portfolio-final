@@ -1,0 +1,200 @@
+{
+  "buildManifest": {
+    "serverBundles": {
+      "nodejs-eyJydW50aW1lIjoibm9kZWpzIn0": {
+        "id": "nodejs-eyJydW50aW1lIjoibm9kZWpzIn0",
+        "file": "build/server/nodejs-eyJydW50aW1lIjoibm9kZWpzIn0/index.js",
+        "config": {
+          "runtime": "nodejs"
+        }
+      }
+    },
+    "routeIdToServerBundleId": {
+      "routes/projects.civic-assist": "nodejs-eyJydW50aW1lIjoibm9kZWpzIn0",
+      "routes/projects.movies-house": "nodejs-eyJydW50aW1lIjoibm9kZWpzIn0",
+      "routes/projects.parakram": "nodejs-eyJydW50aW1lIjoibm9kZWpzIn0",
+      "routes/api.set-theme": "nodejs-eyJydW50aW1lIjoibm9kZWpzIn0",
+      "routes/contact": "nodejs-eyJydW50aW1lIjoibm9kZWpzIn0",
+      "routes/home": "nodejs-eyJydW50aW1lIjoibm9kZWpzIn0",
+      "routes/uses": "nodejs-eyJydW50aW1lIjoibm9kZWpzIn0",
+      "routes/$": "nodejs-eyJydW50aW1lIjoibm9kZWpzIn0",
+      "routes/home/route": "nodejs-eyJydW50aW1lIjoibm9kZWpzIn0"
+    },
+    "routes": {
+      "root": {
+        "path": "",
+        "id": "root",
+        "file": "app/root.jsx",
+        "config": {}
+      },
+      "routes/projects.civic-assist": {
+        "file": "app/routes/projects.civic-assist/route.js",
+        "id": "routes/projects.civic-assist",
+        "path": "projects/civic-assist",
+        "parentId": "root",
+        "config": {
+          "runtime": "nodejs"
+        }
+      },
+      "routes/projects.movies-house": {
+        "file": "app/routes/projects.movies-house/route.js",
+        "id": "routes/projects.movies-house",
+        "path": "projects/movies-house",
+        "parentId": "root",
+        "config": {
+          "runtime": "nodejs"
+        }
+      },
+      "routes/projects.parakram": {
+        "file": "app/routes/projects.parakram/route.js",
+        "id": "routes/projects.parakram",
+        "path": "projects/parakram",
+        "parentId": "root",
+        "config": {
+          "runtime": "nodejs"
+        }
+      },
+      "routes/api.set-theme": {
+        "file": "app/routes/api.set-theme.js",
+        "id": "routes/api.set-theme",
+        "path": "api/set-theme",
+        "parentId": "root",
+        "config": {
+          "runtime": "nodejs"
+        }
+      },
+      "routes/contact": {
+        "file": "app/routes/contact/route.js",
+        "id": "routes/contact",
+        "path": "contact",
+        "parentId": "root",
+        "config": {
+          "runtime": "nodejs"
+        }
+      },
+      "routes/home": {
+        "file": "app/routes/home/route.js",
+        "id": "routes/home",
+        "path": "home",
+        "parentId": "root",
+        "config": {
+          "runtime": "nodejs"
+        }
+      },
+      "routes/uses": {
+        "file": "app/routes/uses/route.js",
+        "id": "routes/uses",
+        "path": "uses",
+        "parentId": "root",
+        "config": {
+          "runtime": "nodejs"
+        }
+      },
+      "routes/$": {
+        "file": "app/routes/$.jsx",
+        "id": "routes/$",
+        "path": "*",
+        "parentId": "root",
+        "config": {
+          "runtime": "nodejs"
+        }
+      },
+      "routes/home/route": {
+        "path": "/",
+        "index": true,
+        "id": "routes/home/route",
+        "parentId": "root",
+        "file": "app/routes/home/route.js",
+        "config": {
+          "runtime": "nodejs"
+        }
+      }
+    }
+  },
+  "remixConfig": {
+    "appDirectory": "/home/runner/workspace/app",
+    "basename": "/",
+    "buildDirectory": "/home/runner/workspace/build",
+    "future": {
+      "v3_fetcherPersist": false,
+      "v3_relativeSplatPath": false,
+      "v3_throwAbortReason": false,
+      "v3_routeConfig": false,
+      "v3_singleFetch": false,
+      "v3_lazyRouteDiscovery": false,
+      "unstable_optimizeDeps": false
+    },
+    "manifest": false,
+    "publicPath": "/",
+    "routes": {
+      "root": {
+        "path": "",
+        "id": "root",
+        "file": "root.jsx"
+      },
+      "routes/projects.civic-assist": {
+        "file": "routes/projects.civic-assist/route.js",
+        "id": "routes/projects.civic-assist",
+        "path": "projects/civic-assist",
+        "parentId": "root"
+      },
+      "routes/projects.movies-house": {
+        "file": "routes/projects.movies-house/route.js",
+        "id": "routes/projects.movies-house",
+        "path": "projects/movies-house",
+        "parentId": "root"
+      },
+      "routes/projects.parakram": {
+        "file": "routes/projects.parakram/route.js",
+        "id": "routes/projects.parakram",
+        "path": "projects/parakram",
+        "parentId": "root"
+      },
+      "routes/api.set-theme": {
+        "file": "routes/api.set-theme.js",
+        "id": "routes/api.set-theme",
+        "path": "api/set-theme",
+        "parentId": "root"
+      },
+      "routes/contact": {
+        "file": "routes/contact/route.js",
+        "id": "routes/contact",
+        "path": "contact",
+        "parentId": "root"
+      },
+      "routes/home": {
+        "file": "routes/home/route.js",
+        "id": "routes/home",
+        "path": "home",
+        "parentId": "root"
+      },
+      "routes/uses": {
+        "file": "routes/uses/route.js",
+        "id": "routes/uses",
+        "path": "uses",
+        "parentId": "root"
+      },
+      "routes/$": {
+        "file": "routes/$.jsx",
+        "id": "routes/$",
+        "path": "*",
+        "parentId": "root"
+      },
+      "routes/home/route": {
+        "path": "/",
+        "index": true,
+        "id": "routes/home/route",
+        "parentId": "root",
+        "file": "routes/home/route.js"
+      }
+    },
+    "serverBuildFile": "index.js",
+    "serverModuleFormat": "esm",
+    "ssr": true
+  },
+  "viteConfig": {
+    "build": {
+      "assetsDir": "assets"
+    }
+  }
+}
