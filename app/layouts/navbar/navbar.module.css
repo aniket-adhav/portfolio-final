@@ -296,6 +296,14 @@
     padding: var(--spaceM) var(--spaceL);
     border-bottom: 1px solid color-mix(in lab, var(--text) 10%, transparent);
     flex-shrink: 0;
+    gap: var(--spaceS);
+
+    @media (--mediaMobile), (--mediaMobileLS) {
+      flex-direction: column;
+      align-items: stretch;
+      padding: var(--spaceS) var(--spaceM);
+      gap: var(--spaceS);
+    }
   }
 
   .resumeModalTitle {
@@ -309,6 +317,10 @@
     display: flex;
     align-items: center;
     gap: var(--spaceM);
+
+    @media (--mediaMobile), (--mediaMobileLS) {
+      gap: var(--spaceS);
+    }
   }
 
   .resumeDownloadBtn {
@@ -325,6 +337,13 @@
     transition: opacity var(--durationS) ease;
 
     &:hover { opacity: 0.85; }
+
+    @media (--mediaMobile), (--mediaMobileLS) {
+      flex: 1;
+      justify-content: center;
+      padding: 8px 12px;
+      border-radius: 8px;
+    }
   }
 
   .resumeCloseBtn {
@@ -339,6 +358,7 @@
     color: var(--textLight);
     cursor: pointer;
     transition: background var(--durationS) ease, color var(--durationS) ease;
+    flex-shrink: 0;
 
     &:hover {
       background: color-mix(in lab, var(--text) 8%, transparent);
