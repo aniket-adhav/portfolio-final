@@ -230,9 +230,9 @@ export function DevStats({ id, sectionRef, visible, github, leetcode }) {
                   </div>
                   <div className={styles.stat}>
                     <span className={styles.statValue} style={{ color: '#FFA116' }}>
-                      {visible ? <AnimatedNumber value={lc.totalActiveDays} /> : 0}
+                      {visible ? <AnimatedNumber value={lc.badgeCount} /> : 0}
                     </span>
-                    <span className={styles.statKey}>Active days</span>
+                    <span className={styles.statKey}>Badges earned 🏅</span>
                   </div>
                 </div>
               </div>

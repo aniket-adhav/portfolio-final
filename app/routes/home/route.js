@@ -104,6 +104,7 @@ async function fetchLeetCode() {
             acSubmissionNum { difficulty count }
           }
           profile { ranking }
+          badges { id }
           userCalendar {
             streak
             totalActiveDays
@@ -149,11 +150,11 @@ async function fetchLeetCode() {
       hard: get('Hard'),
       ranking: mu.profile?.ranking || null,
       streak: mu.userCalendar?.streak || 0,
-      totalActiveDays: mu.userCalendar?.totalActiveDays || 0,
+      badgeCount: mu.badges?.length || 0,
       weekGrid: buildWeekGrid(dayMap),
     };
   } catch {
-    return { username: LEETCODE_USER, easy: 0, medium: 0, hard: 0, ranking: null, streak: 0, totalActiveDays: 0, weekGrid: [] };
+    return { username: LEETCODE_USER, easy: 0, medium: 0, hard: 0, ranking: null, streak: 0, badgeCount: 0, weekGrid: [] };
   }
 }
 
