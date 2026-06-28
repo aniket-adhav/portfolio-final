@@ -14,7 +14,7 @@ import { navLinks, socialLinks } from './nav-data';
 import config from '~/config.json';
 import styles from './navbar.module.css';
 
-const NAV_SECTION_IDS = ['project-1', 'skills', 'details', 'contact'];
+const NAV_SECTION_IDS = ['project-1', 'dev-stats', 'skills', 'details', 'contact'];
 
 export const Navbar = () => {
   const [current, setCurrent] = useState();
