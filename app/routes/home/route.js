@@ -71,10 +71,6 @@ async function fetchGitHub() {
     const dayMap = {};
     (contrib.contributions || []).forEach(c => { dayMap[c.date] = c; });
 
-    const forks = Array.isArray(repos)
-      ? repos.reduce((s, r) => s + (r.forks_count || 0), 0)
-      : 0;
-
     const langMap = {};
     if (Array.isArray(repos)) {
       repos.forEach(r => { if (r.language) langMap[r.language] = (langMap[r.language] || 0) + 1; });
@@ -83,11 +79,12 @@ async function fetchGitHub() {
       .sort((a, b) => b[1] - a[1])
       .slice(0, 5)
       .map(([l]) => l);
+    const languageCount = Object.keys(langMap).length;
 
     return {
       username: GITHUB_USER,
       repos: user.public_repos || 0,
-      forks,
+      languageCount,
       totalContribs: contrib.total?.lastYear || 0,
       streak: computeStreak(dayMap),
       weekGrid: buildWeekGrid(dayMap),

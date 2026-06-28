@@ -127,9 +127,9 @@ export function DevStats({ id, sectionRef, visible, github, leetcode }) {
               </div>
               <div className={styles.stat}>
                 <span className={styles.statValue} style={{ color: '#2dba4e' }}>
-                  {visible ? <AnimatedNumber value={gh.forks} /> : 0}
+                  {visible ? <AnimatedNumber value={gh.languageCount} /> : 0}
                 </span>
-                <span className={styles.statKey}>Forks received</span>
+                <span className={styles.statKey}>Languages used</span>
               </div>
               <div className={styles.stat}>
                 <span className={styles.statValue} style={{ color: '#2dba4e' }}>
