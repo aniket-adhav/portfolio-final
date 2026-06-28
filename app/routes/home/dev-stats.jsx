@@ -1,25 +1,24 @@
-import { useEffect, useRef, useState } from 'react';
+import { useEffect, useRef, useState, useMemo } from 'react';
 import styles from './dev-stats.module.css';
+
+const MONTH_ABBR = ['Jan','Feb','Mar','Apr','May','Jun','Jul','Aug','Sep','Oct','Nov','Dec'];
 
 function AnimatedNumber({ value, duration = 1200 }) {
   const [display, setDisplay] = useState(0);
   const start = useRef(null);
   const raf = useRef(null);
-
   useEffect(() => {
     if (!value) return;
     start.current = null;
     const animate = ts => {
       if (!start.current) start.current = ts;
       const p = Math.min((ts - start.current) / duration, 1);
-      const eased = 1 - Math.pow(1 - p, 3);
-      setDisplay(Math.round(eased * value));
+      setDisplay(Math.round((1 - Math.pow(1 - p, 3)) * value));
       if (p < 1) raf.current = requestAnimationFrame(animate);
     };
     raf.current = requestAnimationFrame(animate);
     return () => cancelAnimationFrame(raf.current);
   }, [value, duration]);
-
   return display.toLocaleString();
 }
 
@@ -29,7 +28,6 @@ function Bar({ label, count, total, color, delay }) {
     const t = setTimeout(() => setPct(total ? Math.round((count / total) * 100) : 0), delay);
     return () => clearTimeout(t);
   }, [count, total, delay]);
-
   return (
     <div className={styles.barRow}>
       <span className={styles.barLabel} style={{ color }}>{label}</span>
@@ -42,10 +40,26 @@ function Bar({ label, count, total, color, delay }) {
 }
 
 function Heatmap({ weekGrid, accentColor, visible }) {
+  const monthLabels = useMemo(() => {
+    if (!weekGrid || !weekGrid.length) return [];
+    return weekGrid.map(week => {
+      const firstReal = week.find(d => d.level !== -1);
+      if (!firstReal) return null;
+      const d = new Date(firstReal.date);
+      if (d.getDate() <= 7) return MONTH_ABBR[d.getMonth()];
+      return null;
+    });
+  }, [weekGrid]);
+
   if (!weekGrid || weekGrid.length === 0) return null;
 
   return (
     <div className={styles.heatmapWrap} style={{ '--hcolor': accentColor }}>
+      <div className={styles.monthRow}>
+        {monthLabels.map((label, wi) => (
+          <div key={wi} className={styles.monthCell}>{label || ''}</div>
+        ))}
+      </div>
       <div className={styles.heatGrid} data-visible={visible}>
         {weekGrid.map((week, wi) => (
           <div key={wi} className={styles.heatWeek} style={{ '--wi': wi }}>
@@ -54,7 +68,7 @@ function Heatmap({ weekGrid, accentColor, visible }) {
                 key={di}
                 className={styles.heatDay}
                 data-level={day.level}
-                title={day.count > 0 ? `${day.date}: ${day.count}` : day.date}
+                title={day.level >= 0 && day.count > 0 ? `${day.date}: ${day.count}` : day.level === -1 ? '' : day.date}
               />
             ))}
           </div>
@@ -67,11 +81,10 @@ function Heatmap({ weekGrid, accentColor, visible }) {
 export function DevStats({ id, sectionRef, visible, github, leetcode }) {
   const gh = github || {};
   const lc = leetcode || {};
-
-  const easy = lc.easy || 0;
+  const easy   = lc.easy   || 0;
   const medium = lc.medium || 0;
-  const hard = lc.hard || 0;
-  const total = easy + medium + hard;
+  const hard   = lc.hard   || 0;
+  const total  = easy + medium + hard;
 
   return (
     <section className={styles.section} id={id} ref={sectionRef} tabIndex={-1}>
@@ -105,12 +118,18 @@ export function DevStats({ id, sectionRef, visible, github, leetcode }) {
               </span>
             </div>
 
-            <div className={styles.statRow}>
+            <div className={styles.statGrid2x2}>
               <div className={styles.stat}>
                 <span className={styles.statValue} style={{ color: '#2dba4e' }}>
                   {visible ? <AnimatedNumber value={gh.repos} /> : 0}
                 </span>
                 <span className={styles.statKey}>Repositories</span>
+              </div>
+              <div className={styles.stat}>
+                <span className={styles.statValue} style={{ color: '#2dba4e' }}>
+                  {visible ? <AnimatedNumber value={gh.stars} /> : 0}
+                </span>
+                <span className={styles.statKey}>Stars earned</span>
               </div>
               <div className={styles.stat}>
                 <span className={styles.statValue} style={{ color: '#2dba4e' }}>
@@ -176,10 +195,7 @@ export function DevStats({ id, sectionRef, visible, github, leetcode }) {
                   <circle cx="50" cy="50" r="40" fill="none" className={styles.ringTrack} strokeWidth="8" />
                   <circle
                     cx="50" cy="50" r="40"
-                    fill="none"
-                    stroke="#FFA116"
-                    strokeWidth="8"
-                    strokeLinecap="round"
+                    fill="none" stroke="#FFA116" strokeWidth="8" strokeLinecap="round"
                     strokeDasharray={`${2 * Math.PI * 40}`}
                     strokeDashoffset={visible ? `${2 * Math.PI * 40 * (1 - Math.min(total / 3000, 1))}` : `${2 * Math.PI * 40}`}
                     className={styles.ringProgress}
@@ -204,7 +220,6 @@ export function DevStats({ id, sectionRef, visible, github, leetcode }) {
                     </>
                   )}
                 </div>
-
                 <div className={styles.statRow}>
                   <div className={styles.stat}>
                     <span className={styles.statValue} style={{ color: '#FFA116' }}>

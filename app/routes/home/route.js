@@ -6,10 +6,14 @@ const WEEKS = 26;
 
 function buildWeekGrid(dayMap) {
   const today = new Date();
+  const todayStr = today.toISOString().slice(0, 10);
   const dow = today.getDay();
+
+  // Start of the current week (Sunday)
   const weekStart = new Date(today);
   weekStart.setDate(today.getDate() - dow);
 
+  // Go back (WEEKS-1) more weeks
   const gridStart = new Date(weekStart);
   gridStart.setDate(weekStart.getDate() - (WEEKS - 1) * 7);
 
@@ -20,7 +24,8 @@ function buildWeekGrid(dayMap) {
     const week = [];
     for (let d = 0; d < 7; d++) {
       const dateStr = cur.toISOString().slice(0, 10);
-      const entry = dayMap[dateStr] || { count: 0, level: 0 };
+      const isFuture = dateStr > todayStr;
+      const entry = !isFuture ? (dayMap[dateStr] || { count: 0, level: 0 }) : { count: 0, level: -1 };
       week.push({ date: dateStr, count: entry.count, level: entry.level });
       cur.setDate(cur.getDate() + 1);
     }
@@ -66,6 +71,10 @@ async function fetchGitHub() {
     const dayMap = {};
     (contrib.contributions || []).forEach(c => { dayMap[c.date] = c; });
 
+    const stars = Array.isArray(repos)
+      ? repos.reduce((s, r) => s + (r.stargazers_count || 0), 0)
+      : 0;
+
     const langMap = {};
     if (Array.isArray(repos)) {
       repos.forEach(r => { if (r.language) langMap[r.language] = (langMap[r.language] || 0) + 1; });
@@ -78,13 +87,14 @@ async function fetchGitHub() {
     return {
       username: GITHUB_USER,
       repos: user.public_repos || 0,
+      stars,
       totalContribs: contrib.total?.lastYear || 0,
       streak: computeStreak(dayMap),
       weekGrid: buildWeekGrid(dayMap),
       topLangs,
     };
   } catch {
-    return { username: GITHUB_USER, repos: 0, totalContribs: 0, streak: 0, weekGrid: [], topLangs: [] };
+    return { username: GITHUB_USER, repos: 0, stars: 0, totalContribs: 0, streak: 0, weekGrid: [], topLangs: [] };
   }
 }
 
