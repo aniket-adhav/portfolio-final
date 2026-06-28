@@ -242,9 +242,12 @@
     z-index: var(--zIndex4);
     font-weight: var(--fontWeightBold);
 
-    @media (--mediaMobile) {
+    @media (--mediaMobile), (--mediaMobileLS) {
       bottom: 20px;
       right: 20px;
+      --buttonSize: calc((40 / 16) * 1rem);
+      --buttonFontSize: calc((13 / 16) * 1rem);
+      --buttonPadding: 0 var(--spaceM);
     }
   }
 
