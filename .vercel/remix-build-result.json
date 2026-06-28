@@ -16,7 +16,6 @@
       "routes/api.set-theme": "nodejs-eyJydW50aW1lIjoibm9kZWpzIn0",
       "routes/contact": "nodejs-eyJydW50aW1lIjoibm9kZWpzIn0",
       "routes/home": "nodejs-eyJydW50aW1lIjoibm9kZWpzIn0",
-      "routes/uses": "nodejs-eyJydW50aW1lIjoibm9kZWpzIn0",
       "routes/$": "nodejs-eyJydW50aW1lIjoibm9kZWpzIn0",
       "routes/home/route": "nodejs-eyJydW50aW1lIjoibm9kZWpzIn0"
     },
@@ -76,15 +75,6 @@
         "file": "app/routes/home/route.js",
         "id": "routes/home",
         "path": "home",
-        "parentId": "root",
-        "config": {
-          "runtime": "nodejs"
-        }
-      },
-      "routes/uses": {
-        "file": "app/routes/uses/route.js",
-        "id": "routes/uses",
-        "path": "uses",
         "parentId": "root",
         "config": {
           "runtime": "nodejs"
@@ -166,12 +156,6 @@
         "file": "routes/home/route.js",
         "id": "routes/home",
         "path": "home",
-        "parentId": "root"
-      },
-      "routes/uses": {
-        "file": "routes/uses/route.js",
-        "id": "routes/uses",
-        "path": "uses",
         "parentId": "root"
       },
       "routes/$": {
