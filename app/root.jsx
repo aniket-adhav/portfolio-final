@@ -154,8 +154,8 @@ export default function App() {
           name="color-scheme"
           content={theme === 'light' ? 'light dark' : 'dark light'}
         />
-        {/* Prevent black flash before CSS loads — matches splash screen background */}
-        <style dangerouslySetInnerHTML={{ __html: `html{background:#f0efeb}` }} />
+        {/* Prevent black flash before CSS loads — matches light theme background */}
+        <style dangerouslySetInnerHTML={{ __html: `html{background:oklch(96.12% 0 0)}` }} />
         <style dangerouslySetInnerHTML={{ __html: themeStyles }} />
         {/* Hide app content immediately on first visit — prevents flash before splash */}
         <style dangerouslySetInnerHTML={{
@@ -207,7 +207,7 @@ export function ErrorBoundary() {
         <meta name="viewport" content="width=device-width, initial-scale=1" />
         <meta name="theme-color" content="#F2F2F2" />
         <meta name="color-scheme" content="light dark" />
-        <style dangerouslySetInnerHTML={{ __html: `html{background:#f0efeb}` }} />
+        <style dangerouslySetInnerHTML={{ __html: `html{background:oklch(96.12% 0 0)}` }} />
         <style dangerouslySetInnerHTML={{ __html: themeStyles }} />
         <Meta />
         <Links />
