@@ -2,7 +2,6 @@ import { useEffect, useRef, useState, useMemo } from 'react';
 import styles from './dev-stats.module.css';
 
 const MONTH_ABBR = ['Jan','Feb','Mar','Apr','May','Jun','Jul','Aug','Sep','Oct','Nov','Dec'];
-const TOTAL_LC_USERS = 3_800_000;
 
 function AnimatedNumber({ value, duration = 1200 }) {
   const [display, setDisplay] = useState(0);
@@ -21,25 +20,6 @@ function AnimatedNumber({ value, duration = 1200 }) {
     return () => cancelAnimationFrame(raf.current);
   }, [value, duration]);
   return display.toLocaleString();
-}
-
-function AnimatedPercent({ value, duration = 1600 }) {
-  const [display, setDisplay] = useState(0);
-  const start = useRef(null);
-  const raf = useRef(null);
-  useEffect(() => {
-    if (!value) return;
-    start.current = null;
-    const animate = ts => {
-      if (!start.current) start.current = ts;
-      const p = Math.min((ts - start.current) / duration, 1);
-      setDisplay(((1 - Math.pow(1 - p, 3)) * value).toFixed(1));
-      if (p < 1) raf.current = requestAnimationFrame(animate);
-    };
-    raf.current = requestAnimationFrame(animate);
-    return () => cancelAnimationFrame(raf.current);
-  }, [value, duration]);
-  return display;
 }
 
 function Bar({ label, count, total, color, delay }) {
@@ -87,56 +67,12 @@ function Heatmap({ weekGrid, accentColor, visible }) {
               <div
                 key={di}
                 className={styles.heatDay}
-                style={{ '--di': di }}
                 data-level={day.level}
                 title={day.level >= 0 && day.count > 0 ? `${day.date}: ${day.count}` : day.level === -1 ? '' : day.date}
               />
             ))}
           </div>
         ))}
-      </div>
-    </div>
-  );
-}
-
-function getRankTier(pct) {
-  if (pct <= 5)  return { label: 'Elite',        color: '#FFB800', glow: '#FFB800' };
-  if (pct <= 10) return { label: 'Expert',        color: '#00d4ff', glow: '#00d4ff' };
-  if (pct <= 25) return { label: 'Advanced',      color: '#2dba4e', glow: '#2dba4e' };
-  return              { label: 'Intermediate',   color: '#a0aec0', glow: '#a0aec0' };
-}
-
-function RankBadge({ ranking, visible }) {
-  if (!ranking) return null;
-
-  const percentile = Math.max(0.1, (1 - (ranking - 1) / TOTAL_LC_USERS) * 100);
-  const tier = getRankTier(percentile);
-
-  return (
-    <div
-      className={styles.rankBadge}
-      style={{ '--tier': tier.color, '--tierGlow': tier.glow }}
-    >
-      <div className={styles.rankBadgeShimmer} />
-      <div className={styles.rankBadgeLeft}>
-        <span className={styles.rankBadgeTierLabel}>{tier.label} Coder</span>
-        <span className={styles.rankBadgeTopText}>
-          TOP&nbsp;
-          <span className={styles.rankBadgePct}>
-            {visible ? <AnimatedPercent value={percentile} /> : '0.0'}%
-          </span>
-        </span>
-        <span className={styles.rankBadgeSubText}>
-          Global Rank #{ranking.toLocaleString()}
-        </span>
-      </div>
-      <div className={styles.rankBadgeRight}>
-        <div className={styles.rankBadgeOrb} />
-        <svg className={styles.rankBadgeTrophy} viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="1.5" strokeLinecap="round" strokeLinejoin="round">
-          <path d="M6 9H3.5a2.5 2.5 0 0 0 0 5H6M18 9h2.5a2.5 2.5 0 0 1 0 5H18" />
-          <path d="M6 3h12v10a6 6 0 0 1-12 0V3z" />
-          <path d="M9 21h6M12 17v4" />
-        </svg>
       </div>
     </div>
   );
@@ -304,7 +240,14 @@ export function DevStats({ id, sectionRef, visible, github, leetcode }) {
 
             <Heatmap weekGrid={lc.weekGrid} accentColor="#FFA116" visible={visible} />
 
-            <RankBadge ranking={lc.ranking} visible={visible} />
+            {lc.ranking && (
+              <div className={styles.ranking}>
+                <span className={styles.rankingLabel}>Global ranking</span>
+                <span className={styles.rankingValue} style={{ color: '#FFA116' }}>
+                  #{visible ? <AnimatedNumber value={lc.ranking} duration={1800} /> : 0}
+                </span>
+              </div>
+            )}
 
             <div className={styles.cardFooter}>
               <span>@{lc.username || 'aniket_adhav'}</span>
