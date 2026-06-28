@@ -19,8 +19,10 @@ import { Intro } from './intro';
 import { Profile } from './profile';
 import { ProjectSummary } from './project-summary';
 import { TechStack } from './tech-stack';
+import { DevStats } from './dev-stats';
 import { ContactSection } from './contact-section';
 import { useEffect, useRef, useState } from 'react';
+import { useLoaderData } from '@remix-run/react';
 import config from '~/config.json';
 import styles from './home.module.css';
 
@@ -65,18 +67,20 @@ export const meta = () => {
 };
 
 export const Home = () => {
+  const { github, leetcode } = useLoaderData();
   const [visibleSections, setVisibleSections] = useState([]);
   const [scrollIndicatorHidden, setScrollIndicatorHidden] = useState(false);
   const intro = useRef();
   const projectOne = useRef();
   const projectTwo = useRef();
   const projectThree = useRef();
+  const devStats = useRef();
   const skills = useRef();
   const details = useRef();
   const contact = useRef();
 
   useEffect(() => {
-    const sections = [intro, projectOne, projectTwo, projectThree, skills, details, contact];
+    const sections = [intro, projectOne, projectTwo, projectThree, devStats, skills, details, contact];
 
     const sectionObserver = new IntersectionObserver(
       (entries, observer) => {
@@ -198,6 +202,13 @@ export const Home = () => {
           <span className={styles.githubBtnShort}>GitHub Projects</span>
         </Button>
       </div>
+      <DevStats
+        id="dev-stats"
+        sectionRef={devStats}
+        visible={visibleSections.includes(devStats.current)}
+        github={github}
+        leetcode={leetcode}
+      />
       <TechStack
         id="skills"
         sectionRef={skills}
