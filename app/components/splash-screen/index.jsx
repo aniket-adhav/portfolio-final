@@ -33,7 +33,7 @@ export function SplashScreen({ onComplete }) {
       schedule(() => setPhase('show100'), 3800);
       schedule(() => setPhase('reveal'),  4500);
       schedule(() => setPhase('exit'),    5400);
-      schedule(onComplete,               5950);
+      schedule(onComplete,               6050);
     });
 
     return () => timers.forEach(clearTimeout);
