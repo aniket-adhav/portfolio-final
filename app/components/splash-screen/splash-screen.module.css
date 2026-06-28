@@ -73,10 +73,16 @@
   to   { transform: translateY(calc(-50vh - 43px)); }
 }
 
-/* Overlay wipes upward to reveal site */
+/* Overlay wipes upward — blade cuts from bottom to top */
 @keyframes wipeUp {
   from { clip-path: inset(0 0 0%   0); }
   to   { clip-path: inset(0 0 100% 0); }
+}
+
+/* Progress line shoots upward like a razor blade */
+@keyframes bladeShoot {
+  from { transform: scaleX(1) translateY(0); }
+  to   { transform: scaleX(1) translateY(calc(-100vh - 2px)); }
 }
 
 /* ── Overlay ─────────────────────────────────────────────── */
@@ -93,7 +99,7 @@
 }
 
 .overlay[data-exit='true'] {
-  animation: wipeUp 0.95s cubic-bezier(0.43, 0.05, 0.17, 1) forwards;
+  animation: wipeUp 0.45s cubic-bezier(0.6, 0, 0.98, 0.2) forwards;
 }
 
 /* ── Progress line — fixed at viewport bottom, outside clip-path overlay ── */
@@ -111,10 +117,10 @@
   transition: opacity 0.35s ease;
 }
 
-/* Fade out after wipe completes */
+/* Blade shoots from bottom to top in sync with the overlay wipe */
 .progressLine[data-exit='true'] {
-  opacity: 0;
-  transition-delay: 0.85s;
+  transition: none;
+  animation: bladeShoot 0.45s cubic-bezier(0.6, 0, 0.98, 0.2) forwards;
 }
 
 /* ── Counter wrapper (fade-out when name reveals) ────────── */
