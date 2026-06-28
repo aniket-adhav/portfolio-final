@@ -121,6 +121,12 @@ export function DevStats({ id, sectionRef, visible, github, leetcode }) {
             <div className={styles.statGrid2x2}>
               <div className={styles.stat}>
                 <span className={styles.statValue} style={{ color: '#2dba4e' }}>
+                  {visible ? <AnimatedNumber value={gh.totalContribs} /> : 0}
+                </span>
+                <span className={styles.statKey}>Contributions</span>
+              </div>
+              <div className={styles.stat}>
+                <span className={styles.statValue} style={{ color: '#2dba4e' }}>
                   {visible ? <AnimatedNumber value={gh.repos} /> : 0}
                 </span>
                 <span className={styles.statKey}>Repositories</span>
@@ -136,12 +142,6 @@ export function DevStats({ id, sectionRef, visible, github, leetcode }) {
                   {visible ? <AnimatedNumber value={gh.streak} /> : 0}
                 </span>
                 <span className={styles.statKey}>Day streak 🔥</span>
-              </div>
-              <div className={styles.stat}>
-                <span className={styles.statValue} style={{ color: '#2dba4e' }}>
-                  {visible ? <AnimatedNumber value={gh.totalContribs} /> : 0}
-                </span>
-                <span className={styles.statKey}>Contributions</span>
               </div>
             </div>
 
