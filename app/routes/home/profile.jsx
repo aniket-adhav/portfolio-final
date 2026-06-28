@@ -70,14 +70,6 @@ const education = [
     scoreLabel: 'Percentage',
     icon: '📘',
   },
-  {
-    degree: 'SSC (Class X)',
-    institute: 'CSV Kolpewadi',
-    period: '2021',
-    score: '84.20%',
-    scoreLabel: 'Percentage',
-    icon: '📗',
-  },
 ];
 
 const achievements = [
@@ -157,16 +149,15 @@ export const Profile = ({ id, visible, sectionRef }) => {
                   <span className={styles.tagText} data-visible={vis}>About me</span>
                 </div>
                 <h2 className={styles.title} id={titleId} data-visible={vis}>
-                  A passionate Full Stack Web &amp; Android Developer.
+                  Full Stack Web &amp; Android Developer.
                 </h2>
                 <p className={styles.bio} data-visible={vis}>
-                  I build fast, scalable web apps and polished Android experiences — and I love
-                  solving hard problems through competitive programming and open-source work.
+                  I build fast, scalable web apps and polished Android experiences.
+                  I enjoy solving hard problems through competitive programming and turning ideas into real products.
                 </p>
                 <ul className={styles.summaryList} data-visible={vis}>
-                  <li>Currently pursuing Bachelor of Engineering in Computer Engineering</li>
-                  <li>💡 Technical Head of DIT Sport Club · led development &amp; handling of Parakram website</li>
-                  <li>🏆 Hackathon winner &amp; Knight on LeetCode with <strong>1866 max rating</strong></li>
+                  <li>💡 Technical Head, DIT Sport Club — led development of the Parakram platform</li>
+                  <li>🏆 Hackathon winner &amp; LeetCode Knight with <strong>1866 max rating</strong></li>
                 </ul>
               </div>
 
