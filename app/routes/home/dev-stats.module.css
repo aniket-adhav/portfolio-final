@@ -2,15 +2,13 @@
   from { opacity: 0; transform: translateY(24px); }
   to   { opacity: 1; transform: translateY(0); }
 }
-@keyframes ds-ring-draw {
-  from { stroke-dashoffset: 251.33; }
-}
-@keyframes ds-bar-grow {
-  from { width: 0 !important; }
-}
 @keyframes live-pulse {
   0%, 100% { opacity: 1; transform: scale(1); }
   50%       { opacity: 0.4; transform: scale(0.75); }
+}
+@keyframes heat-pop {
+  from { opacity: 0; transform: scale(0.5); }
+  to   { opacity: 1; transform: scale(1); }
 }
 
 .section {
@@ -74,6 +72,7 @@
   margin: 0;
 }
 
+/* ── card grid ── */
 .cards {
   display: grid;
   grid-template-columns: 1fr 1fr;
@@ -82,23 +81,16 @@
   opacity: 0;
   transition: opacity var(--durationXL) ease calc(var(--durationM) + 100ms);
 
-  &[data-visible='true'] {
-    opacity: 1;
-  }
+  &[data-visible='true'] { opacity: 1; }
 
   &[data-visible='true'] .card:nth-child(1) {
-    animation: ds-fade-up 0.65s cubic-bezier(0.16, 1, 0.3, 1) both;
-    animation-delay: 100ms;
+    animation: ds-fade-up 0.65s cubic-bezier(0.16, 1, 0.3, 1) both 100ms;
   }
-
   &[data-visible='true'] .card:nth-child(2) {
-    animation: ds-fade-up 0.65s cubic-bezier(0.16, 1, 0.3, 1) both;
-    animation-delay: 220ms;
+    animation: ds-fade-up 0.65s cubic-bezier(0.16, 1, 0.3, 1) both 220ms;
   }
 
-  @media (--mediaTablet) {
-    grid-template-columns: 1fr;
-  }
+  @media (--mediaTablet) { grid-template-columns: 1fr; }
 }
 
 .card {
@@ -137,12 +129,13 @@
   border-radius: 50%;
   background: radial-gradient(circle, color-mix(in lab, var(--accent) 14%, transparent), transparent 70%);
   pointer-events: none;
-  transition: opacity 0.4s ease;
   opacity: 0.6;
+  transition: opacity 0.4s ease;
 
   .card:hover & { opacity: 1; }
 }
 
+/* ── header ── */
 .cardHeader {
   display: flex;
   align-items: center;
@@ -150,8 +143,8 @@
 }
 
 .platformIcon {
-  width: 24px;
-  height: 24px;
+  width: 22px;
+  height: 22px;
   color: var(--accent);
   flex-shrink: 0;
 }
@@ -187,14 +180,14 @@
   animation: live-pulse 2s ease-in-out infinite;
 }
 
-/* ── GitHub stat grid ── */
-.statGrid {
-  display: grid;
-  grid-template-columns: 1fr 1fr;
+/* ── stat row (3-up for GitHub, 2-up for LC) ── */
+.statRow {
+  display: flex;
   gap: var(--spaceM);
 }
 
 .stat {
+  flex: 1;
   display: flex;
   flex-direction: column;
   gap: 2px;
@@ -202,21 +195,85 @@
   border-radius: 12px;
   background: color-mix(in lab, var(--text) 4%, transparent);
   border: 1px solid color-mix(in lab, var(--text) 6%, transparent);
+  min-width: 0;
 }
 
 .statValue {
-  font-size: var(--fontSizeH3);
+  font-size: var(--fontSizeH4);
   font-weight: var(--fontWeightMedium);
   line-height: 1;
   letter-spacing: -0.02em;
-
-  @media (--mediaTablet) { font-size: var(--fontSizeH4); }
+  white-space: nowrap;
 }
 
 .statKey {
-  font-size: var(--fontSizeBodyXS);
+  font-size: 10px;
   color: var(--textLight);
   letter-spacing: 0.04em;
+  white-space: nowrap;
+}
+
+/* ── heatmap ── */
+.heatmapWrap {
+  display: flex;
+  flex-direction: column;
+  gap: 6px;
+  overflow-x: auto;
+  scrollbar-width: none;
+  &::-webkit-scrollbar { display: none; }
+}
+
+.heatGrid {
+  display: flex;
+  gap: 3px;
+  opacity: 0;
+  transition: opacity 0.4s ease 0.3s;
+
+  &[data-visible='true'] {
+    opacity: 1;
+  }
+
+  &[data-visible='true'] .heatWeek {
+    animation: heat-pop 0.35s cubic-bezier(0.34, 1.56, 0.64, 1) both;
+    animation-delay: calc(var(--wi) * 28ms + 350ms);
+  }
+}
+
+.heatWeek {
+  display: flex;
+  flex-direction: column;
+  gap: 3px;
+}
+
+.heatDay {
+  width: 10px;
+  height: 10px;
+  border-radius: 2px;
+  flex-shrink: 0;
+  transition: transform 0.15s ease;
+
+  &:hover { transform: scale(1.4); }
+
+  &[data-level='0'] {
+    background: color-mix(in lab, var(--text) 9%, transparent);
+  }
+  &[data-level='1'] {
+    background: color-mix(in lab, var(--hcolor) 35%, transparent);
+  }
+  &[data-level='2'] {
+    background: color-mix(in lab, var(--hcolor) 55%, transparent);
+  }
+  &[data-level='3'] {
+    background: color-mix(in lab, var(--hcolor) 78%, transparent);
+  }
+  &[data-level='4'] {
+    background: var(--hcolor);
+  }
+
+  @media (--mediaMobile) {
+    width: 8px;
+    height: 8px;
+  }
 }
 
 /* ── top langs ── */
@@ -231,11 +288,7 @@
   margin: 0;
 }
 
-.langChips {
-  display: flex;
-  flex-wrap: wrap;
-  gap: 6px;
-}
+.langChips { display: flex; flex-wrap: wrap; gap: 6px; }
 
 .langChip {
   font-size: 11px;
@@ -248,25 +301,31 @@
   letter-spacing: 0.04em;
 }
 
-/* ── LeetCode ring ── */
-.solvedRing {
+/* ── LeetCode top (ring + side) ── */
+.lcTop {
   display: flex;
-  justify-content: center;
   align-items: center;
+  gap: var(--spaceL);
+}
+
+.lcSide {
+  flex: 1;
+  display: flex;
+  flex-direction: column;
+  gap: var(--spaceM);
+  min-width: 0;
+}
+
+.solvedRing {
   position: relative;
-  width: 140px;
-  height: 140px;
-  align-self: center;
+  width: 110px;
+  height: 110px;
+  flex-shrink: 0;
 }
 
-.ringsvg {
-  width: 100%;
-  height: 100%;
-}
+.ringsvg { width: 100%; height: 100%; }
 
-.ringTrack {
-  stroke: color-mix(in lab, var(--text) 8%, transparent);
-}
+.ringTrack { stroke: color-mix(in lab, var(--text) 8%, transparent); }
 
 .ringProgress {
   transition: stroke-dashoffset 1.4s cubic-bezier(0.16, 1, 0.3, 1) 300ms;
@@ -283,29 +342,25 @@
 }
 
 .ringValue {
-  font-size: var(--fontSizeH3);
+  font-size: var(--fontSizeH4);
   font-weight: var(--fontWeightMedium);
   line-height: 1;
   letter-spacing: -0.02em;
 }
 
 .ringKey {
-  font-size: var(--fontSizeBodyXS);
+  font-size: 10px;
   color: var(--textLight);
   letter-spacing: 0.06em;
   text-transform: uppercase;
 }
 
 /* ── difficulty bars ── */
-.bars {
-  display: flex;
-  flex-direction: column;
-  gap: var(--spaceS);
-}
+.bars { display: flex; flex-direction: column; gap: 8px; }
 
 .barRow {
   display: grid;
-  grid-template-columns: 52px 1fr 36px;
+  grid-template-columns: 48px 1fr 32px;
   align-items: center;
   gap: var(--spaceS);
 }
@@ -313,11 +368,11 @@
 .barLabel {
   font-size: 11px;
   font-weight: var(--fontWeightMedium);
-  letter-spacing: 0.06em;
+  letter-spacing: 0.04em;
 }
 
 .barTrack {
-  height: 6px;
+  height: 5px;
   border-radius: 100px;
   background: color-mix(in lab, var(--text) 8%, transparent);
   overflow: hidden;

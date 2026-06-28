@@ -34,12 +34,32 @@ function Bar({ label, count, total, color, delay }) {
     <div className={styles.barRow}>
       <span className={styles.barLabel} style={{ color }}>{label}</span>
       <div className={styles.barTrack}>
-        <div
-          className={styles.barFill}
-          style={{ width: `${pct}%`, background: color, transitionDelay: `${delay}ms` }}
-        />
+        <div className={styles.barFill} style={{ width: `${pct}%`, background: color, transitionDelay: `${delay}ms` }} />
       </div>
       <span className={styles.barCount}>{count}</span>
+    </div>
+  );
+}
+
+function Heatmap({ weekGrid, accentColor, visible }) {
+  if (!weekGrid || weekGrid.length === 0) return null;
+
+  return (
+    <div className={styles.heatmapWrap} style={{ '--hcolor': accentColor }}>
+      <div className={styles.heatGrid} data-visible={visible}>
+        {weekGrid.map((week, wi) => (
+          <div key={wi} className={styles.heatWeek} style={{ '--wi': wi }}>
+            {week.map((day, di) => (
+              <div
+                key={di}
+                className={styles.heatDay}
+                data-level={day.level}
+                title={day.count > 0 ? `${day.date}: ${day.count}` : day.date}
+              />
+            ))}
+          </div>
+        ))}
+      </div>
     </div>
   );
 }
@@ -63,6 +83,7 @@ export function DevStats({ id, sectionRef, visible, github, leetcode }) {
         </div>
 
         <div className={styles.cards} data-visible={visible}>
+
           {/* ── GitHub Card ── */}
           <a
             className={styles.card}
@@ -72,6 +93,7 @@ export function DevStats({ id, sectionRef, visible, github, leetcode }) {
             style={{ '--accent': '#2dba4e' }}
           >
             <div className={styles.cardGlow} />
+
             <div className={styles.cardHeader}>
               <svg className={styles.platformIcon} viewBox="0 0 24 24" fill="currentColor" aria-hidden="true">
                 <path d="M12 0C5.37 0 0 5.37 0 12c0 5.31 3.435 9.795 8.205 11.385.6.105.825-.255.825-.57 0-.285-.015-1.23-.015-2.235-3.015.555-3.795-.735-4.035-1.41-.135-.345-.72-1.41-1.23-1.695-.42-.225-1.02-.78-.015-.795.945-.015 1.62.87 1.845 1.23 1.08 1.815 2.805 1.305 3.495.99.105-.78.42-1.305.765-1.605-2.67-.3-5.46-1.335-5.46-5.925 0-1.305.465-2.385 1.23-3.225-.12-.3-.54-1.53.12-3.18 0 0 1.005-.315 3.3 1.23.96-.27 1.98-.405 3-.405s2.04.135 3 .405c2.295-1.56 3.3-1.23 3.3-1.23.66 1.65.24 2.88.12 3.18.765.84 1.23 1.905 1.23 3.225 0 4.605-2.805 5.625-5.475 5.925.435.375.81 1.095.81 2.22 0 1.605-.015 2.895-.015 3.3 0 .315.225.69.825.57A12.02 12.02 0 0 0 24 12c0-6.63-5.37-12-12-12z" />
@@ -83,7 +105,7 @@ export function DevStats({ id, sectionRef, visible, github, leetcode }) {
               </span>
             </div>
 
-            <div className={styles.statGrid}>
+            <div className={styles.statRow}>
               <div className={styles.stat}>
                 <span className={styles.statValue} style={{ color: '#2dba4e' }}>
                   {visible ? <AnimatedNumber value={gh.repos} /> : 0}
@@ -92,23 +114,19 @@ export function DevStats({ id, sectionRef, visible, github, leetcode }) {
               </div>
               <div className={styles.stat}>
                 <span className={styles.statValue} style={{ color: '#2dba4e' }}>
-                  {visible ? <AnimatedNumber value={gh.stars} /> : 0}
+                  {visible ? <AnimatedNumber value={gh.streak} /> : 0}
                 </span>
-                <span className={styles.statKey}>Stars earned</span>
+                <span className={styles.statKey}>Day streak 🔥</span>
               </div>
               <div className={styles.stat}>
                 <span className={styles.statValue} style={{ color: '#2dba4e' }}>
-                  {visible ? <AnimatedNumber value={gh.followers} /> : 0}
+                  {visible ? <AnimatedNumber value={gh.totalContribs} /> : 0}
                 </span>
-                <span className={styles.statKey}>Followers</span>
-              </div>
-              <div className={styles.stat}>
-                <span className={styles.statValue} style={{ color: '#2dba4e' }}>
-                  {visible ? <AnimatedNumber value={gh.following} /> : 0}
-                </span>
-                <span className={styles.statKey}>Following</span>
+                <span className={styles.statKey}>Contributions</span>
               </div>
             </div>
+
+            <Heatmap weekGrid={gh.weekGrid} accentColor="#2dba4e" visible={visible} />
 
             {gh.topLangs && gh.topLangs.length > 0 && (
               <div className={styles.langs}>
@@ -138,11 +156,12 @@ export function DevStats({ id, sectionRef, visible, github, leetcode }) {
             style={{ '--accent': '#FFA116' }}
           >
             <div className={styles.cardGlow} />
+
             <div className={styles.cardHeader}>
-              <svg className={styles.platformIcon} viewBox="0 0 50 50" fill="currentColor" aria-hidden="true">
-                <path d="M36.9 33.6c-.8.8-2 .8-2.8 0L25 24.5l-9.1 9.1c-.8.8-2 .8-2.8 0-.8-.8-.8-2 0-2.8l10.5-10.5c.8-.8 2-.8 2.8 0l10.5 10.5c.8.8.8 2 0 2.8z"/>
-                <path d="M16 37h18v3H16z"/>
-                <path d="M12.5 10.5L3 20l9.5 9.5" fill="none" stroke="currentColor" strokeWidth="3" strokeLinecap="round" strokeLinejoin="round"/>
+              <svg className={styles.platformIcon} viewBox="0 0 95 115" fill="currentColor" aria-hidden="true">
+                <path d="M68.8 58.5 44.2 83.2a8 8 0 0 1-11.3-11.3l19-19-19-19A8 8 0 0 1 44 22.6l24.7 24.7a8 8 0 0 1 0 11.2z"/>
+                <path d="M27 90h41a5 5 0 0 1 0 10H27a5 5 0 0 1 0-10z"/>
+                <path d="M13 55 2 44 13 33" fill="none" stroke="currentColor" strokeWidth="9" strokeLinecap="round" strokeLinejoin="round"/>
               </svg>
               <span className={styles.platformName}>LeetCode</span>
               <span className={styles.liveChip}>
@@ -151,38 +170,59 @@ export function DevStats({ id, sectionRef, visible, github, leetcode }) {
               </span>
             </div>
 
-            <div className={styles.solvedRing}>
-              <svg viewBox="0 0 100 100" className={styles.ringsvg}>
-                <circle cx="50" cy="50" r="40" fill="none" className={styles.ringTrack} strokeWidth="8" />
-                <circle
-                  cx="50" cy="50" r="40"
-                  fill="none"
-                  stroke="#FFA116"
-                  strokeWidth="8"
-                  strokeLinecap="round"
-                  strokeDasharray={`${2 * Math.PI * 40}`}
-                  strokeDashoffset={visible ? `${2 * Math.PI * 40 * (1 - Math.min(total / 3000, 1))}` : `${2 * Math.PI * 40}`}
-                  className={styles.ringProgress}
-                  transform="rotate(-90 50 50)"
-                />
-              </svg>
-              <div className={styles.ringInner}>
-                <span className={styles.ringValue} style={{ color: '#FFA116' }}>
-                  {visible ? <AnimatedNumber value={total} /> : 0}
-                </span>
-                <span className={styles.ringKey}>Solved</span>
+            <div className={styles.lcTop}>
+              <div className={styles.solvedRing}>
+                <svg viewBox="0 0 100 100" className={styles.ringsvg}>
+                  <circle cx="50" cy="50" r="40" fill="none" className={styles.ringTrack} strokeWidth="8" />
+                  <circle
+                    cx="50" cy="50" r="40"
+                    fill="none"
+                    stroke="#FFA116"
+                    strokeWidth="8"
+                    strokeLinecap="round"
+                    strokeDasharray={`${2 * Math.PI * 40}`}
+                    strokeDashoffset={visible ? `${2 * Math.PI * 40 * (1 - Math.min(total / 3000, 1))}` : `${2 * Math.PI * 40}`}
+                    className={styles.ringProgress}
+                    transform="rotate(-90 50 50)"
+                  />
+                </svg>
+                <div className={styles.ringInner}>
+                  <span className={styles.ringValue} style={{ color: '#FFA116' }}>
+                    {visible ? <AnimatedNumber value={total} /> : 0}
+                  </span>
+                  <span className={styles.ringKey}>Solved</span>
+                </div>
+              </div>
+
+              <div className={styles.lcSide}>
+                <div className={styles.bars}>
+                  {visible && (
+                    <>
+                      <Bar label="Easy"   count={easy}   total={total} color="#00b8a3" delay={200} />
+                      <Bar label="Medium" count={medium} total={total} color="#FFA116" delay={350} />
+                      <Bar label="Hard"   count={hard}   total={total} color="#ef4743" delay={500} />
+                    </>
+                  )}
+                </div>
+
+                <div className={styles.statRow}>
+                  <div className={styles.stat}>
+                    <span className={styles.statValue} style={{ color: '#FFA116' }}>
+                      {visible ? <AnimatedNumber value={lc.streak} /> : 0}
+                    </span>
+                    <span className={styles.statKey}>Day streak 🔥</span>
+                  </div>
+                  <div className={styles.stat}>
+                    <span className={styles.statValue} style={{ color: '#FFA116' }}>
+                      {visible ? <AnimatedNumber value={lc.totalActiveDays} /> : 0}
+                    </span>
+                    <span className={styles.statKey}>Active days</span>
+                  </div>
+                </div>
               </div>
             </div>
 
-            <div className={styles.bars}>
-              {visible && (
-                <>
-                  <Bar label="Easy"   count={easy}   total={total} color="#00b8a3" delay={200} />
-                  <Bar label="Medium" count={medium} total={total} color="#FFA116" delay={350} />
-                  <Bar label="Hard"   count={hard}   total={total} color="#ef4743" delay={500} />
-                </>
-              )}
-            </div>
+            <Heatmap weekGrid={lc.weekGrid} accentColor="#FFA116" visible={visible} />
 
             {lc.ranking && (
               <div className={styles.ranking}>
@@ -200,6 +240,7 @@ export function DevStats({ id, sectionRef, visible, github, leetcode }) {
               </svg>
             </div>
           </a>
+
         </div>
       </div>
     </section>
