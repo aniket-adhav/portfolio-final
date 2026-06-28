@@ -70,6 +70,14 @@ const education = [
     scoreLabel: 'Percentage',
     icon: '📘',
   },
+  {
+    degree: 'SSC (Class X)',
+    institute: 'CSV Kolpewadi',
+    period: '2021',
+    score: '84.20%',
+    scoreLabel: 'Percentage',
+    icon: '📗',
+  },
 ];
 
 const achievements = [
