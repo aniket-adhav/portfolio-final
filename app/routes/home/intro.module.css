@@ -333,6 +333,13 @@
 
   & svg {
     stroke: color-mix(in lab, var(--text) 50%, transparent);
+    width: 43px;
+    height: 15px;
+
+    @media (--mediaMobile), (--mediaMobileLS) {
+      width: 30px;
+      height: 10px;
+    }
   }
 
   &:focus-visible {
