@@ -71,8 +71,8 @@ async function fetchGitHub() {
     const dayMap = {};
     (contrib.contributions || []).forEach(c => { dayMap[c.date] = c; });
 
-    const stars = Array.isArray(repos)
-      ? repos.reduce((s, r) => s + (r.stargazers_count || 0), 0)
+    const forks = Array.isArray(repos)
+      ? repos.reduce((s, r) => s + (r.forks_count || 0), 0)
       : 0;
 
     const langMap = {};
@@ -87,7 +87,7 @@ async function fetchGitHub() {
     return {
       username: GITHUB_USER,
       repos: user.public_repos || 0,
-      stars,
+      forks,
       totalContribs: contrib.total?.lastYear || 0,
       streak: computeStreak(dayMap),
       weekGrid: buildWeekGrid(dayMap),
