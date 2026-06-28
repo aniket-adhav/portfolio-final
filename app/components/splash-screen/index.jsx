@@ -44,10 +44,11 @@ export function SplashScreen({ onComplete }) {
   const isExit         = phase === 'exit';
 
   return (
-    <div className={styles.overlay} data-exit={isExit}>
+    <>
+      {/* Progress line lives OUTSIDE the overlay so clip-path on wipeUp doesn't clip it */}
+      <div className={styles.progressLine} data-exit={isExit} />
 
-      {/* Loading progress line — bottom edge, grows left→right in sync with counter */}
-      <div className={styles.progressLine} />
+    <div className={styles.overlay} data-exit={isExit}>
 
       {/* Counter — all spans always mounted; CSS handles the 0→100 transition */}
       <div className={styles.counterWrap} data-hide={!counterVisible}>
@@ -81,5 +82,6 @@ export function SplashScreen({ onComplete }) {
       <span className={styles.labelBR} data-hide={!counterVisible}>Loading</span>
 
     </div>
+    </>
   );
 }
