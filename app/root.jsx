@@ -117,18 +117,22 @@ export default function App() {
     if (!seen) {
       splashWasShown.current = true;
       setShowSplash(true);
-      // Wait until React has painted with data-app-state="hidden" before releasing
-      // the pre-hydration CSS lock — prevents any flash of main content
-      requestAnimationFrame(() => {
-        requestAnimationFrame(() => {
-          document.documentElement.removeAttribute('data-splash-pending');
-        });
-      });
+      // data-splash-pending is removed by the effect below, which only fires
+      // after showSplash=true has been committed to the DOM — no flash possible.
     } else {
       document.documentElement.removeAttribute('data-splash-pending');
       setSplashDone(true);
     }
   }, []);
+
+  // Remove the pre-hydration CSS lock only after the splash is actually
+  // painted in the DOM. Using a separate effect keyed on showSplash guarantees
+  // React has already committed the splash component before we lift the lock.
+  useEffect(() => {
+    if (showSplash) {
+      document.documentElement.removeAttribute('data-splash-pending');
+    }
+  }, [showSplash]);
 
   const handleSplashComplete = useCallback(() => {
     sessionStorage.setItem('splashSeen', '1');
