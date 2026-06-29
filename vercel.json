@@ -1,7 +1,6 @@
 {
-  "buildCommand": "pnpm run build",
-  "installCommand": "pnpm install",
-  "outputDirectory": "build/client",
+  "buildCommand": "npm run build",
+  "installCommand": "npm install",
   "functions": {
     "api/index.js": {
       "maxDuration": 30
