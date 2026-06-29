@@ -4,5 +4,5 @@
       <path clip-rule="evenodd" d="M0 29L15 0L30 29ZM4 29L15 8L26 29ZM7 18L23 18L23 22L7 22Z" />
     </clipPath>
   </defs>
-  <rect clip-path="url(#mono-clip)" fill="#ffffff" width="30" height="29" />
+  <rect clip-path="url(#mono-clip)" fill="#302c1a" width="30" height="29" />
 </svg>
