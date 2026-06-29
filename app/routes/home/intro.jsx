@@ -10,7 +10,6 @@ import { useInterval, usePrevious, useScrollToHash } from '~/hooks';
 import { Suspense, lazy, useEffect, useState } from 'react';
 import { cssProps } from '~/utils/style';
 import config from '~/config.json';
-import { useHydrated } from '~/hooks/useHydrated';
 import { useSplashDone } from '~/components/splash-screen/context';
 import styles from './intro.module.css';
 
@@ -30,8 +29,6 @@ export function Intro({ id, sectionRef, scrollIndicatorHidden, ...rest }) {
   const currentDiscipline = disciplines.find((item, index) => index === disciplineIndex);
   const titleId = `${id}-title`;
   const scrollToHash = useScrollToHash();
-  const isHydrated = useHydrated();
-
   useInterval(
     () => {
       const index = (disciplineIndex + 1) % disciplines.length;
@@ -65,11 +62,9 @@ export function Intro({ id, sectionRef, scrollIndicatorHidden, ...rest }) {
       <Transition in={splashDone} key={`${theme}-${splashDone}`} timeout={3000}>
         {({ visible, status }) => (
           <>
-            {isHydrated && (
-              <Suspense>
-                <DisplacementSphere />
-              </Suspense>
-            )}
+            <Suspense>
+              <DisplacementSphere />
+            </Suspense>
             <header className={styles.text}>
               <h1 className={styles.name} data-visible={visible} id={titleId}>
                 <DecoderText text={config.name} start={splashDone} delay={300} />
