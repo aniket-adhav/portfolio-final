@@ -1,7 +1,10 @@
 {
-  "framework": "remix",
-  "buildCommand": "remix vite:build",
-  "installCommand": "npm install --legacy-peer-deps",
+  "buildCommand": "npm run build",
+  "installCommand": "npm ci",
+  "outputDirectory": "build/client",
+  "rewrites": [
+    { "source": "/(.*)", "destination": "/api/index.js" }
+  ],
   "headers": [
     {
       "source": "/favicon.ico",
