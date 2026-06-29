@@ -1,23 +1,15 @@
 import { createRequestHandler } from '@remix-run/express';
 import express from 'express';
+import { fileURLToPath } from 'url';
+import { join, dirname } from 'path';
+
+const __dirname = dirname(fileURLToPath(import.meta.url));
+const BUILD_PATH = join(__dirname, '..', 'build', 'server', 'index.js');
 
 const app = express();
 
-let build;
-const getHandler = async () => {
-  if (!build) {
-    build = await import('../build/server/index.js');
-  }
-  return createRequestHandler({ build });
-};
-
-app.all('*', async (req, res, next) => {
-  try {
-    const handler = await getHandler();
-    return handler(req, res, next);
-  } catch (err) {
-    next(err);
-  }
-});
+app.all('*', createRequestHandler({
+  build: () => import(BUILD_PATH),
+}));
 
 export default app;
