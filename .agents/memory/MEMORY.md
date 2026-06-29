@@ -1,2 +1,3 @@
 - [Portfolio SVG text fix](portfolio-svg.md) — project-summary SVG watermark needs left:0;right:0 NOT right:-36% to center under laptop
 - [Portfolio resume modal](portfolio-resume.md) — resume button lives in navbar.jsx (not home.jsx), opens PDF in iframe modal
+- [CSS Modules global syntax](css-modules-global.md) — invalid :global patterns silently break in production; use local @keyframes instead

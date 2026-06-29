@@ -305,10 +305,12 @@
   margin-right: var(--spaceS);
 }
 
+@keyframes contactFadeIn {
+  from { opacity: 0; }
+  to   { opacity: 1; }
+}
+
 .footer {
   opacity: 0;
-
-  &:global {
-    animation: fade-in var(--durationL) ease var(--durationXL) forwards;
-  }
+  animation: contactFadeIn var(--durationL) ease var(--durationXL) forwards;
 }

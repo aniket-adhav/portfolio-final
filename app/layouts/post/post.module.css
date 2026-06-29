@@ -1,3 +1,8 @@
+@keyframes postFadeIn {
+  from { opacity: 0; }
+  to   { opacity: 1; }
+}
+
 @layer layout {
   @property --background1 {
     syntax: '<color>';
@@ -212,9 +217,7 @@
     padding: var(--spaceL);
     opacity: 0;
 
-    &:global {
-      animation: fade-in 0.6s var(--bezierFastoutSlowin) 1s forwards;
-    }
+    animation: postFadeIn 0.6s var(--bezierFastoutSlowin) 1s forwards;
 
     & svg {
       stroke: color-mix(in lab, var(--text) 50%, transparent);
@@ -240,9 +243,7 @@
     gap: 10px;
     opacity: 0;
 
-    &:global {
-      animation: fade-in 0.6s var(--bezierFastoutSlowin) 1s forwards;
-    }
+    animation: postFadeIn 0.6s var(--bezierFastoutSlowin) 1s forwards;
 
     &::before {
       content: '';
@@ -270,9 +271,7 @@
     display: grid;
     grid-template-columns: 1fr var(--gutterWidth) var(--contentWidth) var(--gutterWidth) 1fr;
 
-    &:global {
-      animation: fade-in 1.2s var(--bezierFastoutSlowin) 1s forwards;
-    }
+    animation: postFadeIn 1.2s var(--bezierFastoutSlowin) 1s forwards;
 
     @media (--mediaTablet) {
       grid-template-columns: 100%;
