@@ -4,6 +4,6 @@ import * as build from '../build/server/index.js';
 
 const app = express();
 
-app.all('*', createRequestHandler({ build, mode: process.env.NODE_ENV }));
+app.use(createRequestHandler({ build, mode: process.env.NODE_ENV }));
 
 export default app;
