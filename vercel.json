@@ -1,13 +1,5 @@
 {
   "buildCommand": "pnpm run build",
-  "functions": {
-    "api/index.js": {
-      "maxDuration": 30
-    }
-  },
-  "rewrites": [
-    { "source": "/(.*)", "destination": "/api/index.js" }
-  ],
   "headers": [
     {
       "source": "/favicon.ico",
