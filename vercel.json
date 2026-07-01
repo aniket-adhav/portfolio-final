@@ -1,5 +1,10 @@
 {
-  "buildCommand": "pnpm run build",
+  "buildCommand": "npm run build",
+  "installCommand": "npm install --legacy-peer-deps",
+  "outputDirectory": "build/client",
+  "rewrites": [
+    { "source": "/(.*)", "destination": "/api/index" }
+  ],
   "headers": [
     {
       "source": "/favicon.ico",
