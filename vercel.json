@@ -1,6 +1,6 @@
 {
   "buildCommand": "node ./scripts/draco.cjs && npm run build",
-  "installCommand": "npm install --ignore-scripts",
+  "installCommand": "npm ci --ignore-scripts",
   "outputDirectory": "build/client",
   "rewrites": [
     { "source": "/(.*)", "destination": "/api/index" }
