@@ -3,14 +3,14 @@
   "installCommand": "pnpm install --ignore-scripts",
   "builds": [
     {
-      "src": "api/index.js",
+      "src": "vercel-handler.js",
       "use": "@vercel/node",
       "config": {
-        "includeFiles": ["../build/**"]
+        "includeFiles": ["build/**"]
       }
     }
   ],
   "routes": [
-    { "src": "/(.*)", "dest": "/api/index.js" }
+    { "src": "/(.*)", "dest": "/vercel-handler.js" }
   ]
 }
