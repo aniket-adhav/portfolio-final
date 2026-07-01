@@ -111,10 +111,10 @@ const certificates = [
     image: '/cert-udemy-android.jpg',
   },
   {
-    title: 'Full Stack Web Development',
+    title: 'DSA with C++',
     issuer: 'Apna College',
-    date: '2024',
-    duration: 'Alpha DSA with Java',
+    date: 'Dec 2024',
+    duration: 'Alpha DSA with C++',
     badge: '🌐',
     accentColor: '#f0a500',
     image: '/cert-apna-college.png',
