@@ -1,10 +1,7 @@
 {
+  "framework": "remix",
   "buildCommand": "node ./scripts/draco.cjs && pnpm run build",
   "installCommand": "pnpm install --ignore-scripts",
-  "outputDirectory": "build/client",
-  "rewrites": [
-    { "source": "/(.*)", "destination": "/api/index" }
-  ],
   "headers": [
     {
       "source": "/favicon.ico",
